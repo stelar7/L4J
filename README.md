@@ -3,11 +3,11 @@
 A Java wrapper for the Riot Games League of Legends API.
 
 ## Dependencies
-Lombok
-Junit
-Guava
-HttpClient
-Jackson-mapper-asl
+* Lombok
+* Junit
+* Guava
+* HttpClient
+* Jackson-mapper-asl
 
 OR just [download it with dependencies](https://github.com/stelar7/L4J/releases) :)
 
