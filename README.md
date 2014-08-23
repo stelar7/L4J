@@ -3,9 +3,6 @@
 A Java wrapper for the Riot Games League of Legends API.
 
 ## Dependencies
-* Lombok
-* Junit
-* Guava
 * HttpClient
 * Jackson-mapper-asl
 
