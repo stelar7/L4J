@@ -2,9 +2,10 @@ package my.api.stelar7.usewith.lol.dto.staticdata.rune;
 
 import java.util.Map;
 
-import my.api.stelar7.usewith.lol.dto.staticdata.general.BasicData;
 import lombok.Getter;
 import lombok.ToString;
+import my.api.stelar7.usewith.lol.dto.staticdata.general.BasicData;
+
 @Getter
 @ToString
 public class RuneList

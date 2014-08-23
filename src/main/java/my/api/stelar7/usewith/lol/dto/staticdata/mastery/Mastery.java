@@ -2,9 +2,9 @@ package my.api.stelar7.usewith.lol.dto.staticdata.mastery;
 
 import java.util.List;
 
-import my.api.stelar7.usewith.lol.dto.staticdata.general.Image;
 import lombok.Getter;
 import lombok.ToString;
+import my.api.stelar7.usewith.lol.dto.staticdata.general.Image;
 
 @Getter
 @ToString

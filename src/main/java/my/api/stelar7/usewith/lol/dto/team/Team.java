@@ -6,7 +6,7 @@ import java.util.List;
 import lombok.Getter;
 import lombok.ToString;
 import my.api.stelar7.usewith.lol.L4J;
-import my.api.stelar7.usewith.lol.basic.CacheHolder;
+import my.api.stelar7.usewith.lol.basic.CacheData;
 import my.api.stelar7.usewith.lol.basic.DataCall;
 import my.api.stelar7.usewith.lol.basic.URLEndpoint;
 import my.api.stelar7.usewith.lol.dto.league.League;
@@ -32,7 +32,7 @@ public class Team
 
     public League getFullLeague()
     {
-        final League test = CacheHolder.getLeaguesFull().getIfPresent(this.fullId);
+        final League test = CacheData.getLeaguesFull().get(this.fullId);
         if (test != null) { return test; }
         try
         {
@@ -41,7 +41,7 @@ public class Team
             call.setData(Arrays.asList("" + this.fullId));
             call.setVerbose(true);
             final List<League> pages = L4J.getMapper().convertValue(L4J.getMapper().readTree(call.doCall()).get("" + this.fullId), L4J.getMapper().getTypeFactory().constructCollectionType(List.class, League.class));
-            CacheHolder.getLeaguesFull().put(this.fullId, pages.get(0));
+            CacheData.getLeaguesFull().put(this.fullId, pages.get(0));
             return pages.get(0);
         } catch (final Exception e)
         {
@@ -52,7 +52,7 @@ public class Team
 
     public League getSelfLeague()
     {
-        final League test = CacheHolder.getLeaguesSelf().getIfPresent(this.fullId);
+        final League test = CacheData.getLeaguesSelf().get(this.fullId);
         if (test != null) { return test; }
         try
         {
@@ -61,7 +61,7 @@ public class Team
             call.setData(Arrays.asList("" + this.fullId));
             call.setVerbose(true);
             final List<League> pages = L4J.getMapper().convertValue(L4J.getMapper().readTree(call.doCall()).get("" + this.fullId), L4J.getMapper().getTypeFactory().constructCollectionType(List.class, League.class));
-            CacheHolder.getLeaguesSelf().put(this.fullId, pages.get(0));
+            CacheData.getLeaguesSelf().put(this.fullId, pages.get(0));
             return pages.get(0);
         } catch (final Exception e)
         {

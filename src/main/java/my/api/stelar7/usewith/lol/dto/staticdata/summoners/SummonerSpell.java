@@ -2,11 +2,12 @@ package my.api.stelar7.usewith.lol.dto.staticdata.summoners;
 
 import java.util.List;
 
+import lombok.Getter;
+import lombok.ToString;
 import my.api.stelar7.usewith.lol.dto.staticdata.general.Image;
 import my.api.stelar7.usewith.lol.dto.staticdata.general.LevelTip;
 import my.api.stelar7.usewith.lol.dto.staticdata.general.SpellVars;
-import lombok.Getter;
-import lombok.ToString;
+
 @Getter
 @ToString
 public class SummonerSpell

@@ -6,7 +6,7 @@ import java.util.List;
 import lombok.Getter;
 import lombok.ToString;
 import my.api.stelar7.usewith.lol.L4J;
-import my.api.stelar7.usewith.lol.basic.CacheHolder;
+import my.api.stelar7.usewith.lol.basic.CacheData;
 import my.api.stelar7.usewith.lol.basic.DataCall;
 import my.api.stelar7.usewith.lol.basic.URLEndpoint;
 import my.api.stelar7.usewith.lol.dto.game.Game;
@@ -30,7 +30,7 @@ public class Summoner
 
     public League getFullLeague()
     {
-        final League test = CacheHolder.getLeaguesFull().getIfPresent(this.id);
+        final League test = CacheData.getLeaguesFull().get(this.id);
         if (test != null) { return test; }
         try
         {
@@ -39,7 +39,7 @@ public class Summoner
             call.setData(Arrays.asList(this.id));
             call.setVerbose(true);
             final List<League> pages = L4J.getMapper().convertValue(L4J.getMapper().readTree(call.doCall()).get("" + this.id), L4J.getMapper().getTypeFactory().constructCollectionType(List.class, League.class));
-            CacheHolder.getLeaguesFull().put(this.id, pages.get(0));
+            CacheData.getLeaguesFull().put(this.id, pages.get(0));
             return pages.get(0);
         } catch (final Exception e)
         {
@@ -50,7 +50,7 @@ public class Summoner
 
     public List<MasteryPage> getMasteryPages()
     {
-        final List<MasteryPage> test = CacheHolder.getMasteryPages().getIfPresent(this.id);
+        final List<MasteryPage> test = CacheData.getMasteryPages().get(this.id);
         if (test != null) { return test; }
         try
         {
@@ -58,8 +58,10 @@ public class Summoner
             call.setUrlEndpoint(URLEndpoint.SUMMONER_MASTERIES);
             call.setData(Arrays.asList(this.id));
             call.setVerbose(true);
-            final List<MasteryPage> pages = L4J.getMapper().convertValue(L4J.getMapper().readTree(call.doCall()).get("" + this.id).get("pages"), L4J.getMapper().getTypeFactory().constructCollectionType(List.class, MasteryPage.class));
-            CacheHolder.getMasteryPages().put(this.id, pages);
+            final String json = call.doCall();
+            if (json == null) { return null; }
+            final List<MasteryPage> pages = L4J.getMapper().convertValue(L4J.getMapper().readTree(json).get("" + this.id).get("pages"), L4J.getMapper().getTypeFactory().constructCollectionType(List.class, MasteryPage.class));
+            CacheData.getMasteryPages().put(this.id, pages);
             return pages;
         } catch (final Exception e)
         {
@@ -70,7 +72,7 @@ public class Summoner
 
     public RankedStats getRankedStats()
     {
-        final RankedStats test = CacheHolder.getRankedStats().getIfPresent(this.id);
+        final RankedStats test = CacheData.getRankedStats().get(this.id);
         if (test != null) { return test; }
         try
         {
@@ -79,7 +81,7 @@ public class Summoner
             call.setData(Arrays.asList(this.id));
             call.setVerbose(true);
             final RankedStats pages = L4J.getMapper().readValue(call.doCall(), RankedStats.class);
-            CacheHolder.getRankedStats().put(this.id, pages);
+            CacheData.getRankedStats().put(this.id, pages);
             return pages;
         } catch (final Exception e)
         {
@@ -90,15 +92,15 @@ public class Summoner
 
     public List<Game> getRecentGames()
     {
-        final List<Game> test = CacheHolder.getGames().getIfPresent(this.id).getGames();
-        if (test != null) { return test; }
+        final RecentGames test = CacheData.getGames().get(this.id);
+        if (test != null) { return test.getGames(); }
         try
         {
             final DataCall call = new DataCall();
             call.setUrlEndpoint(URLEndpoint.RECENT_GAMES);
             call.setData(Arrays.asList(this.id));
             final RecentGames games = L4J.getMapper().readValue(call.doCall(), RecentGames.class);
-            CacheHolder.getGames().put(this.id, games);
+            CacheData.getGames().put(this.id, games);
             return games.getGames();
         } catch (final Exception e)
         {
@@ -109,7 +111,7 @@ public class Summoner
 
     public List<RunePage> getRunePages()
     {
-        final List<RunePage> test = CacheHolder.getRunePages().getIfPresent(this.id);
+        final List<RunePage> test = CacheData.getRunePages().get(this.id);
         if (test != null) { return test; }
         try
         {
@@ -117,8 +119,10 @@ public class Summoner
             call.setUrlEndpoint(URLEndpoint.SUMMONER_RUNES);
             call.setData(Arrays.asList(this.id));
             call.setVerbose(true);
-            final List<RunePage> pages = L4J.getMapper().convertValue(L4J.getMapper().readTree(call.doCall()).get("" + this.id).get("pages"), L4J.getMapper().getTypeFactory().constructCollectionType(List.class, RunePage.class));
-            CacheHolder.getRunePages().put(this.id, pages);
+            final String json = call.doCall();
+            if (json == null) { return null; }
+            final List<RunePage> pages = L4J.getMapper().convertValue(L4J.getMapper().readTree(json).get("" + this.id).get("pages"), L4J.getMapper().getTypeFactory().constructCollectionType(List.class, RunePage.class));
+            CacheData.getRunePages().put(this.id, pages);
             return pages;
         } catch (final Exception e)
         {
@@ -129,7 +133,7 @@ public class Summoner
 
     public League getSelfLeague()
     {
-        final League test = CacheHolder.getLeaguesSelf().getIfPresent(this.id);
+        final League test = CacheData.getLeaguesSelf().get(this.id);
         if (test != null) { return test; }
         try
         {
@@ -138,7 +142,7 @@ public class Summoner
             call.setData(Arrays.asList(this.id));
             call.setVerbose(true);
             final List<League> pages = L4J.getMapper().convertValue(L4J.getMapper().readTree(call.doCall()).get("" + this.id), L4J.getMapper().getTypeFactory().constructCollectionType(List.class, League.class));
-            CacheHolder.getLeaguesSelf().put(this.id, pages.get(0));
+            CacheData.getLeaguesSelf().put(this.id, pages.get(0));
             return pages.get(0);
         } catch (final Exception e)
         {
@@ -149,7 +153,7 @@ public class Summoner
 
     public List<StatSummary> getStatSummary()
     {
-        final List<StatSummary> test = CacheHolder.getStatSummary().getIfPresent(this.id);
+        final List<StatSummary> test = CacheData.getStatSummary().get(this.id);
         if (test != null) { return test; }
         try
         {
@@ -158,7 +162,7 @@ public class Summoner
             call.setData(Arrays.asList(this.id));
             call.setVerbose(true);
             final List<StatSummary> pages = L4J.getMapper().convertValue(L4J.getMapper().readTree(call.doCall()).get("playerStatSummaries"), L4J.getMapper().getTypeFactory().constructCollectionType(List.class, StatSummary.class));
-            CacheHolder.getStatSummary().put(this.id, pages);
+            CacheData.getStatSummary().put(this.id, pages);
             return pages;
         } catch (final Exception e)
         {
@@ -169,7 +173,7 @@ public class Summoner
 
     public List<Team> getTeams()
     {
-        final List<Team> test = CacheHolder.getTeamList().getIfPresent(this.id);
+        final List<Team> test = CacheData.getTeamList().get(this.id);
         if (test != null) { return test; }
         try
         {
@@ -177,8 +181,10 @@ public class Summoner
             call.setUrlEndpoint(URLEndpoint.TEAM_BY_SUMMONER);
             call.setData(Arrays.asList(this.id));
             call.setVerbose(true);
-            final List<Team> pages = L4J.getMapper().convertValue(L4J.getMapper().readTree(call.doCall()).get("" + this.id), L4J.getMapper().getTypeFactory().constructCollectionType(List.class, Team.class));
-            CacheHolder.getTeamList().put(this.id, pages);
+            final String json = call.doCall();
+            if (json == null) { return null; }
+            final List<Team> pages = L4J.getMapper().convertValue(L4J.getMapper().readTree(json).get("" + this.id), L4J.getMapper().getTypeFactory().constructCollectionType(List.class, Team.class));
+            CacheData.getTeamList().put(this.id, pages);
             return pages;
         } catch (final Exception e)
         {

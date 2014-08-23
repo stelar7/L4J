@@ -10,7 +10,7 @@ import lombok.ToString;
 public class Event
 {
     List<Integer> assistingParticipantIds;
-    String        uildingType;
+    String        buildingType;
     int           creatorId;
     String        eventType;
     int           killerId;

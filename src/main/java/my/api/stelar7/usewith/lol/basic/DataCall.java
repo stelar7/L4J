@@ -37,7 +37,10 @@ public class DataCall
         final StringBuilder items = new StringBuilder();
         if (this.data != null)
         {
-            this.data.forEach(i -> items.append(i.toString().toLowerCase().replaceAll(" ", "")).append(","));
+            for (final Object s : this.data)
+            {
+                items.append(s.toString().toLowerCase().replaceAll(" ", "")).append(",");
+            }
             items.deleteCharAt(items.length() - 1);
         }
         if (!this.isToStatic())
@@ -65,7 +68,11 @@ public class DataCall
         }
         final HttpClient client = HttpClientBuilder.create().build();
         final HttpResponse response = client.execute(new HttpGet(URL));
-        if (response.getStatusLine().getStatusCode() != 200) { throw new LibraryException(response.getStatusLine().getStatusCode()); }
+        if (response.getStatusLine().getStatusCode() != 200)
+        {
+            LibraryException.lastError = response.getStatusLine().getStatusCode();
+            return null;
+        }
         final BufferedReader rd = new BufferedReader(new InputStreamReader(response.getEntity().getContent()));
         final StringBuffer result = new StringBuffer();
         String line = "";

@@ -14,7 +14,8 @@ public class LibraryException extends Exception
         UNKNOWN;
     }
 
-    Type type;
+    public static int lastError;
+    Type              type;
 
     /**
      *
