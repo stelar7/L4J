@@ -13,6 +13,7 @@ import my.api.stelar7.usewith.lol.dto.game.Game;
 import my.api.stelar7.usewith.lol.dto.game.RecentGames;
 import my.api.stelar7.usewith.lol.dto.league.League;
 import my.api.stelar7.usewith.lol.dto.masteries.MasteryPage;
+import my.api.stelar7.usewith.lol.dto.matchhistory.PlayerHistory;
 import my.api.stelar7.usewith.lol.dto.runes.RunePage;
 import my.api.stelar7.usewith.lol.dto.stats.RankedStats;
 import my.api.stelar7.usewith.lol.dto.stats.StatSummary;
@@ -28,9 +29,9 @@ public class Summoner
     Long   revisionDate;
     Long   summonerLevel;
 
-    public League getFullLeague()
+    public List<League> getFullLeague()
     {
-        final League test = CacheData.getLeaguesFull().get(this.id);
+        final List<League> test = CacheData.getLeaguesFull().get(this.id);
         if (test != null) { return test; }
         try
         {
@@ -39,8 +40,8 @@ public class Summoner
             call.setData(Arrays.asList(this.id));
             call.setVerbose(true);
             final List<League> pages = L4J.getMapper().convertValue(L4J.getMapper().readTree(call.doCall()).get("" + this.id), L4J.getMapper().getTypeFactory().constructCollectionType(List.class, League.class));
-            CacheData.getLeaguesFull().put(this.id, pages.get(0));
-            return pages.get(0);
+            CacheData.getLeaguesFull().put(this.id, pages);
+            return pages;
         } catch (final Exception e)
         {
             e.printStackTrace();
@@ -63,6 +64,31 @@ public class Summoner
             final List<MasteryPage> pages = L4J.getMapper().convertValue(L4J.getMapper().readTree(json).get("" + this.id).get("pages"), L4J.getMapper().getTypeFactory().constructCollectionType(List.class, MasteryPage.class));
             CacheData.getMasteryPages().put(this.id, pages);
             return pages;
+        } catch (final Exception e)
+        {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    /**
+     * Gets the players matchhistory
+     *
+     * @return PlayerHistory from the player
+     */
+    public PlayerHistory getMatchHistory()
+    {
+        final PlayerHistory test = CacheData.getPlayerHistory().get(this.id);
+        if (test != null) { return test; }
+        try
+        {
+            final DataCall call = new DataCall();
+            call.setUrlEndpoint(URLEndpoint.MATCH_HISTORY);
+            call.setVerbose(true);
+            call.setData(Arrays.asList(this.id));
+            final PlayerHistory match = L4J.getMapper().readValue(call.doCall(), PlayerHistory.class);
+            CacheData.getPlayerHistory().put(this.id, match);
+            return match;
         } catch (final Exception e)
         {
             e.printStackTrace();
@@ -131,9 +157,9 @@ public class Summoner
         }
     }
 
-    public League getSelfLeague()
+    public List<League> getSelfLeague()
     {
-        final League test = CacheData.getLeaguesSelf().get(this.id);
+        final List<League> test = CacheData.getLeaguesSelf().get(this.id);
         if (test != null) { return test; }
         try
         {
@@ -142,8 +168,8 @@ public class Summoner
             call.setData(Arrays.asList(this.id));
             call.setVerbose(true);
             final List<League> pages = L4J.getMapper().convertValue(L4J.getMapper().readTree(call.doCall()).get("" + this.id), L4J.getMapper().getTypeFactory().constructCollectionType(List.class, League.class));
-            CacheData.getLeaguesSelf().put(this.id, pages.get(0));
-            return pages.get(0);
+            CacheData.getLeaguesSelf().put(this.id, pages);
+            return pages;
         } catch (final Exception e)
         {
             e.printStackTrace();

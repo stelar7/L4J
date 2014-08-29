@@ -43,11 +43,11 @@ public class Game
             call.setVerbose(true);
             call.setData(Arrays.asList(this.gameId));
             call.setUrlParams(new HashMap<String, Object>()
-                    {
+            {
                 {
                     this.put("includeTimeline", true);
                 }
-                    });
+            });
             final MatchDetail match = L4J.getMapper().readValue(call.doCall(), MatchDetail.class);
             CacheData.getMatchDetails().put(this.gameId, match);
             return match;

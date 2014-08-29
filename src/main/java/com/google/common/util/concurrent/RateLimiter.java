@@ -145,9 +145,9 @@ public abstract class RateLimiter
     {
         /*
          * The default RateLimiter configuration can save the unused permits of up to one second. This is to avoid unnecessary stalls in situations like this: A RateLimiter of 1qps, and 4 threads, all calling acquire() at these moments:
-         *
+         * 
          * T0 at 0 seconds T1 at 1.05 seconds T2 at 2 seconds T3 at 3 seconds
-         *
+         * 
          * Due to the slight delay of T1, T2 would have to sleep till 2.05 seconds, and T3 would also have to sleep till 3.05 seconds.
          */
         return RateLimiter.create(SleepingStopwatch.createFromSystemTimer(), permitsPerSecond);

@@ -20,19 +20,19 @@ public class VersionChecker
             case SUMMONER_MASTERIES:
                 return "v1.4";
             case TEAM_BY_SUMMONER:
-                return "v2.3";
+                return "v2.4";
             case TEAM_BY_ID:
-                return "v2.3";
+                return "v2.4";
             case LEAGUE_BY_SUMMONER_FULL:
-                return "v2.4";
+                return "v2.5";
             case LEAGUE_BY_SUMMONER:
-                return "v2.4";
+                return "v2.5";
             case LEAGUE_BY_TEAM:
-                return "v2.4";
+                return "v2.5";
             case LEAGUE_BY_TEAM_FULL:
-                return "v2.4";
+                return "v2.5";
             case CHALLENGER_LEAGUE:
-                return "v2.4";
+                return "v2.5";
             case MATCH:
                 return "v2.2";
             case MATCH_HISTORY:

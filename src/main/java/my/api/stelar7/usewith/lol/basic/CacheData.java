@@ -44,9 +44,9 @@ public class CacheData
     @Getter
     static HashMap<String, Team>                                                             teams                 = new HashMap<>();
     @Getter
-    static HashMap<Object, League>                                                           leaguesFull           = new HashMap<>();
+    static HashMap<Object, List<League>>                                                     leaguesFull           = new HashMap<>();
     @Getter
-    static HashMap<Object, League>                                                           leaguesSelf           = new HashMap<>();
+    static HashMap<Object, List<League>>                                                     leaguesSelf           = new HashMap<>();
     @Getter
     static HashMap<LeagueType, League>                                                       challengerLeague      = new HashMap<>();
     @Getter

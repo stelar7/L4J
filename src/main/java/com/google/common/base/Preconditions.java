@@ -16,10 +16,10 @@ package com.google.common.base;
 
 /**
  * Static convenience methods that help a method or constructor check whether it was invoked correctly (whether its <i>preconditions</i> have been met). These methods generally accept a {@code boolean} expression which is expected to be {@code true} (or in the case of {@code checkNotNull}, an object reference which is expected to be non-null). When {@code false} (or {@code null}) is passed instead, the {@code Preconditions} method throws an unchecked exception, which helps the calling method communicate to <i>its</i> caller that <i>that</i> caller has made a mistake. Example:
- * 
+ *
  * <pre>
  * {@code
- * 
+ *
  *   /**
  *    * Returns the positive square root of the given value.
  *    *
@@ -29,7 +29,7 @@ package com.google.common.base;
  *     Preconditions.checkArgument(value >= 0.0, "negative value: %s", value);
  *     // calculate the square root
  *   }
- * 
+ *
  *   void exampleBadCaller() {
  *     double d = sqrt(-1.0);
  *   }}
@@ -41,10 +41,10 @@ package com.google.common.base;
  *
  * <p>
  * The goal of this class is to improve readability of code, but in some circumstances this may come at a significant performance cost. Remember that parameter values for message construction must all be computed eagerly, and autoboxing and varargs array creation may happen as well, even when the precondition check then succeeds (as it should almost always do in production). In some circumstances these wasted CPU cycles and allocations can add up to a real problem. Performance-sensitive precondition checks can always be converted to the customary form:
- * 
+ *
  * <pre>
  * {@code
- * 
+ *
  *   if (value < 0.0) {
  *     throw new IllegalArgumentException("negative value: " + value);
  *   }}
@@ -223,17 +223,17 @@ public final class Preconditions
 
     /*
      * All recent hotspots (as of 2009) *really* like to have the natural code
-     * 
+     *
      * if (guardExpression) { throw new BadException(messageExpression); }
-     * 
+     *
      * refactored so that messageExpression is moved to a separate String-returning method.
-     * 
+     *
      * if (guardExpression) { throw new BadException(badMsg(...)); }
-     * 
+     *
      * The alternative natural refactorings into void or Exception-returning methods are much slower. This is a big deal - we're talking factors of 2-8 in microbenchmarks, not just 10-20%. (This is a hotspot optimizer bug, which should be fixed, but that's a separate, big project).
-     * 
+     *
      * The coding pattern above is heavily used in java.util, e.g. in ArrayList. There is a RangeCheckMicroBenchmark in the JDK that was used to test this.
-     * 
+     *
      * But the methods in this class want to throw different exceptions, depending on the args, so it appears that this pattern is not directly applicable. But we can use the ridiculous, devious trick of throwing an exception in the middle of the construction of another exception. Hotspot is fine with that.
      */
 

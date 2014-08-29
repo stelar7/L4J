@@ -30,9 +30,9 @@ public class Team
     List<TeamStatDetail>      teamStatDetails;
     Long                      thirdLastJoinDate;
 
-    public League getFullLeague()
+    public List<League> getFullLeague()
     {
-        final League test = CacheData.getLeaguesFull().get(this.fullId);
+        final List<League> test = CacheData.getLeaguesFull().get(this.fullId);
         if (test != null) { return test; }
         try
         {
@@ -41,8 +41,8 @@ public class Team
             call.setData(Arrays.asList("" + this.fullId));
             call.setVerbose(true);
             final List<League> pages = L4J.getMapper().convertValue(L4J.getMapper().readTree(call.doCall()).get("" + this.fullId), L4J.getMapper().getTypeFactory().constructCollectionType(List.class, League.class));
-            CacheData.getLeaguesFull().put(this.fullId, pages.get(0));
-            return pages.get(0);
+            CacheData.getLeaguesFull().put(this.fullId, pages);
+            return pages;
         } catch (final Exception e)
         {
             e.printStackTrace();
@@ -50,9 +50,9 @@ public class Team
         }
     }
 
-    public League getSelfLeague()
+    public List<League> getSelfLeague()
     {
-        final League test = CacheData.getLeaguesSelf().get(this.fullId);
+        final List<League> test = CacheData.getLeaguesSelf().get(this.fullId);
         if (test != null) { return test; }
         try
         {
@@ -61,8 +61,8 @@ public class Team
             call.setData(Arrays.asList("" + this.fullId));
             call.setVerbose(true);
             final List<League> pages = L4J.getMapper().convertValue(L4J.getMapper().readTree(call.doCall()).get("" + this.fullId), L4J.getMapper().getTypeFactory().constructCollectionType(List.class, League.class));
-            CacheData.getLeaguesSelf().put(this.fullId, pages.get(0));
-            return pages.get(0);
+            CacheData.getLeaguesSelf().put(this.fullId, pages);
+            return pages;
         } catch (final Exception e)
         {
             e.printStackTrace();
