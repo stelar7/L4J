@@ -28,18 +28,18 @@ package com.google.common.base;
 public abstract class Ticker
 {
     private static final Ticker SYSTEM_TICKER = new Ticker()
-    {
-        @Override
-        public long read()
-        {
-            return System.nanoTime();
-        }
-    };
+                                              {
+                                                  @Override
+                                                  public long read()
+                                                  {
+                                                      return System.nanoTime();
+                                                  }
+                                              };
 
     /**
      * Constructor for use by subclasses.
      */
-     protected Ticker()
+    protected Ticker()
     {}
 
     /**
@@ -47,13 +47,13 @@ public abstract class Ticker
      *
      * @since 10.0
      */
-     public static Ticker systemTicker()
-     {
-         return Ticker.SYSTEM_TICKER;
-     }
+    public static Ticker systemTicker()
+    {
+        return Ticker.SYSTEM_TICKER;
+    }
 
-     /**
-      * Returns the number of nanoseconds elapsed since this ticker's fixed point of reference.
-      */
-     public abstract long read();
+    /**
+     * Returns the number of nanoseconds elapsed since this ticker's fixed point of reference.
+     */
+    public abstract long read();
 }

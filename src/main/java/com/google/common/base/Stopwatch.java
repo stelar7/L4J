@@ -35,9 +35,9 @@ import java.util.concurrent.TimeUnit;
  *   Stopwatch stopwatch = Stopwatch.{@link #createStarted createStarted}();
  *   doSomething();
  *   stopwatch.{@link #stop stop}(); // optional
- * 
+ *
  *   long millis = stopwatch.elapsed(MILLISECONDS);
- * 
+ *
  *   log.info("time: " + stopwatch); // formatted string like "12.3 ms"
  * </pre>
  *

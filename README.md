@@ -8,11 +8,14 @@ A Java wrapper for the Riot Games League of Legends API.
 
 OR just [download it with dependencies](https://github.com/stelar7/L4J/releases) :)
 
+## Todo
+Remove HttpClient
+Remove Jackson (maybe)
+
 ## Questions/Contributions
 Feel free to send pull requests or to contact me via github or skype (steffenerd).
 
 ## Bugs/Errors
-
 There's probably typos or some data missing somewhere in the project. Let me know about any of them you run into.
 
 ## Disclaimer

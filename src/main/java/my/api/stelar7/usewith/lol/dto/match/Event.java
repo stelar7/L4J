@@ -13,10 +13,15 @@ public class Event
     String        buildingType;
     int           creatorId;
     String        eventType;
+    int           itemAfter;
+    int           itemBefore;
     int           killerId;
     String        laneType;
+    String        levelUpType;
     String        monsterType;
+    int           participantId;
     Position      position;
+    int           skillSlot;
     int           teamId;
     long          timestamp;
     String        towerType;

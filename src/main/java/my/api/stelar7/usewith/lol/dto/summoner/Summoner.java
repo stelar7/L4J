@@ -84,7 +84,7 @@ public class Summoner
      *            the begin index to use for fetching (can be null)
      * @param endIndex
      *            the end index to use for fetching (can be null)
-     * 
+     *
      * @return PlayerHistory from the player
      */
     public PlayerHistory getMatchHistory(final List<Integer> champids, final List<SubType> rankedQueues, final Integer beginIndex, final Integer endIndex)
@@ -98,18 +98,33 @@ public class Summoner
             call.setVerbose(true);
             call.setData(Arrays.asList(this.id));
             call.setUrlParams(new HashMap<String, Object>()
-            {
+                    {
                 {
-                    if (champids != null) put("championIds", champids.toString().substring(1, champids.toString().length() - 2));
-                    if (rankedQueues != null) put("rankedQueues", rankedQueues.toString().substring(1, rankedQueues.toString().length() - 2));
-                    if (beginIndex != null) put("beginIndex", beginIndex);
-                    if (endIndex != null) put("endIndex", endIndex);
+                    if (champids != null)
+                    {
+                        this.put("championIds", champids.toString().substring(1, champids.toString().length() - 2));
+                    }
+                    if (rankedQueues != null)
+                    {
+                        this.put("rankedQueues", rankedQueues.toString().substring(1, rankedQueues.toString().length() - 2));
+                    }
+                    if (beginIndex != null)
+                    {
+                        this.put("beginIndex", beginIndex);
+                    }
+                    if (endIndex != null)
+                    {
+                        this.put("endIndex", endIndex);
+                    }
                 }
-            });
-            String json = call.doCall();
-            if (json.equals("{}")) return null;
+                    });
+            final String json = call.doCall();
+            if (json.equals("{}")) { return null; }
             final PlayerHistory match = L4J.getMapper().readValue(json, PlayerHistory.class);
-            if (champids == null && champids == null && champids == null && champids == null) CacheData.getPlayerHistory().put(this.id, match);
+            if ((champids == null) && (champids == null) && (champids == null) && (champids == null))
+            {
+                CacheData.getPlayerHistory().put(this.id, match);
+            }
             return match;
         } catch (final Exception e)
         {

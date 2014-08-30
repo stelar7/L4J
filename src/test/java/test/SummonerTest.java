@@ -25,5 +25,5 @@ public class SummonerTest
         System.out.println(lib.getLeagueBySummoners(false, a.get(0).getId()));
         System.out.println(lib.getLeagueBySummoners(false, a.get(1).getId()));
         System.out.println(lib.getLeagueBySummoners(false, a.get(2).getId()));
-        }
+    }
 }

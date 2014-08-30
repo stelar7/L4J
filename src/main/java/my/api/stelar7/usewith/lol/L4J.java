@@ -80,11 +80,11 @@ public class L4J
             final DataCall call = new DataCall();
             call.setUrlEndpoint(URLEndpoint.CHALLENGER_LEAGUE);
             call.setUrlParams(new HashMap<String, Object>()
-                    {
+            {
                 {
                     this.put("type", type);
                 }
-                    });
+            });
             call.setVerbose(true);
             final League league = L4J.getMapper().readValue(call.doCall(), League.class);
             CacheData.getChallengerLeague().put(type, league);
@@ -188,11 +188,11 @@ public class L4J
             call.setVerbose(true);
             call.setData(Arrays.asList(id));
             call.setUrlParams(new HashMap<String, Object>()
-                    {
+            {
                 {
                     this.put("includeTimeline", true);
                 }
-                    });
+            });
             final MatchDetail match = L4J.getMapper().readValue(call.doCall(), MatchDetail.class);
             CacheData.getMatchDetails().put(id, match);
             return match;
