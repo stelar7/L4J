@@ -1,6 +1,7 @@
 package my.api.stelar7.usewith.lol.dto.summoner;
 
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 
 import lombok.Getter;
@@ -11,6 +12,7 @@ import my.api.stelar7.usewith.lol.basic.DataCall;
 import my.api.stelar7.usewith.lol.basic.URLEndpoint;
 import my.api.stelar7.usewith.lol.dto.game.Game;
 import my.api.stelar7.usewith.lol.dto.game.RecentGames;
+import my.api.stelar7.usewith.lol.dto.general.SubType;
 import my.api.stelar7.usewith.lol.dto.league.League;
 import my.api.stelar7.usewith.lol.dto.masteries.MasteryPage;
 import my.api.stelar7.usewith.lol.dto.matchhistory.PlayerHistory;
@@ -72,11 +74,20 @@ public class Summoner
     }
 
     /**
-     * Gets the players matchhistory
+     * Gets the players matchhistory (max 15 games)
      *
+     * @param champids
+     *            list of champion IDs to use for fetching games (can be null)
+     * @param rankedQueues
+     *            list of ranked queues yo use for fetching games. Non-ranked queues will be ignored (can be null)
+     * @param beginIndex
+     *            the begin index to use for fetching (can be null)
+     * @param endIndex
+     *            the end index to use for fetching (can be null)
+     * 
      * @return PlayerHistory from the player
      */
-    public PlayerHistory getMatchHistory()
+    public PlayerHistory getMatchHistory(final List<Integer> champids, final List<SubType> rankedQueues, final Integer beginIndex, final Integer endIndex)
     {
         final PlayerHistory test = CacheData.getPlayerHistory().get(this.id);
         if (test != null) { return test; }
@@ -86,8 +97,19 @@ public class Summoner
             call.setUrlEndpoint(URLEndpoint.MATCH_HISTORY);
             call.setVerbose(true);
             call.setData(Arrays.asList(this.id));
-            final PlayerHistory match = L4J.getMapper().readValue(call.doCall(), PlayerHistory.class);
-            CacheData.getPlayerHistory().put(this.id, match);
+            call.setUrlParams(new HashMap<String, Object>()
+            {
+                {
+                    if (champids != null) put("championIds", champids.toString().substring(1, champids.toString().length() - 2));
+                    if (rankedQueues != null) put("rankedQueues", rankedQueues.toString().substring(1, rankedQueues.toString().length() - 2));
+                    if (beginIndex != null) put("beginIndex", beginIndex);
+                    if (endIndex != null) put("endIndex", endIndex);
+                }
+            });
+            String json = call.doCall();
+            if (json.equals("{}")) return null;
+            final PlayerHistory match = L4J.getMapper().readValue(json, PlayerHistory.class);
+            if (champids == null && champids == null && champids == null && champids == null) CacheData.getPlayerHistory().put(this.id, match);
             return match;
         } catch (final Exception e)
         {
