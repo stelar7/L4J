@@ -60,25 +60,34 @@ public class LibraryException extends Exception
     @Override
     public String getMessage()
     {
+        String error = "";
         switch (this.type)
         {
             case BAD_REQUEST:
-                return "Bad Request";
+                error += "Bad Request";
+                break;
             case NOT_FOUND:
-                return "404 No data found";
+                error += "404 No data found";
+                break;
             case PARSE_FAILURE:
-                return "Failed to parse API response";
+                error += "Failed to parse API response";
+                break;
             case RATE_LIMIT:
-                return "Rate limit reached";
+                error += "Rate limit reached";
+                break;
             case SERVER_ERROR:
-                return "Server Error";
+                error += "Server Error";
+                break;
             case UNAUTHORIZED:
-                return "Unauthorized";
+                error += "Unauthorized";
+                break;
             case UNAVAILABLE:
-                return "Service Unavailable";
+                error += "Service Unavailable";
+                break;
             default:
-                return "An unknown error occured";
+                error += "An unknown error occured";
         }
+        return error + " (" + lastError + ")";
     }
 
 }

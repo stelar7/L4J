@@ -5,6 +5,7 @@ import java.io.InputStreamReader;
 import java.util.HashMap;
 import java.util.List;
 
+import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.java.Log;
 import my.api.stelar7.usewith.lol.L4J;
@@ -15,6 +16,7 @@ import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.HttpClientBuilder;
 
 @Setter
+@Getter
 @Log
 public class DataCall
 {
@@ -23,6 +25,7 @@ public class DataCall
     List<?>                 data;
     boolean                 blockWhileLimited = true;
     boolean                 verbose           = false;
+    boolean                 error             = false;
     HashMap<String, Object> urlParams         = new HashMap<>();
 
     /**
@@ -71,6 +74,7 @@ public class DataCall
         if (response.getStatusLine().getStatusCode() != 200)
         {
             LibraryException.lastError = response.getStatusLine().getStatusCode();
+            this.error = true;
             return null;
         }
         final BufferedReader rd = new BufferedReader(new InputStreamReader(response.getEntity().getContent()));

@@ -80,13 +80,15 @@ public class L4J
             final DataCall call = new DataCall();
             call.setUrlEndpoint(URLEndpoint.CHALLENGER_LEAGUE);
             call.setUrlParams(new HashMap<String, Object>()
-            {
+                    {
                 {
                     this.put("type", type);
                 }
-            });
+                    });
             call.setVerbose(true);
-            final League league = L4J.getMapper().readValue(call.doCall(), League.class);
+            final String json = call.doCall();
+            if (call.isError()) { throw new LibraryException(LibraryException.lastError); }
+            final League league = L4J.getMapper().readValue(json, League.class);
             CacheData.getChallengerLeague().put(type, league);
             return league;
         } catch (final Exception e)
@@ -108,7 +110,9 @@ public class L4J
         {
             final DataCall call = new DataCall();
             call.setUrlEndpoint(URLEndpoint.CHAMPION_LIST);
-            final ChampionList all = L4J.mapper.readValue(call.doCall(), ChampionList.class);
+            final String json = call.doCall();
+            if (call.isError()) { throw new LibraryException(LibraryException.lastError); }
+            final ChampionList all = L4J.mapper.readValue(json, ChampionList.class);
             CacheData.getChampionList().put(0, all);
             return all.getChampions();
         } catch (final Exception e)
@@ -149,7 +153,9 @@ public class L4J
             call.setUrlEndpoint(full ? URLEndpoint.LEAGUE_BY_SUMMONER_FULL : URLEndpoint.LEAGUE_BY_SUMMONER);
             call.setData(copy);
             call.setVerbose(true);
-            final JsonNode node = L4J.mapper.readTree(call.doCall());
+            final String json = call.doCall();
+            if (call.isError()) { throw new LibraryException(LibraryException.lastError); }
+            final JsonNode node = L4J.mapper.readTree(json);
             for (final Long s : copy)
             {
                 final List<League> pages = L4J.getMapper().convertValue(node.get("" + s), L4J.getMapper().getTypeFactory().constructCollectionType(List.class, League.class));
@@ -188,12 +194,14 @@ public class L4J
             call.setVerbose(true);
             call.setData(Arrays.asList(id));
             call.setUrlParams(new HashMap<String, Object>()
-            {
+                    {
                 {
                     this.put("includeTimeline", true);
                 }
-            });
-            final MatchDetail match = L4J.getMapper().readValue(call.doCall(), MatchDetail.class);
+                    });
+            final String json = call.doCall();
+            if (call.isError()) { throw new LibraryException(LibraryException.lastError); }
+            final MatchDetail match = L4J.getMapper().readValue(json, MatchDetail.class);
             CacheData.getMatchDetails().put(id, match);
             return match;
         } catch (final Exception e)
@@ -234,7 +242,9 @@ public class L4J
             call.setUrlEndpoint(URLEndpoint.SUMMONER_BY_NAME);
             call.setData(copy);
             call.setVerbose(true);
-            final JsonNode node = L4J.mapper.readTree(call.doCall());
+            final String json = call.doCall();
+            if (call.isError()) { throw new LibraryException(LibraryException.lastError); }
+            final JsonNode node = L4J.mapper.readTree(json);
             for (final String s : copy)
             {
                 final Summoner sum = L4J.mapper.readValue(node.get(s.toLowerCase().replaceAll(" ", "")), Summoner.class);
@@ -281,7 +291,9 @@ public class L4J
             final DataCall call = new DataCall();
             call.setUrlEndpoint(URLEndpoint.TEAM_BY_SUMMONER);
             call.setData(copy);
-            final JsonNode node = L4J.mapper.readTree(call.doCall());
+            final String json = call.doCall();
+            if (call.isError()) { throw new LibraryException(LibraryException.lastError); }
+            final JsonNode node = L4J.mapper.readTree(json);
             for (final Long s : copy)
             {
                 final List<Team> tea = L4J.mapper.readValue(node.get("" + s), L4J.mapper.getTypeFactory().constructCollectionType(List.class, Team.class));
@@ -328,7 +340,9 @@ public class L4J
             final DataCall call = new DataCall();
             call.setUrlEndpoint(URLEndpoint.TEAM_BY_ID);
             call.setData(copy);
-            final JsonNode node = L4J.mapper.readTree(call.doCall());
+            final String json = call.doCall();
+            if (call.isError()) { throw new LibraryException(LibraryException.lastError); }
+            final JsonNode node = L4J.mapper.readTree(json);
             for (final String s : copy)
             {
                 final Team tea = L4J.mapper.readValue(node.get(s), Team.class);

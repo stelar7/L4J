@@ -8,8 +8,11 @@ import lombok.ToString;
 import my.api.stelar7.usewith.lol.L4J;
 import my.api.stelar7.usewith.lol.basic.CacheData;
 import my.api.stelar7.usewith.lol.basic.DataCall;
+import my.api.stelar7.usewith.lol.basic.LibraryException;
 import my.api.stelar7.usewith.lol.basic.URLEndpoint;
 import my.api.stelar7.usewith.lol.dto.league.League;
+
+import org.codehaus.jackson.JsonNode;
 
 @Getter
 @ToString
@@ -40,7 +43,10 @@ public class Team
             call.setUrlEndpoint(URLEndpoint.LEAGUE_BY_TEAM_FULL);
             call.setData(Arrays.asList("" + this.fullId));
             call.setVerbose(true);
-            final List<League> pages = L4J.getMapper().convertValue(L4J.getMapper().readTree(call.doCall()).get("" + this.fullId), L4J.getMapper().getTypeFactory().constructCollectionType(List.class, League.class));
+            final String json = call.doCall();
+            if (call.isError()) { throw new LibraryException(LibraryException.lastError); }
+            final JsonNode node = L4J.getMapper().readTree(json);
+            final List<League> pages = L4J.getMapper().convertValue(node.get("" + this.fullId), L4J.getMapper().getTypeFactory().constructCollectionType(List.class, League.class));
             CacheData.getLeaguesFull().put(this.fullId, pages);
             return pages;
         } catch (final Exception e)
@@ -60,7 +66,10 @@ public class Team
             call.setUrlEndpoint(URLEndpoint.LEAGUE_BY_TEAM);
             call.setData(Arrays.asList("" + this.fullId));
             call.setVerbose(true);
-            final List<League> pages = L4J.getMapper().convertValue(L4J.getMapper().readTree(call.doCall()).get("" + this.fullId), L4J.getMapper().getTypeFactory().constructCollectionType(List.class, League.class));
+            final String json = call.doCall();
+            if (call.isError()) { throw new LibraryException(LibraryException.lastError); }
+            final JsonNode node = L4J.getMapper().readTree(json);
+            final List<League> pages = L4J.getMapper().convertValue(node.get("" + this.fullId), L4J.getMapper().getTypeFactory().constructCollectionType(List.class, League.class));
             CacheData.getLeaguesSelf().put(this.fullId, pages);
             return pages;
         } catch (final Exception e)

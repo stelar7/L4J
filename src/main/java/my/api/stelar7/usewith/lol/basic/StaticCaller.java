@@ -58,7 +58,9 @@ public class StaticCaller
                     this.put("dataById", idAsKey);
                 }
                     });
-            final my.api.stelar7.usewith.lol.dto.staticdata.champion.ChampionList champ = L4J.getMapper().readValue(call.doCall(), my.api.stelar7.usewith.lol.dto.staticdata.champion.ChampionList.class);
+            final String json = call.doCall();
+            if (call.isError()) { throw new LibraryException(LibraryException.lastError); }
+            final my.api.stelar7.usewith.lol.dto.staticdata.champion.ChampionList champ = L4J.getMapper().readValue(json, my.api.stelar7.usewith.lol.dto.staticdata.champion.ChampionList.class);
             if ((champdata != null) && champdata.contains("all"))
             {
                 CacheData.getChampionDataAll().put(0, champ);
@@ -110,7 +112,9 @@ public class StaticCaller
                     }
                 }
                     });
-            final my.api.stelar7.usewith.lol.dto.staticdata.champion.Champion champ = L4J.getMapper().readValue(call.doCall(), my.api.stelar7.usewith.lol.dto.staticdata.champion.Champion.class);
+            final String json = call.doCall();
+            if (call.isError()) { throw new LibraryException(LibraryException.lastError); }
+            final my.api.stelar7.usewith.lol.dto.staticdata.champion.Champion champ = L4J.getMapper().readValue(json, my.api.stelar7.usewith.lol.dto.staticdata.champion.Champion.class);
             if ((champdata != null) && champdata.contains("all"))
             {
                 CacheData.getChampionData().put(id, champ);
@@ -159,7 +163,9 @@ public class StaticCaller
                     }
                 }
                     });
-            final ItemList champ = L4J.getMapper().readValue(call.doCall(), ItemList.class);
+            final String json = call.doCall();
+            if (call.isError()) { throw new LibraryException(LibraryException.lastError); }
+            final ItemList champ = L4J.getMapper().readValue(json, ItemList.class);
             if ((itemListData != null) && itemListData.contains("all"))
             {
                 CacheData.getItemListData().put(0, champ);
@@ -211,7 +217,9 @@ public class StaticCaller
                     }
                 }
                     });
-            final Item champ = L4J.getMapper().readValue(call.doCall(), Item.class);
+            final String json = call.doCall();
+            if (call.isError()) { throw new LibraryException(LibraryException.lastError); }
+            final Item champ = L4J.getMapper().readValue(json, Item.class);
             if ((itemData != null) && itemData.contains("all"))
             {
                 CacheData.getItemData().put(id, champ);
@@ -260,7 +268,9 @@ public class StaticCaller
                     }
                 }
                     });
-            final MasteryList champ = L4J.getMapper().readValue(call.doCall(), MasteryList.class);
+            final String json = call.doCall();
+            if (call.isError()) { throw new LibraryException(LibraryException.lastError); }
+            final MasteryList champ = L4J.getMapper().readValue(json, MasteryList.class);
             if ((champdata != null) && champdata.contains("all"))
             {
                 CacheData.getMasteryListData().put(0, champ);
@@ -312,7 +322,9 @@ public class StaticCaller
                     }
                 }
                     });
-            final Mastery champ = L4J.getMapper().readValue(call.doCall(), Mastery.class);
+            final String json = call.doCall();
+            if (call.isError()) { throw new LibraryException(LibraryException.lastError); }
+            final Mastery champ = L4J.getMapper().readValue(json, Mastery.class);
             if ((data != null) && data.contains("all"))
             {
                 CacheData.getMasteryData().put(id, champ);
@@ -337,7 +349,9 @@ public class StaticCaller
             final DataCall call = new DataCall();
             call.setUrlEndpoint(URLEndpoint.STATIC_REALM);
             call.setVerbose(true);
-            final Realm champ = L4J.getMapper().readValue(call.doCall(), Realm.class);
+            final String json = call.doCall();
+            if (call.isError()) { throw new LibraryException(LibraryException.lastError); }
+            final Realm champ = L4J.getMapper().readValue(json, Realm.class);
             CacheData.getRealm().put(0, champ);
             return champ;
         } catch (final Exception e)
@@ -383,7 +397,9 @@ public class StaticCaller
                     }
                 }
                     });
-            final RuneList champ = L4J.getMapper().readValue(call.doCall(), RuneList.class);
+            final String json = call.doCall();
+            if (call.isError()) { throw new LibraryException(LibraryException.lastError); }
+            final RuneList champ = L4J.getMapper().readValue(json, RuneList.class);
             if ((itemData != null) && itemData.contains("all"))
             {
                 CacheData.getRuneListData().put(0, champ);
@@ -435,7 +451,9 @@ public class StaticCaller
                     }
                 }
                     });
-            final Rune champ = L4J.getMapper().readValue(call.doCall(), Rune.class);
+            final String json = call.doCall();
+            if (call.isError()) { throw new LibraryException(LibraryException.lastError); }
+            final Rune champ = L4J.getMapper().readValue(json, Rune.class);
             if ((itemData != null) && itemData.contains("all"))
             {
                 CacheData.getRuneData().put(id, champ);
@@ -487,7 +505,9 @@ public class StaticCaller
                     }
                 }
                     });
-            final SummonerSpellList champ = L4J.getMapper().readValue(call.doCall(), SummonerSpellList.class);
+            final String json = call.doCall();
+            if (call.isError()) { throw new LibraryException(LibraryException.lastError); }
+            final SummonerSpellList champ = L4J.getMapper().readValue(json, SummonerSpellList.class);
             if ((itemData != null) && itemData.contains("all"))
             {
                 CacheData.getSummonerSpellListData().put(0, champ);
@@ -541,7 +561,9 @@ public class StaticCaller
                     }
                 }
                     });
-            final SummonerSpell champ = L4J.getMapper().readValue(call.doCall(), SummonerSpell.class);
+            final String json = call.doCall();
+            if (call.isError()) { throw new LibraryException(LibraryException.lastError); }
+            final SummonerSpell champ = L4J.getMapper().readValue(json, SummonerSpell.class);
             if ((itemData != null) && itemData.contains("all"))
             {
                 CacheData.getSummonerSpellData().put(id, champ);
@@ -566,7 +588,9 @@ public class StaticCaller
             final DataCall call = new DataCall();
             call.setUrlEndpoint(URLEndpoint.STATIC_VERSION);
             call.setVerbose(true);
-            final List<String> champ = L4J.getMapper().readValue(call.doCall(), L4J.getMapper().getTypeFactory().constructCollectionType(List.class, String.class));
+            final String json = call.doCall();
+            if (call.isError()) { throw new LibraryException(LibraryException.lastError); }
+            final List<String> champ = L4J.getMapper().readValue(json, L4J.getMapper().getTypeFactory().constructCollectionType(List.class, String.class));
             CacheData.getVersions().put(0, champ);
             return champ;
         } catch (final Exception e)

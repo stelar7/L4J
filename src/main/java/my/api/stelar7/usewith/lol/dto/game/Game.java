@@ -9,6 +9,7 @@ import lombok.ToString;
 import my.api.stelar7.usewith.lol.L4J;
 import my.api.stelar7.usewith.lol.basic.CacheData;
 import my.api.stelar7.usewith.lol.basic.DataCall;
+import my.api.stelar7.usewith.lol.basic.LibraryException;
 import my.api.stelar7.usewith.lol.basic.URLEndpoint;
 import my.api.stelar7.usewith.lol.dto.match.MatchDetail;
 
@@ -48,7 +49,9 @@ public class Game
                     this.put("includeTimeline", true);
                 }
                     });
-            final MatchDetail match = L4J.getMapper().readValue(call.doCall(), MatchDetail.class);
+            final String json = call.doCall();
+            if (call.isError()) { throw new LibraryException(LibraryException.lastError); }
+            final MatchDetail match = L4J.getMapper().readValue(json, MatchDetail.class);
             CacheData.getMatchDetails().put(this.gameId, match);
             return match;
         } catch (final Exception e)
