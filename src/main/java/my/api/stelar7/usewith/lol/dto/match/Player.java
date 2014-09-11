@@ -9,5 +9,6 @@ public class Player
 {
     String matchHistoryUri;
     int    profileIcon;
+    long   summonerId;
     String summonerName;
 }

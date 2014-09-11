@@ -24,17 +24,17 @@ public class L4J
 
     @Getter
     @Setter
-    static String                     APIKey;
+    static String                       APIKey;
     @Getter
     @Setter
-    static RateLimiter                rateLimiter = RateLimiter.create(7.0 / 10.0);
+    static HashMap<Server, RateLimiter> rateLimiter = new HashMap<>();
     @Getter
     @Setter
-    static Server                     region      = Server.EUW;
+    static Server                       region      = Server.EUW;
     @Getter
-    private static final ObjectMapper mapper      = new ObjectMapper();
+    private static final ObjectMapper   mapper      = new ObjectMapper();
     @Getter
-    private final StaticCaller        staticData  = new StaticCaller();
+    private final StaticCaller          staticData  = new StaticCaller();
 
     /**
      *
@@ -43,7 +43,7 @@ public class L4J
      */
     public L4J(final String key)
     {
-        this(key, L4J.rateLimiter, L4J.region);
+        this(key, 7.0 / 10.0, L4J.region);
     }
 
     /**
@@ -55,11 +55,13 @@ public class L4J
      * @param server
      *            Your regional endpoint
      */
-    public L4J(final String key, final RateLimiter limiter, final Server server)
+    public L4J(final String key, final double rate, final Server server)
     {
         L4J.APIKey = key;
-        L4J.rateLimiter = limiter;
         L4J.region = server;
+        for (Server s : Server.values()) {
+            rateLimiter.put(s, RateLimiter.create(rate));
+        }
         L4J.mapper.configure(DeserializationConfig.Feature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 
     }
@@ -80,11 +82,11 @@ public class L4J
             final DataCall call = new DataCall();
             call.setUrlEndpoint(URLEndpoint.CHALLENGER_LEAGUE);
             call.setUrlParams(new HashMap<String, Object>()
-                    {
+            {
                 {
                     this.put("type", type);
                 }
-                    });
+            });
             call.setVerbose(true);
             final String json = call.doCall();
             if (call.isError()) { throw new LibraryException(LibraryException.lastError); }
@@ -194,11 +196,11 @@ public class L4J
             call.setVerbose(true);
             call.setData(Arrays.asList(id));
             call.setUrlParams(new HashMap<String, Object>()
-                    {
+            {
                 {
                     this.put("includeTimeline", true);
                 }
-                    });
+            });
             final String json = call.doCall();
             if (call.isError()) { throw new LibraryException(LibraryException.lastError); }
             final MatchDetail match = L4J.getMapper().readValue(json, MatchDetail.class);

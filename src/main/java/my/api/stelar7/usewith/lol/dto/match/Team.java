@@ -11,6 +11,7 @@ public class Team
 {
     List<BannedChampion> bans;
     int                  baronKills;
+    long                 dominionVictoryScore;
     int                  dragonKills;
     boolean              firstBaron;
     boolean              firstBlood;

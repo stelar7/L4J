@@ -51,10 +51,10 @@ public class DataCall
             URL += L4J.getRegion().getServer();
             if (this.blockWhileLimited)
             {
-                L4J.getRateLimiter().acquire();
+                L4J.getRateLimiter().get(L4J.getRegion()).acquire();
             } else
             {
-                if (!L4J.getRateLimiter().tryAcquire()) { throw new LibraryException(LibraryException.Type.RATE_LIMIT); }
+                if (!L4J.getRateLimiter().get(L4J.getRegion()).tryAcquire()) { throw new LibraryException(LibraryException.Type.RATE_LIMIT); }
             }
         } else
         {

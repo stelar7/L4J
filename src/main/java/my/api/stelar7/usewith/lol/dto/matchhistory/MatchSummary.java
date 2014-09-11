@@ -15,6 +15,8 @@ public class MatchSummary
     long                      matchCreation;
     long                      matchDuration;
     long                      matchId;
+    String                    matchMode;
+    String                    matchType;
     String                    matchVersion;
     List<ParticipantIdentity> participantIdentities;
     List<Participant>         participants;
