@@ -9,17 +9,20 @@ import lombok.ToString;
 @Getter
 public class Event
 {
+    String        ascendedType;
     List<Integer> assistingParticipantIds;
     String        buildingType;
     int           creatorId;
     String        eventType;
     int           itemAfter;
     int           itemBefore;
+    int           itemId;
     int           killerId;
     String        laneType;
     String        levelUpType;
     String        monsterType;
     int           participantId;
+    String        pointCaptured;
     Position      position;
     int           skillSlot;
     int           teamId;
