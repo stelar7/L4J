@@ -31,7 +31,7 @@ public class BasicData
     String               sanitizedDescription;
     int                  specialRecipe;
     int                  stacks;
-    BasicDataStats       stats;
+    Map<String, Double>  stats;
     List<String>         tags;
 
 }
