@@ -3,13 +3,11 @@
 A Java wrapper for the Riot Games League of Legends API.
 
 ## Dependencies
-* HttpClient
 * Jackson-mapper-asl
 
 OR just [download it with dependencies](https://github.com/stelar7/L4J/releases) :)
 
 ## Todo
-Remove HttpClient
 Remove Jackson (maybe)
 
 ## Questions/Contributions
