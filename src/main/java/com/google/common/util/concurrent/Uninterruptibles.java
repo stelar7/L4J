@@ -20,24 +20,12 @@ import static java.util.concurrent.TimeUnit.*;
 
 import java.util.concurrent.*;
 
-/**
- * Utilities for treating interruptible operations as uninterruptible. In all cases, if a thread is interrupted during such a call, the call continues to block until the result is available or the timeout elapses, and only then re-interrupts the thread.
- *
- * @author Anthony Zana
- * @since 10.0
- */
 public final class Uninterruptibles
 {
-
-    // Implementation Note: As of 3-7-11, the logic for each blocking/timeout
-    // methods is identical, save for method being invoked.
 
     private Uninterruptibles()
     {}
 
-    /**
-     * Invokes {@code latch.}{@link CountDownLatch#await() await()} uninterruptibly.
-     */
     public static void awaitUninterruptibly(final CountDownLatch latch)
     {
         boolean interrupted = false;
@@ -63,9 +51,6 @@ public final class Uninterruptibles
         }
     }
 
-    /**
-     * Invokes {@code latch.}{@link CountDownLatch#await(long, TimeUnit) await(timeout, unit)} uninterruptibly.
-     */
     public static boolean awaitUninterruptibly(final CountDownLatch latch, final long timeout, final TimeUnit unit)
     {
         boolean interrupted = false;
@@ -78,7 +63,6 @@ public final class Uninterruptibles
             {
                 try
                 {
-                    // CountDownLatch treats negative timeouts just like zero.
                     return latch.await(remainingNanos, NANOSECONDS);
                 } catch (final InterruptedException e)
                 {
@@ -94,18 +78,6 @@ public final class Uninterruptibles
             }
         }
     }
-
-    /**
-     * Invokes {@code future.}{@link Future#get() get()} uninterruptibly. To get uninterruptibility and remove checked exceptions, see {@link Futures#getUnchecked}.
-     *
-     * <p>
-     * If instead, you wish to treat {@link InterruptedException} uniformly with other exceptions, see {@link Futures#get(Future, Class) Futures.get} or {@link Futures#makeChecked}.
-     *
-     * @throws ExecutionException
-     *             if the computation threw an exception
-     * @throws CancellationException
-     *             if the computation was cancelled
-     */
     public static <V> V getUninterruptibly(final Future<V> future) throws ExecutionException
     {
         boolean interrupted = false;
@@ -130,19 +102,6 @@ public final class Uninterruptibles
         }
     }
 
-    /**
-     * Invokes {@code future.}{@link Future#get(long, TimeUnit) get(timeout, unit)} uninterruptibly.
-     *
-     * <p>
-     * If instead, you wish to treat {@link InterruptedException} uniformly with other exceptions, see {@link Futures#get(Future, Class) Futures.get} or {@link Futures#makeChecked}.
-     *
-     * @throws ExecutionException
-     *             if the computation threw an exception
-     * @throws CancellationException
-     *             if the computation was cancelled
-     * @throws TimeoutException
-     *             if the wait timed out
-     */
     public static <V> V getUninterruptibly(final Future<V> future, final long timeout, final TimeUnit unit) throws ExecutionException, TimeoutException
     {
         boolean interrupted = false;
@@ -172,9 +131,6 @@ public final class Uninterruptibles
         }
     }
 
-    /**
-     * Invokes {@code toJoin.}{@link Thread#join() join()} uninterruptibly.
-     */
     public static void joinUninterruptibly(final Thread toJoin)
     {
         boolean interrupted = false;
@@ -200,9 +156,6 @@ public final class Uninterruptibles
         }
     }
 
-    /**
-     * Invokes {@code unit.}{@link TimeUnit#timedJoin(Thread, long) timedJoin(toJoin, timeout)} uninterruptibly.
-     */
     public static void joinUninterruptibly(final Thread toJoin, final long timeout, final TimeUnit unit)
     {
         boolean interrupted = false;
@@ -232,14 +185,6 @@ public final class Uninterruptibles
         }
     }
 
-    /**
-     * Invokes {@code queue.}{@link BlockingQueue#put(Object) put(element)} uninterruptibly.
-     *
-     * @throws ClassCastException
-     *             if the class of the specified element prevents it from being added to the given queue
-     * @throws IllegalArgumentException
-     *             if some property of the specified element prevents it from being added to the given queue
-     */
     public static <E> void putUninterruptibly(final BlockingQueue<E> queue, final E element)
     {
         boolean interrupted = false;
@@ -265,10 +210,6 @@ public final class Uninterruptibles
         }
     }
 
-    // TODO(user): Support Sleeper somehow (wrapper or interface method)?
-    /**
-     * Invokes {@code unit.}{@link TimeUnit#sleep(long) sleep(sleepFor)} uninterruptibly.
-     */
     public static void sleepUninterruptibly(final long sleepFor, final TimeUnit unit)
     {
         boolean interrupted = false;
@@ -280,7 +221,6 @@ public final class Uninterruptibles
             {
                 try
                 {
-                    // TimeUnit.sleep() treats negative timeouts just like zero.
                     NANOSECONDS.sleep(remainingNanos);
                     return;
                 } catch (final InterruptedException e)
@@ -298,9 +238,6 @@ public final class Uninterruptibles
         }
     }
 
-    /**
-     * Invokes {@code queue.}{@link BlockingQueue#take() take()} uninterruptibly.
-     */
     public static <E> E takeUninterruptibly(final BlockingQueue<E> queue)
     {
         boolean interrupted = false;
@@ -325,11 +262,6 @@ public final class Uninterruptibles
         }
     }
 
-    /**
-     * Invokes {@code semaphore.}{@link Semaphore#tryAcquire(int, long, TimeUnit) tryAcquire(permits, timeout, unit)} uninterruptibly.
-     *
-     * @since 18.0
-     */
     public static boolean tryAcquireUninterruptibly(final Semaphore semaphore, final int permits, final long timeout, final TimeUnit unit)
     {
         boolean interrupted = false;
@@ -359,13 +291,6 @@ public final class Uninterruptibles
         }
     }
 
-    // TODO(user): Add support for waitUninterruptibly.
-
-    /**
-     * Invokes {@code semaphore.}{@link Semaphore#tryAcquire(int, long, TimeUnit) tryAcquire(1, timeout, unit)} uninterruptibly.
-     *
-     * @since 18.0
-     */
     public static boolean tryAcquireUninterruptibly(final Semaphore semaphore, final long timeout, final TimeUnit unit)
     {
         return Uninterruptibles.tryAcquireUninterruptibly(semaphore, 1, timeout, unit);
