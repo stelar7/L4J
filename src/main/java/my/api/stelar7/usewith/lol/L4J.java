@@ -59,7 +59,8 @@ public class L4J
     {
         L4J.APIKey = key;
         L4J.region = server;
-        for (Server s : Server.values()) {
+        for (Server s : Server.values())
+        {
             rateLimiter.put(s, RateLimiter.create(rate));
         }
         L4J.mapper.configure(DeserializationConfig.Feature.FAIL_ON_UNKNOWN_PROPERTIES, false);
@@ -249,9 +250,14 @@ public class L4J
             final JsonNode node = L4J.mapper.readTree(json);
             for (final String s : copy)
             {
-                final Summoner sum = L4J.mapper.readValue(node.get(s.toLowerCase().replaceAll(" ", "")), Summoner.class);
-                summoners.add(sum);
-                CacheData.getSummoners().put(s.toLowerCase().replaceAll(" ", ""), sum);
+                JsonNode innernode = node.get(s.toLowerCase().replaceAll(" ", ""));
+                if (innernode == null) summoners.add(null);
+                else
+                {
+                    final Summoner sum = L4J.mapper.readValue(innernode, Summoner.class);
+                    summoners.add(sum);
+                    CacheData.getSummoners().put(s.toLowerCase().replaceAll(" ", ""), sum);
+                }
             }
             return summoners;
         } catch (final Exception e)
@@ -298,9 +304,14 @@ public class L4J
             final JsonNode node = L4J.mapper.readTree(json);
             for (final Long s : copy)
             {
-                final List<Team> tea = L4J.mapper.readValue(node.get("" + s), L4J.mapper.getTypeFactory().constructCollectionType(List.class, Team.class));
-                teams.put(s, tea);
-                CacheData.getTeamList().put(s, tea);
+                JsonNode innernode = node.get("" + s);
+                if (innernode == null) teams.put(s, null);
+                else
+                {
+                    final List<Team> tea = L4J.mapper.readValue(innernode, L4J.mapper.getTypeFactory().constructCollectionType(List.class, Team.class));
+                    teams.put(s, tea);
+                    CacheData.getTeamList().put(s, tea);
+                }
             }
             return teams;
         } catch (final Exception e)
@@ -347,9 +358,14 @@ public class L4J
             final JsonNode node = L4J.mapper.readTree(json);
             for (final String s : copy)
             {
-                final Team tea = L4J.mapper.readValue(node.get(s), Team.class);
-                teams.add(tea);
-                CacheData.getTeams().put(tea.getFullId(), tea);
+                JsonNode innernode = node.get(s);
+                if (innernode == null) teams.add(null);
+                else
+                {
+                    final Team tea = L4J.mapper.readValue(innernode, Team.class);
+                    teams.add(tea);
+                    CacheData.getTeams().put(tea.getFullId(), tea);
+                }
             }
             return teams;
         } catch (final Exception e)

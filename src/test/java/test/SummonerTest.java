@@ -17,7 +17,7 @@ public class SummonerTest
     public void test1()
     {
         L4J.setRegion(Server.EUW);
-        List<Summoner> a = lib.getSummonersByName("stelar7", "henriko950", "vibbsen");
+        List<Summoner> a = lib.getSummonersByName("stelar7", "henriko950", "vibbsdsfdsfdsfdsfdsfdsen");
         System.out.println(lib.getLeagueBySummoners(false, a.get(0).getId()));
         System.out.println(lib.getLeagueBySummoners(true, a.get(1).getId()));
         System.out.println(lib.getLeagueBySummoners(false, a.get(2).getId()));
