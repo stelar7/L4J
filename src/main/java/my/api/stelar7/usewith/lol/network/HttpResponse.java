@@ -7,46 +7,30 @@ import java.net.HttpURLConnection;
 public class HttpResponse
 {
 
-    HttpURLConnection connection;
-    String            body;
-    Integer           response;
+    String  body;
+    Integer response;
 
-    public HttpResponse(HttpURLConnection con)
+    public HttpResponse(HttpURLConnection con) throws Exception
     {
-        this.connection = con;
+        StringBuilder sb = new StringBuilder();
+        int x = -1;
+        final Reader r = new InputStreamReader(con.getInputStream());
+        while ((x = r.read()) > 0)
+        {
+            sb.append((char) x);
+        }
+        body = sb.toString();
+        response = con.getResponseCode();
     }
 
     public int getStatusCode()
     {
-        if (response != null) return response;
-        try
-        {
-            return response = connection.getResponseCode();
-        } catch (Exception e)
-        {
-            e.printStackTrace();
-            return 0;
-        }
+        return response;
     }
 
     public String getBody()
     {
-        if (body != null) return body;
-        try
-        {
-            StringBuilder sb = new StringBuilder();
-            int x = -1;
-            final Reader r = new InputStreamReader(connection.getInputStream());
-            while ((x = r.read()) > 0)
-            {
-                sb.append((char) x);
-            }
-            return body = sb.toString();
-        } catch (Exception e)
-        {
-            e.printStackTrace();
-            return null;
-        }
+        return body;
     }
 
 }

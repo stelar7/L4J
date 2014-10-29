@@ -93,10 +93,13 @@ public class Summoner
      *
      * @return PlayerHistory from the player
      */
-    public PlayerHistory getMatchHistory(final List<Integer> champids, final List<SubType> rankedQueues, final Integer beginIndex, final Integer endIndex)
+    public PlayerHistory getMatchHistory(final List<Integer> champids, final List<SubType> rankedQueues, final Integer beginIndex, final Integer endIndex, boolean ignoreCache)
     {
-        final PlayerHistory test = CacheData.getPlayerHistory().get(this.id);
-        if (test != null) { return test; }
+        if (!ignoreCache)
+        {
+            final PlayerHistory test = CacheData.getPlayerHistory().get(this.id);
+            if (test != null) { return test; }
+        }
         try
         {
             final DataCall call = new DataCall();
@@ -104,7 +107,7 @@ public class Summoner
             call.setVerbose(true);
             call.setData(Arrays.asList(this.id));
             call.setUrlParams(new HashMap<String, Object>()
-                    {
+            {
                 {
                     if (champids != null)
                     {
@@ -123,7 +126,7 @@ public class Summoner
                         this.put("endIndex", endIndex);
                     }
                 }
-                    });
+            });
             final String json = call.doCall();
             if (json.equals("{}")) { return null; }
             final PlayerHistory match = L4J.getMapper().readValue(json, PlayerHistory.class);

@@ -9,6 +9,7 @@ public class LibraryException extends Exception
         PARSE_FAILURE,
         RATE_LIMIT,
         SERVER_ERROR,
+        TIMEOUT,
         UNAUTHORIZED,
         UNAVAILABLE,
         UNKNOWN;
@@ -44,6 +45,9 @@ public class LibraryException extends Exception
         if (code == 429)
         {
             this.type = Type.RATE_LIMIT;
+        }
+        if(code == 0) {
+            this.type = Type.TIMEOUT;
         }
     }
 

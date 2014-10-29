@@ -184,9 +184,11 @@ public class L4J
      *
      * @param id
      *            The id of the match to find
+     * @param timeline
+     *            Include the timeline
      * @return MatchDetail of the match
      */
-    public MatchDetail getMatch(final long id)
+    public MatchDetail getMatch(final long id, final boolean timeline)
     {
         final MatchDetail test = CacheData.getMatchDetails().get(id);
         if (test != null) { return test; }
@@ -199,7 +201,7 @@ public class L4J
             call.setUrlParams(new HashMap<String, Object>()
             {
                 {
-                    this.put("includeTimeline", true);
+                    this.put("includeTimeline", timeline);
                 }
             });
             final String json = call.doCall();
