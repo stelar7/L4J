@@ -11,7 +11,7 @@ public class League
 {
     List<LeagueEntry> entries;
     String            name;
+    String            participantId;
     String            queue;
     String            tier;
-    String            participantId;
 }

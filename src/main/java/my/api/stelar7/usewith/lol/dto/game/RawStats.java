@@ -69,6 +69,7 @@ public class RawStats
     int     totalDamageTaken;
     int     totalHeal;
     int     totalPlayerScore;
+    int     totalScoreRank;
     int     totalTimeCrowdControlDealt;
     int     totalUnitsHealed;
     int     tripleKills;

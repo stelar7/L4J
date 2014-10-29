@@ -20,6 +20,7 @@ public class MatchSummary
     String                    matchVersion;
     List<ParticipantIdentity> participantIdentities;
     List<Participant>         participants;
+    String                    platformId;
     String                    queueType;
     String                    region;
     String                    season;

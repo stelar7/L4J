@@ -7,15 +7,15 @@ import lombok.ToString;
 @ToString
 public class LeagueEntry
 {
+    public String     division;
     public boolean    isFreshBlood;
+    public boolean    isHotStreak;
     public boolean    isInactive;
     public boolean    isVeteran;
-    public boolean    isHotStreak;
     public int        leaguePoints;
     public MiniSeries miniSeries;
     public String     playerOrTeamId;
     public String     playerOrTeamName;
-    public String     division;
     public int        wins;
 
 }
