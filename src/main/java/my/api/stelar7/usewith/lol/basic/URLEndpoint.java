@@ -7,6 +7,7 @@ public enum URLEndpoint
     CHAMPION_LIST("api/lol/{region}/{version}/champion"),
     CHAMPION_ID("api/lol/{region}/{version}/champion/{data}"),
     SUMMONER_BY_NAME("api/lol/{region}/{version}/summoner/by-name/{data}"),
+    SUMMONER_BY_ID("api/lol/{region}/{version}/summoner/{data}"),
     RECENT_GAMES("api/lol/{region}/{version}/game/by-summoner/{data}/recent"),
     SUMMONER_RUNES("api/lol/{region}/{version}/summoner/{data}/runes"),
     SUMMONER_MASTERIES("api/lol/{region}/{version}/summoner/{data}/masteries"),

@@ -93,6 +93,7 @@ public abstract class RateLimiter
         rateLimiter.setRate(permitsPerSecond);
         return rateLimiter;
     }
+
     public double acquire()
     {
         return this.acquire(1);

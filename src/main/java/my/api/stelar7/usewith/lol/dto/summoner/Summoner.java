@@ -7,10 +7,7 @@ import java.util.List;
 import lombok.Getter;
 import lombok.ToString;
 import my.api.stelar7.usewith.lol.L4J;
-import my.api.stelar7.usewith.lol.basic.CacheData;
-import my.api.stelar7.usewith.lol.basic.DataCall;
-import my.api.stelar7.usewith.lol.basic.LibraryException;
-import my.api.stelar7.usewith.lol.basic.URLEndpoint;
+import my.api.stelar7.usewith.lol.basic.*;
 import my.api.stelar7.usewith.lol.dto.game.Game;
 import my.api.stelar7.usewith.lol.dto.game.RecentGames;
 import my.api.stelar7.usewith.lol.dto.general.SubType;
@@ -33,6 +30,7 @@ public class Summoner
     int    profileIconId;
     Long   revisionDate;
     Long   summonerLevel;
+    Server region;
 
     public List<League> getFullLeague()
     {
@@ -93,13 +91,10 @@ public class Summoner
      *
      * @return PlayerHistory from the player
      */
-    public PlayerHistory getMatchHistory(final List<Integer> champids, final List<SubType> rankedQueues, final Integer beginIndex, final Integer endIndex, boolean ignoreCache)
+    public PlayerHistory getMatchHistory(final List<Integer> champids, final List<SubType> rankedQueues, final Integer beginIndex, final Integer endIndex)
     {
-        if (!ignoreCache)
-        {
-            final PlayerHistory test = CacheData.getPlayerHistory().get(this.id);
-            if (test != null) { return test; }
-        }
+        final PlayerHistory test = CacheData.getPlayerHistory().get(this.id);
+        if (test != null) { return test; }
         try
         {
             final DataCall call = new DataCall();
@@ -130,7 +125,7 @@ public class Summoner
             final String json = call.doCall();
             if (json.equals("{}")) { return null; }
             final PlayerHistory match = L4J.getMapper().readValue(json, PlayerHistory.class);
-            if ((champids == null) && (champids == null) && (champids == null) && (champids == null))
+            if ((champids == null) && (rankedQueues == null) && (beginIndex == null) && (endIndex == null))
             {
                 CacheData.getPlayerHistory().put(this.id, match);
             }

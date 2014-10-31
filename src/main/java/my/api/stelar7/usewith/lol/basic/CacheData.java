@@ -34,6 +34,8 @@ public class CacheData
     @Getter
     static HashMap<String, Summoner>                                                         summoners             = new HashMap<>();
     @Getter
+    static HashMap<Long, Summoner>                                                           summonersId           = new HashMap<>();
+    @Getter
     static HashMap<Long, RecentGames>                                                        games                 = new HashMap<>();
     @Getter
     static HashMap<Long, List<RunePage>>                                                     runePages             = new HashMap<>();

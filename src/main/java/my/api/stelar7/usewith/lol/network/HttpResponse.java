@@ -10,27 +10,27 @@ public class HttpResponse
     String  body;
     Integer response;
 
-    public HttpResponse(HttpURLConnection con) throws Exception
+    public HttpResponse(final HttpURLConnection con) throws Exception
     {
-        StringBuilder sb = new StringBuilder();
+        final StringBuilder sb = new StringBuilder();
         int x = -1;
         final Reader r = new InputStreamReader(con.getInputStream());
         while ((x = r.read()) > 0)
         {
             sb.append((char) x);
         }
-        body = sb.toString();
-        response = con.getResponseCode();
-    }
-
-    public int getStatusCode()
-    {
-        return response;
+        this.body = sb.toString();
+        this.response = con.getResponseCode();
     }
 
     public String getBody()
     {
-        return body;
+        return this.body;
+    }
+
+    public int getStatusCode()
+    {
+        return this.response;
     }
 
 }

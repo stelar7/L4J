@@ -107,12 +107,14 @@ public final class Stopwatch
     {
         return this.isRunning;
     }
+
     public Stopwatch reset()
     {
         this.elapsedNanos = 0;
         this.isRunning = false;
         return this;
     }
+
     public Stopwatch start()
     {
         Preconditions.checkState(!this.isRunning, "This stopwatch is already running.");

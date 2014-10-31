@@ -95,10 +95,7 @@ public final class Preconditions
 
     public static <T> T checkNotNull(final T reference, final String errorMessageTemplate, final Object... errorMessageArgs)
     {
-        if (reference == null)
-        {
-            throw new NullPointerException(Preconditions.format(errorMessageTemplate, errorMessageArgs));
-        }
+        if (reference == null) { throw new NullPointerException(Preconditions.format(errorMessageTemplate, errorMessageArgs)); }
         return reference;
     }
 

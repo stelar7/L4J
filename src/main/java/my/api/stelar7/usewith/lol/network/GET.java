@@ -8,12 +8,12 @@ public class GET
 
     URL url;
 
-    public GET(String url)
+    public GET(final String url)
     {
         try
         {
             this.url = new URL(url);
-        } catch (MalformedURLException e)
+        } catch (final MalformedURLException e)
         {
             e.printStackTrace();
         }

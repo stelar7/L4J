@@ -1,5 +1,6 @@
 package my.api.stelar7.usewith.lol;
 
+import java.lang.reflect.Field;
 import java.util.*;
 
 import lombok.Getter;
@@ -59,9 +60,9 @@ public class L4J
     {
         L4J.APIKey = key;
         L4J.region = server;
-        for (Server s : Server.values())
+        for (final Server s : Server.values())
         {
-            rateLimiter.put(s, RateLimiter.create(rate));
+            L4J.rateLimiter.put(s, RateLimiter.create(rate));
         }
         L4J.mapper.configure(DeserializationConfig.Feature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 
@@ -221,6 +222,64 @@ public class L4J
      *
      * @return list of of Summoners from their name
      */
+    public List<Summoner> getSummonersByID(final Long... names)
+    {
+        final List<Long> copy = new LinkedList<>(Arrays.asList(names));
+        final List<Summoner> summoners = new ArrayList<>();
+        for (final Long s : names)
+        {
+            final Summoner test = CacheData.getSummonersId().get(s);
+            if (test != null)
+            {
+                summoners.add(test);
+                copy.remove(s);
+            }
+        }
+        if (copy.isEmpty()) { return summoners; }
+        while (copy.size() > 40)
+        {
+            final List<Long> remove = new ArrayList<Long>(copy.subList(0, 40 > copy.size() ? copy.size() : 40));
+            copy.removeAll(remove);
+            summoners.addAll(this.getSummonersByID(remove.toArray(new Long[40])));
+        }
+        try
+        {
+            final DataCall call = new DataCall();
+            call.setUrlEndpoint(URLEndpoint.SUMMONER_BY_ID);
+            call.setData(copy);
+            call.setVerbose(true);
+            final String json = call.doCall();
+            if (call.isError()) { throw new LibraryException(LibraryException.lastError); }
+            final JsonNode node = L4J.mapper.readTree(json);
+            for (final Long s : copy)
+            {
+                final JsonNode innernode = node.get(Long.toString(s));
+                if (innernode == null)
+                {
+                    summoners.add(null);
+                } else
+                {
+                    final Summoner sum = L4J.mapper.readValue(innernode, Summoner.class);
+                    final Field f = Summoner.class.getDeclaredField("region");
+                    f.setAccessible(true);
+                    f.set(sum, L4J.region);
+                    summoners.add(sum);
+                    CacheData.getSummonersId().put(s, sum);
+                }
+            }
+            return summoners;
+        } catch (final Exception e)
+        {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    /**
+     * Gets a list of Summoners from their name
+     *
+     * @return list of of Summoners from their name
+     */
     public List<Summoner> getSummonersByName(final String... names)
     {
         final List<String> copy = new LinkedList<>(Arrays.asList(names));
@@ -237,7 +296,7 @@ public class L4J
         if (copy.isEmpty()) { return summoners; }
         while (copy.size() > 40)
         {
-            final List<String> remove = copy.subList(0, 40 > copy.size() ? copy.size() : 40);
+            final List<String> remove = new ArrayList<String>(copy.subList(0, 40 > copy.size() ? copy.size() : 40));
             copy.removeAll(remove);
             summoners.addAll(this.getSummonersByName(remove.toArray(new String[40])));
         }
@@ -252,11 +311,16 @@ public class L4J
             final JsonNode node = L4J.mapper.readTree(json);
             for (final String s : copy)
             {
-                JsonNode innernode = node.get(s.toLowerCase().replaceAll(" ", ""));
-                if (innernode == null) summoners.add(null);
-                else
+                final JsonNode innernode = node.get(s.toLowerCase().replaceAll(" ", ""));
+                if (innernode == null)
+                {
+                    summoners.add(null);
+                } else
                 {
                     final Summoner sum = L4J.mapper.readValue(innernode, Summoner.class);
+                    final Field f = Summoner.class.getDeclaredField("region");
+                    f.setAccessible(true);
+                    f.set(sum, L4J.region);
                     summoners.add(sum);
                     CacheData.getSummoners().put(s.toLowerCase().replaceAll(" ", ""), sum);
                 }
@@ -306,9 +370,11 @@ public class L4J
             final JsonNode node = L4J.mapper.readTree(json);
             for (final Long s : copy)
             {
-                JsonNode innernode = node.get("" + s);
-                if (innernode == null) teams.put(s, null);
-                else
+                final JsonNode innernode = node.get("" + s);
+                if (innernode == null)
+                {
+                    teams.put(s, null);
+                } else
                 {
                     final List<Team> tea = L4J.mapper.readValue(innernode, L4J.mapper.getTypeFactory().constructCollectionType(List.class, Team.class));
                     teams.put(s, tea);
@@ -360,9 +426,11 @@ public class L4J
             final JsonNode node = L4J.mapper.readTree(json);
             for (final String s : copy)
             {
-                JsonNode innernode = node.get(s);
-                if (innernode == null) teams.add(null);
-                else
+                final JsonNode innernode = node.get(s);
+                if (innernode == null)
+                {
+                    teams.add(null);
+                } else
                 {
                     final Team tea = L4J.mapper.readValue(innernode, Team.class);
                     teams.add(tea);

@@ -40,30 +40,99 @@ public class ParticipantTimeline
 
     public Map<String, Map<String, Double>> getFields()
     {
-        Map<String, Map<String, Double>> retme = new HashMap<String, Map<String, Double>>();
-        if (ancientGolemAssistsPerMinCounts != null) retme.put("ancientGolemAssistsPerMinCounts", ancientGolemAssistsPerMinCounts.getFields());
-        if (ancientGolemKillsPerMinCounts != null) retme.put("ancientGolemKillsPerMinCounts", ancientGolemKillsPerMinCounts.getFields());
-        if (ancientGolemKillsPerMinCounts != null) retme.put("assistedLaneDeathsPerMinDeltas", assistedLaneDeathsPerMinDeltas.getFields());
-        if (assistedLaneKillsPerMinDeltas != null) retme.put("assistedLaneKillsPerMinDeltas", assistedLaneKillsPerMinDeltas.getFields());
-        if (baronAssistsPerMinCounts != null) retme.put("baronAssistsPerMinCounts", baronAssistsPerMinCounts.getFields());
-        if (baronKillsPerMinCounts != null) retme.put("baronKillsPerMinCounts", baronKillsPerMinCounts.getFields());
-        if (creepsPerMinDeltas != null) retme.put("creepsPerMinDeltas", creepsPerMinDeltas.getFields());
-        if (csDiffPerMinDeltas != null) retme.put("csDiffPerMinDeltas", csDiffPerMinDeltas.getFields());
-        if (damageTakenDiffPerMinDeltas != null) retme.put("damageTakenDiffPerMinDeltas", damageTakenDiffPerMinDeltas.getFields());
-        if (damageTakenDiffPerMinDeltas != null) retme.put("damageTakenPerMinDeltas", damageTakenPerMinDeltas.getFields());
-        if (dragonAssistsPerMinCounts != null) retme.put("dragonAssistsPerMinCounts", dragonAssistsPerMinCounts.getFields());
-        if (dragonKillsPerMinCounts != null) retme.put("dragonKillsPerMinCounts", dragonKillsPerMinCounts.getFields());
-        if (elderLizardAssistsPerMinCounts != null) retme.put("elderLizardAssistsPerMinCounts", elderLizardAssistsPerMinCounts.getFields());
-        if (elderLizardKillsPerMinCounts != null) retme.put("elderLizardKillsPerMinCounts", elderLizardKillsPerMinCounts.getFields());
-        if (goldPerMinDeltas != null) retme.put("goldPerMinDeltas", goldPerMinDeltas.getFields());
-        if (towerAssistsPerMinCounts != null) retme.put("towerAssistsPerMinCounts", towerAssistsPerMinCounts.getFields());
-        if (towerKillsPerMinCounts != null) retme.put("towerKillsPerMinCounts", towerKillsPerMinCounts.getFields());
-        if (towerKillsPerMinDeltas != null) retme.put("towerKillsPerMinDeltas", towerKillsPerMinDeltas.getFields());
-        if (vilemawAssistsPerMinCounts != null) retme.put("vilemawAssistsPerMinCounts", vilemawAssistsPerMinCounts.getFields());
-        if (vilemawKillsPerMinCounts != null) retme.put("vilemawKillsPerMinCounts", vilemawKillsPerMinCounts.getFields());
-        if (wardsPerMinDeltas != null) retme.put("wardsPerMinDeltas", wardsPerMinDeltas.getFields());
-        if (xpPerMinDeltas != null) retme.put("xpPerMinDeltas", xpPerMinDeltas.getFields());
-        if (xpDiffPerMinDeltas != null) retme.put("xpDiffPerMinDeltas", xpDiffPerMinDeltas.getFields());
+        final Map<String, Map<String, Double>> retme = new HashMap<String, Map<String, Double>>();
+        if (this.ancientGolemAssistsPerMinCounts != null)
+        {
+            retme.put("ancientGolemAssistsPerMinCounts", this.ancientGolemAssistsPerMinCounts.getFields());
+        }
+        if (this.ancientGolemKillsPerMinCounts != null)
+        {
+            retme.put("ancientGolemKillsPerMinCounts", this.ancientGolemKillsPerMinCounts.getFields());
+        }
+        if (this.ancientGolemKillsPerMinCounts != null)
+        {
+            retme.put("assistedLaneDeathsPerMinDeltas", this.assistedLaneDeathsPerMinDeltas.getFields());
+        }
+        if (this.assistedLaneKillsPerMinDeltas != null)
+        {
+            retme.put("assistedLaneKillsPerMinDeltas", this.assistedLaneKillsPerMinDeltas.getFields());
+        }
+        if (this.baronAssistsPerMinCounts != null)
+        {
+            retme.put("baronAssistsPerMinCounts", this.baronAssistsPerMinCounts.getFields());
+        }
+        if (this.baronKillsPerMinCounts != null)
+        {
+            retme.put("baronKillsPerMinCounts", this.baronKillsPerMinCounts.getFields());
+        }
+        if (this.creepsPerMinDeltas != null)
+        {
+            retme.put("creepsPerMinDeltas", this.creepsPerMinDeltas.getFields());
+        }
+        if (this.csDiffPerMinDeltas != null)
+        {
+            retme.put("csDiffPerMinDeltas", this.csDiffPerMinDeltas.getFields());
+        }
+        if (this.damageTakenDiffPerMinDeltas != null)
+        {
+            retme.put("damageTakenDiffPerMinDeltas", this.damageTakenDiffPerMinDeltas.getFields());
+        }
+        if (this.damageTakenDiffPerMinDeltas != null)
+        {
+            retme.put("damageTakenPerMinDeltas", this.damageTakenPerMinDeltas.getFields());
+        }
+        if (this.dragonAssistsPerMinCounts != null)
+        {
+            retme.put("dragonAssistsPerMinCounts", this.dragonAssistsPerMinCounts.getFields());
+        }
+        if (this.dragonKillsPerMinCounts != null)
+        {
+            retme.put("dragonKillsPerMinCounts", this.dragonKillsPerMinCounts.getFields());
+        }
+        if (this.elderLizardAssistsPerMinCounts != null)
+        {
+            retme.put("elderLizardAssistsPerMinCounts", this.elderLizardAssistsPerMinCounts.getFields());
+        }
+        if (this.elderLizardKillsPerMinCounts != null)
+        {
+            retme.put("elderLizardKillsPerMinCounts", this.elderLizardKillsPerMinCounts.getFields());
+        }
+        if (this.goldPerMinDeltas != null)
+        {
+            retme.put("goldPerMinDeltas", this.goldPerMinDeltas.getFields());
+        }
+        if (this.towerAssistsPerMinCounts != null)
+        {
+            retme.put("towerAssistsPerMinCounts", this.towerAssistsPerMinCounts.getFields());
+        }
+        if (this.towerKillsPerMinCounts != null)
+        {
+            retme.put("towerKillsPerMinCounts", this.towerKillsPerMinCounts.getFields());
+        }
+        if (this.towerKillsPerMinDeltas != null)
+        {
+            retme.put("towerKillsPerMinDeltas", this.towerKillsPerMinDeltas.getFields());
+        }
+        if (this.vilemawAssistsPerMinCounts != null)
+        {
+            retme.put("vilemawAssistsPerMinCounts", this.vilemawAssistsPerMinCounts.getFields());
+        }
+        if (this.vilemawKillsPerMinCounts != null)
+        {
+            retme.put("vilemawKillsPerMinCounts", this.vilemawKillsPerMinCounts.getFields());
+        }
+        if (this.wardsPerMinDeltas != null)
+        {
+            retme.put("wardsPerMinDeltas", this.wardsPerMinDeltas.getFields());
+        }
+        if (this.xpPerMinDeltas != null)
+        {
+            retme.put("xpPerMinDeltas", this.xpPerMinDeltas.getFields());
+        }
+        if (this.xpDiffPerMinDeltas != null)
+        {
+            retme.put("xpDiffPerMinDeltas", this.xpDiffPerMinDeltas.getFields());
+        }
         return retme;
     }
 }

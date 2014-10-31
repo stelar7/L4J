@@ -108,7 +108,7 @@ abstract class SmoothRateLimiter extends RateLimiter
     double       storedPermits;
     double       maxPermits;
     double       stableIntervalMicros;
-    private long nextFreeTicketMicros = 0L; 
+    private long nextFreeTicketMicros = 0L;
 
     private SmoothRateLimiter(final SleepingStopwatch stopwatch)
     {

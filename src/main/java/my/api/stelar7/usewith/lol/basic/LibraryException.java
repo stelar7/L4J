@@ -46,7 +46,8 @@ public class LibraryException extends Exception
         {
             this.type = Type.RATE_LIMIT;
         }
-        if(code == 0) {
+        if (code == 0)
+        {
             this.type = Type.TIMEOUT;
         }
     }
@@ -91,7 +92,7 @@ public class LibraryException extends Exception
             default:
                 error += "An unknown error occured";
         }
-        return error + " (" + lastError + ")";
+        return error + " (" + LibraryException.lastError + ")";
     }
 
 }

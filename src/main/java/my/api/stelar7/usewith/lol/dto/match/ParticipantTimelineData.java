@@ -17,11 +17,11 @@ public class ParticipantTimelineData
 
     public Map<String, Double> getFields()
     {
-        Map<String, Double> retme = new HashMap<String, Double>();
-        retme.put("zeroToTen", zeroToTen);
-        retme.put("tenToTwenty", tenToTwenty);
-        retme.put("twentyToThirty", twentyToThirty);
-        retme.put("thirtyToEnd", thirtyToEnd);
+        final Map<String, Double> retme = new HashMap<String, Double>();
+        retme.put("zeroToTen", this.zeroToTen);
+        retme.put("tenToTwenty", this.tenToTwenty);
+        retme.put("twentyToThirty", this.twentyToThirty);
+        retme.put("thirtyToEnd", this.thirtyToEnd);
         return retme;
     }
 }

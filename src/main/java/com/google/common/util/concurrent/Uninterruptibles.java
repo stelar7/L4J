@@ -78,6 +78,7 @@ public final class Uninterruptibles
             }
         }
     }
+
     public static <V> V getUninterruptibly(final Future<V> future) throws ExecutionException
     {
         boolean interrupted = false;

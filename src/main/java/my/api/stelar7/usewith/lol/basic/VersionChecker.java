@@ -65,6 +65,8 @@ public class VersionChecker
                 return "v1.2";
             case STATIC_SUMMONER_SPELL_ID:
                 return "v1.2";
+            case SUMMONER_BY_ID:
+                return "v1.4";
         }
         return "null";
     }
