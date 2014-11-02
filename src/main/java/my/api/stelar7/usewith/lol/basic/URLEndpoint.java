@@ -33,7 +33,10 @@ public enum URLEndpoint
     STATIC_RUNE("api/lol/static-data/{region}/{version}/rune"),
     STATIC_RUNE_ID("api/lol/static-data/{region}/{version}/rune/{data}"),
     STATIC_SUMMONER_SPELL("api/lol/static-data/{region}/{version}/summoner-spell"),
-    STATIC_SUMMONER_SPELL_ID("api/lol/static-data/{region}/{version}/summoner-spell/{data}");
+    STATIC_SUMMONER_SPELL_ID("api/lol/static-data/{region}/{version}/summoner-spell/{data}"),
+    STATIC_SHARD("http://status.leagueoflegends.com/shards"),
+    STATIC_SHARD_REGION("http://status.leagueoflegends.com/shards/{data}");
+    
 
     @Getter
     String value;

@@ -67,6 +67,12 @@ public class VersionChecker
                 return "v1.2";
             case SUMMONER_BY_ID:
                 return "v1.4";
+            case STATIC_SHARD:
+                break;
+            case STATIC_SHARD_REGION:
+                break;
+            default:
+                break;
         }
         return "null";
     }

@@ -59,16 +59,22 @@ public class DataCall
      */
     public String doCall() throws Exception
     {
-        final StringBuilder URL = new StringBuilder("https://");
-        if (!this.isToStatic())
+        final StringBuilder URL = new StringBuilder();
+        if (!urlEndpoint.getValue().startsWith("http"))
         {
-            URL.append(L4J.getRegion().getServer());
-            this.applyRateLimit();
-        } else
-        {
-            URL.append(Server.GLOBAL.getServer());
+            URL.append("https://");
+            if (!this.isToStatic())
+            {
+                URL.append(L4J.getRegion().getServer());
+                this.applyRateLimit();
+            } else
+            {
+                URL.append(Server.GLOBAL.getServer());
+            }
+            URL.append("/");
         }
-        URL.append("/").append(this.parseEndpoint(this.urlEndpoint.getValue())).append(this.getAPIkey()).append(this.getParameters());
+        URL.append(replaceData(replaceVersion(replaceRegion(this.urlEndpoint.getValue()))));
+        URL.append(this.getAPIkey()).append(this.getParameters());
         if (this.verbose)
         {
             DataCall.log.info(URL.toString());
@@ -76,8 +82,8 @@ public class DataCall
         final HttpResponse response = HttpClient.execute(new GET(URL.toString()), 1);
         if (response.getStatusCode() != 200)
         {
-            this.errorData = new LibraryException(response.getStatusCode());
             this.error = true;
+            this.errorData = new LibraryException(response.getStatusCode());
             return null;
         }
         return response.getBody();
@@ -105,8 +111,18 @@ public class DataCall
         return this.urlEndpoint.toString().startsWith("api/lol/static-data");
     }
 
-    private String parseEndpoint(final String s) throws Exception
+    private String replaceRegion(String s)
     {
-        return s.replace("{region}", L4J.getRegion().name().toLowerCase()).replace("{version}", VersionChecker.getFor(this.urlEndpoint)).replace("{data}", this.buildData());
+        return s.replace("{region}", L4J.getRegion().name().toLowerCase());
+    }
+
+    private String replaceVersion(String s)
+    {
+        return s.replace("{version}", VersionChecker.getFor(this.urlEndpoint));
+    }
+
+    private String replaceData(final String s) throws Exception
+    {
+        return s.replace("{data}", this.buildData());
     }
 }

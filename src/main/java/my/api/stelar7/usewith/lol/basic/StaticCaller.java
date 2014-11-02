@@ -4,6 +4,8 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 
+import org.codehaus.jackson.type.TypeReference;
+
 import my.api.stelar7.usewith.lol.L4J;
 import my.api.stelar7.usewith.lol.dto.staticdata.general.Locale;
 import my.api.stelar7.usewith.lol.dto.staticdata.general.Realm;
@@ -13,6 +15,8 @@ import my.api.stelar7.usewith.lol.dto.staticdata.mastery.Mastery;
 import my.api.stelar7.usewith.lol.dto.staticdata.mastery.MasteryList;
 import my.api.stelar7.usewith.lol.dto.staticdata.rune.Rune;
 import my.api.stelar7.usewith.lol.dto.staticdata.rune.RuneList;
+import my.api.stelar7.usewith.lol.dto.staticdata.shard.Shard;
+import my.api.stelar7.usewith.lol.dto.staticdata.shard.ShardStatus;
 import my.api.stelar7.usewith.lol.dto.staticdata.summoners.SummonerSpell;
 import my.api.stelar7.usewith.lol.dto.staticdata.summoners.SummonerSpellList;
 
@@ -39,7 +43,7 @@ public class StaticCaller
             call.setUrlEndpoint(URLEndpoint.STATIC_CHAMPION);
             call.setVerbose(true);
             call.setUrlParams(new HashMap<String, Object>()
-                    {
+            {
                 {
                     if (locale != null)
                     {
@@ -55,10 +59,57 @@ public class StaticCaller
                     }
                     this.put("dataById", idAsKey);
                 }
-                    });
+            });
             final String json = call.doCall();
             if (call.isError()) { throw call.getErrorData(); }
             return L4J.getMapper().readValue(json, my.api.stelar7.usewith.lol.dto.staticdata.champion.ChampionList.class);
+        } catch (final Exception e)
+        {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    /**
+     * Gets data about the game in the form of a Shard
+     * 
+     * @return A list of Shards
+     */
+
+    public List<Shard> getShards()
+    {
+        try
+        {
+            final DataCall call = new DataCall();
+            call.setUrlEndpoint(URLEndpoint.STATIC_SHARD);
+            call.setVerbose(true);
+            final String json = call.doCall();
+            if (call.isError()) { throw call.getErrorData(); }
+            return L4J.getMapper().readValue(json, new TypeReference<List<Shard>>(){});//L4J.getMapper.getMapper().getTypeFactory().constructCollectionType(List.class, Shard.class));
+        } catch (final Exception e)
+        {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    /**
+     * Gets the ShardStatus of a shard from its slug
+     * 
+     * @param slug
+     *            the region to check
+     * @return
+     */
+    public ShardStatus getShardStatus(String slug)
+    {
+        try
+        {
+            final DataCall call = new DataCall();
+            call.setUrlEndpoint(URLEndpoint.STATIC_SHARD_REGION);
+            call.setData(Arrays.asList(slug.toLowerCase()));
+            final String json = call.doCall();
+            if (call.isError()) { throw call.getErrorData(); }
+            return L4J.getMapper().readValue(json, ShardStatus.class);
         } catch (final Exception e)
         {
             e.printStackTrace();
@@ -87,7 +138,7 @@ public class StaticCaller
             call.setVerbose(true);
             call.setData(Arrays.asList(id));
             call.setUrlParams(new HashMap<String, Object>()
-                    {
+            {
                 {
                     if (locale != null)
                     {
@@ -102,7 +153,7 @@ public class StaticCaller
                         this.put("champData", champdata.toString().substring(1, champdata.toString().lastIndexOf("]")));
                     }
                 }
-                    });
+            });
             final String json = call.doCall();
             if (call.isError()) { throw call.getErrorData(); }
             return L4J.getMapper().readValue(json, my.api.stelar7.usewith.lol.dto.staticdata.champion.Champion.class);
@@ -131,7 +182,7 @@ public class StaticCaller
             call.setUrlEndpoint(URLEndpoint.STATIC_ITEM);
             call.setVerbose(true);
             call.setUrlParams(new HashMap<String, Object>()
-                    {
+            {
                 {
                     if (locale != null)
                     {
@@ -146,7 +197,7 @@ public class StaticCaller
                         this.put("itemListData", itemListData.toString().substring(1, itemListData.toString().lastIndexOf("]")));
                     }
                 }
-                    });
+            });
             final String json = call.doCall();
             if (call.isError()) { throw call.getErrorData(); }
             return L4J.getMapper().readValue(json, ItemList.class);
@@ -178,7 +229,7 @@ public class StaticCaller
             call.setVerbose(true);
             call.setData(Arrays.asList(id));
             call.setUrlParams(new HashMap<String, Object>()
-                    {
+            {
                 {
                     if (locale != null)
                     {
@@ -193,7 +244,7 @@ public class StaticCaller
                         this.put("itemData", itemData.toString().substring(1, itemData.toString().lastIndexOf("]")));
                     }
                 }
-                    });
+            });
             final String json = call.doCall();
             if (call.isError()) { throw call.getErrorData(); }
             return L4J.getMapper().readValue(json, Item.class);
@@ -222,7 +273,7 @@ public class StaticCaller
             call.setUrlEndpoint(URLEndpoint.STATIC_MASTERY);
             call.setVerbose(true);
             call.setUrlParams(new HashMap<String, Object>()
-                    {
+            {
                 {
                     if (locale != null)
                     {
@@ -237,7 +288,7 @@ public class StaticCaller
                         this.put("masteryListData", champdata.toString().substring(1, champdata.toString().lastIndexOf("]")));
                     }
                 }
-                    });
+            });
             final String json = call.doCall();
             if (call.isError()) { throw call.getErrorData(); }
             return L4J.getMapper().readValue(json, MasteryList.class);
@@ -269,7 +320,7 @@ public class StaticCaller
             call.setVerbose(true);
             call.setData(Arrays.asList(id));
             call.setUrlParams(new HashMap<String, Object>()
-                    {
+            {
                 {
                     if (locale != null)
                     {
@@ -284,7 +335,7 @@ public class StaticCaller
                         this.put("masteryData", data.toString().substring(1, data.toString().lastIndexOf("]")));
                     }
                 }
-                    });
+            });
             final String json = call.doCall();
             if (call.isError()) { throw call.getErrorData(); }
             return L4J.getMapper().readValue(json, Mastery.class);
@@ -333,7 +384,7 @@ public class StaticCaller
             call.setUrlEndpoint(URLEndpoint.STATIC_RUNE);
             call.setVerbose(true);
             call.setUrlParams(new HashMap<String, Object>()
-                    {
+            {
                 {
                     if (locale != null)
                     {
@@ -348,7 +399,7 @@ public class StaticCaller
                         this.put("runeListData", itemData.toString().substring(1, itemData.toString().lastIndexOf("]")));
                     }
                 }
-                    });
+            });
             final String json = call.doCall();
             if (call.isError()) { throw call.getErrorData(); }
             return L4J.getMapper().readValue(json, RuneList.class);
@@ -380,7 +431,7 @@ public class StaticCaller
             call.setVerbose(true);
             call.setData(Arrays.asList(id));
             call.setUrlParams(new HashMap<String, Object>()
-                    {
+            {
                 {
                     if (locale != null)
                     {
@@ -395,7 +446,7 @@ public class StaticCaller
                         this.put("runeData", itemData.toString().substring(1, itemData.toString().lastIndexOf("]")));
                     }
                 }
-                    });
+            });
             final String json = call.doCall();
             if (call.isError()) { throw call.getErrorData(); }
             return L4J.getMapper().readValue(json, Rune.class);
@@ -426,7 +477,7 @@ public class StaticCaller
             call.setUrlEndpoint(URLEndpoint.STATIC_SUMMONER_SPELL);
             call.setVerbose(true);
             call.setUrlParams(new HashMap<String, Object>()
-                    {
+            {
                 {
                     if (locale != null)
                     {
@@ -442,7 +493,7 @@ public class StaticCaller
                         this.put("spellData", itemData.toString().substring(1, itemData.toString().lastIndexOf("]")));
                     }
                 }
-                    });
+            });
             final String json = call.doCall();
             if (call.isError()) { throw call.getErrorData(); }
             return L4J.getMapper().readValue(json, SummonerSpellList.class);
@@ -476,7 +527,7 @@ public class StaticCaller
             call.setVerbose(true);
             call.setData(Arrays.asList(id));
             call.setUrlParams(new HashMap<String, Object>()
-                    {
+            {
                 {
                     if (locale != null)
                     {
@@ -491,7 +542,7 @@ public class StaticCaller
                         this.put("spellData", itemData.toString().substring(1, itemData.toString().lastIndexOf("]")));
                     }
                 }
-                    });
+            });
             final String json = call.doCall();
             if (call.isError()) { throw call.getErrorData(); }
             return L4J.getMapper().readValue(json, SummonerSpell.class);
