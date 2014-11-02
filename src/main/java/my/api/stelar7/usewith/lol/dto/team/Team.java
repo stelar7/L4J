@@ -6,9 +6,7 @@ import java.util.List;
 import lombok.Getter;
 import lombok.ToString;
 import my.api.stelar7.usewith.lol.L4J;
-import my.api.stelar7.usewith.lol.basic.CacheData;
 import my.api.stelar7.usewith.lol.basic.DataCall;
-import my.api.stelar7.usewith.lol.basic.LibraryException;
 import my.api.stelar7.usewith.lol.basic.URLEndpoint;
 import my.api.stelar7.usewith.lol.dto.league.League;
 
@@ -35,8 +33,6 @@ public class Team
 
     public List<League> getFullLeague()
     {
-        final List<League> test = CacheData.getLeaguesFull().get(this.fullId);
-        if (test != null) { return test; }
         try
         {
             final DataCall call = new DataCall();
@@ -44,11 +40,9 @@ public class Team
             call.setData(Arrays.asList("" + this.fullId));
             call.setVerbose(true);
             final String json = call.doCall();
-            if (call.isError()) { throw new LibraryException(LibraryException.lastError); }
+            if (call.isError()) { throw call.getErrorData(); }
             final JsonNode node = L4J.getMapper().readTree(json);
-            final List<League> pages = L4J.getMapper().convertValue(node.get("" + this.fullId), L4J.getMapper().getTypeFactory().constructCollectionType(List.class, League.class));
-            CacheData.getLeaguesFull().put(this.fullId, pages);
-            return pages;
+            return L4J.getMapper().convertValue(node.get("" + this.fullId), L4J.getMapper().getTypeFactory().constructCollectionType(List.class, League.class));
         } catch (final Exception e)
         {
             e.printStackTrace();
@@ -58,8 +52,6 @@ public class Team
 
     public List<League> getSelfLeague()
     {
-        final List<League> test = CacheData.getLeaguesSelf().get(this.fullId);
-        if (test != null) { return test; }
         try
         {
             final DataCall call = new DataCall();
@@ -67,11 +59,9 @@ public class Team
             call.setData(Arrays.asList("" + this.fullId));
             call.setVerbose(true);
             final String json = call.doCall();
-            if (call.isError()) { throw new LibraryException(LibraryException.lastError); }
+            if (call.isError()) { throw call.getErrorData(); }
             final JsonNode node = L4J.getMapper().readTree(json);
-            final List<League> pages = L4J.getMapper().convertValue(node.get("" + this.fullId), L4J.getMapper().getTypeFactory().constructCollectionType(List.class, League.class));
-            CacheData.getLeaguesSelf().put(this.fullId, pages);
-            return pages;
+            return L4J.getMapper().convertValue(node.get("" + this.fullId), L4J.getMapper().getTypeFactory().constructCollectionType(List.class, League.class));
         } catch (final Exception e)
         {
             e.printStackTrace();

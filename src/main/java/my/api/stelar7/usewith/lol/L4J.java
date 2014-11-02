@@ -5,8 +5,10 @@ import java.util.*;
 
 import lombok.Getter;
 import lombok.Setter;
-import my.api.stelar7.usewith.lol.basic.*;
-import my.api.stelar7.usewith.lol.dto.champion.Champion;
+import my.api.stelar7.usewith.lol.basic.DataCall;
+import my.api.stelar7.usewith.lol.basic.Server;
+import my.api.stelar7.usewith.lol.basic.StaticCaller;
+import my.api.stelar7.usewith.lol.basic.URLEndpoint;
 import my.api.stelar7.usewith.lol.dto.champion.ChampionList;
 import my.api.stelar7.usewith.lol.dto.league.League;
 import my.api.stelar7.usewith.lol.dto.league.LeagueType;
@@ -28,14 +30,18 @@ public class L4J
     static String                       APIKey;
     @Getter
     @Setter
-    static HashMap<Server, RateLimiter> rateLimiter = new HashMap<>();
+    static HashMap<Server, RateLimiter> rateLimiter      = new HashMap<>();
     @Getter
     @Setter
-    static Server                       region      = Server.EUW;
+    static Server                       region           = Server.EUW;
     @Getter
-    private static final ObjectMapper   mapper      = new ObjectMapper();
+    private static final ObjectMapper   mapper           = new ObjectMapper();
     @Getter
-    private final StaticCaller          staticData  = new StaticCaller();
+    private final StaticCaller          staticData       = new StaticCaller();
+
+    private static final int            MAX_PER_SUMMONER = 40;
+    private static final int            MAX_PER_TEAM     = 10;
+    private static final int            MAX_PER_LEAGUE   = 10;
 
     /**
      *
@@ -77,8 +83,6 @@ public class L4J
      */
     public League getChallengerLeague(final LeagueType type)
     {
-        final League test = CacheData.getChallengerLeague().get(type);
-        if (test != null) { return test; }
         try
         {
             final DataCall call = new DataCall();
@@ -91,10 +95,8 @@ public class L4J
             });
             call.setVerbose(true);
             final String json = call.doCall();
-            if (call.isError()) { throw new LibraryException(LibraryException.lastError); }
-            final League league = L4J.getMapper().readValue(json, League.class);
-            CacheData.getChallengerLeague().put(type, league);
-            return league;
+            if (call.isError()) { throw call.getErrorData(); }
+            return L4J.getMapper().readValue(json, League.class);
         } catch (final Exception e)
         {
             e.printStackTrace();
@@ -107,18 +109,15 @@ public class L4J
      *
      * @return list of all Champions avalible in the game
      */
-    public List<Champion> getChampionList()
+    public ChampionList getChampionList()
     {
-        if (CacheData.getChampionList().get(0) != null) { return CacheData.getChampionList().get(0).getChampions(); }
         try
         {
             final DataCall call = new DataCall();
             call.setUrlEndpoint(URLEndpoint.CHAMPION_LIST);
             final String json = call.doCall();
-            if (call.isError()) { throw new LibraryException(LibraryException.lastError); }
-            final ChampionList all = L4J.mapper.readValue(json, ChampionList.class);
-            CacheData.getChampionList().put(0, all);
-            return all.getChampions();
+            if (call.isError()) { throw call.getErrorData(); }
+            return L4J.mapper.readValue(json, ChampionList.class);
         } catch (final Exception e)
         {
             e.printStackTrace();
@@ -135,21 +134,11 @@ public class L4J
     {
         final List<Long> copy = new LinkedList<>(Arrays.asList(names));
         final HashMap<Long, List<League>> summoners = new HashMap<>();
-        for (final Long s : names)
+        while (copy.size() > L4J.MAX_PER_LEAGUE)
         {
-            final List<League> test = full ? CacheData.getLeaguesFull().get(s) : CacheData.getLeaguesSelf().get(s);
-            if (test != null)
-            {
-                summoners.put(s, test);
-                copy.remove(s);
-            }
-        }
-        if (copy.isEmpty()) { return summoners; }
-        while (copy.size() > 10)
-        {
-            final List<Long> remove = copy.subList(0, 10 > copy.size() ? copy.size() : 10);
+            final List<Long> remove = new ArrayList<Long>(copy.subList(0, L4J.MAX_PER_LEAGUE > copy.size() ? copy.size() : L4J.MAX_PER_LEAGUE));
             copy.removeAll(remove);
-            summoners.putAll(this.getLeagueBySummoners(full, remove.toArray(new Long[10])));
+            summoners.putAll(this.getLeagueBySummoners(full, remove.toArray(new Long[L4J.MAX_PER_LEAGUE])));
         }
         try
         {
@@ -158,19 +147,12 @@ public class L4J
             call.setData(copy);
             call.setVerbose(true);
             final String json = call.doCall();
-            if (call.isError()) { throw new LibraryException(LibraryException.lastError); }
+            if (call.isError()) { throw call.getErrorData(); }
             final JsonNode node = L4J.mapper.readTree(json);
             for (final Long s : copy)
             {
                 final List<League> pages = L4J.getMapper().convertValue(node.get("" + s), L4J.getMapper().getTypeFactory().constructCollectionType(List.class, League.class));
                 summoners.put(s, pages);
-                if (full)
-                {
-                    CacheData.getLeaguesFull().put(s, pages);
-                } else
-                {
-                    CacheData.getLeaguesSelf().put(s, pages);
-                }
             }
             return summoners;
         } catch (final Exception e)
@@ -191,8 +173,6 @@ public class L4J
      */
     public MatchDetail getMatch(final long id, final boolean timeline)
     {
-        final MatchDetail test = CacheData.getMatchDetails().get(id);
-        if (test != null) { return test; }
         try
         {
             final DataCall call = new DataCall();
@@ -206,10 +186,8 @@ public class L4J
                 }
             });
             final String json = call.doCall();
-            if (call.isError()) { throw new LibraryException(LibraryException.lastError); }
-            final MatchDetail match = L4J.getMapper().readValue(json, MatchDetail.class);
-            CacheData.getMatchDetails().put(id, match);
-            return match;
+            if (call.isError()) { throw call.getErrorData(); }
+            return L4J.getMapper().readValue(json, MatchDetail.class);
         } catch (final Exception e)
         {
             e.printStackTrace();
@@ -226,21 +204,11 @@ public class L4J
     {
         final List<Long> copy = new LinkedList<>(Arrays.asList(names));
         final List<Summoner> summoners = new ArrayList<>();
-        for (final Long s : names)
+        while (copy.size() > L4J.MAX_PER_SUMMONER)
         {
-            final Summoner test = CacheData.getSummonersId().get(s);
-            if (test != null)
-            {
-                summoners.add(test);
-                copy.remove(s);
-            }
-        }
-        if (copy.isEmpty()) { return summoners; }
-        while (copy.size() > 40)
-        {
-            final List<Long> remove = new ArrayList<Long>(copy.subList(0, 40 > copy.size() ? copy.size() : 40));
+            final List<Long> remove = new ArrayList<Long>(copy.subList(0, L4J.MAX_PER_SUMMONER > copy.size() ? copy.size() : L4J.MAX_PER_SUMMONER));
             copy.removeAll(remove);
-            summoners.addAll(this.getSummonersByID(remove.toArray(new Long[40])));
+            summoners.addAll(this.getSummonersByID(remove.toArray(new Long[L4J.MAX_PER_SUMMONER])));
         }
         try
         {
@@ -249,7 +217,7 @@ public class L4J
             call.setData(copy);
             call.setVerbose(true);
             final String json = call.doCall();
-            if (call.isError()) { throw new LibraryException(LibraryException.lastError); }
+            if (call.isError()) { throw call.getErrorData(); }
             final JsonNode node = L4J.mapper.readTree(json);
             for (final Long s : copy)
             {
@@ -264,7 +232,6 @@ public class L4J
                     f.setAccessible(true);
                     f.set(sum, L4J.region);
                     summoners.add(sum);
-                    CacheData.getSummonersId().put(s, sum);
                 }
             }
             return summoners;
@@ -284,21 +251,11 @@ public class L4J
     {
         final List<String> copy = new LinkedList<>(Arrays.asList(names));
         final List<Summoner> summoners = new ArrayList<>();
-        for (final String s : names)
+        while (copy.size() > L4J.MAX_PER_SUMMONER)
         {
-            final Summoner test = CacheData.getSummoners().get(s.toLowerCase().replaceAll(" ", ""));
-            if (test != null)
-            {
-                summoners.add(test);
-                copy.remove(s);
-            }
-        }
-        if (copy.isEmpty()) { return summoners; }
-        while (copy.size() > 40)
-        {
-            final List<String> remove = new ArrayList<String>(copy.subList(0, 40 > copy.size() ? copy.size() : 40));
+            final List<String> remove = new ArrayList<String>(copy.subList(0, L4J.MAX_PER_SUMMONER > copy.size() ? copy.size() : L4J.MAX_PER_SUMMONER));
             copy.removeAll(remove);
-            summoners.addAll(this.getSummonersByName(remove.toArray(new String[40])));
+            summoners.addAll(this.getSummonersByName(remove.toArray(new String[L4J.MAX_PER_SUMMONER])));
         }
         try
         {
@@ -307,7 +264,7 @@ public class L4J
             call.setData(copy);
             call.setVerbose(true);
             final String json = call.doCall();
-            if (call.isError()) { throw new LibraryException(LibraryException.lastError); }
+            if (call.isError()) { throw call.getErrorData(); }
             final JsonNode node = L4J.mapper.readTree(json);
             for (final String s : copy)
             {
@@ -322,7 +279,6 @@ public class L4J
                     f.setAccessible(true);
                     f.set(sum, L4J.region);
                     summoners.add(sum);
-                    CacheData.getSummoners().put(s.toLowerCase().replaceAll(" ", ""), sum);
                 }
             }
             return summoners;
@@ -344,21 +300,11 @@ public class L4J
     {
         final List<Long> copy = new LinkedList<>(Arrays.asList(ids));
         final HashMap<Long, List<Team>> teams = new HashMap<>();
-        for (final long s : ids)
+        while (copy.size() > L4J.MAX_PER_TEAM)
         {
-            final List<Team> test = CacheData.getTeamList().get(s);
-            if (test != null)
-            {
-                teams.put(s, test);
-                copy.remove(s);
-            }
-        }
-        if (copy.isEmpty()) { return teams; }
-        while (copy.size() > 10)
-        {
-            final List<Long> remove = copy.subList(0, 10 > copy.size() ? copy.size() : 10);
+            final List<Long> remove = new ArrayList<Long>(copy.subList(0, L4J.MAX_PER_TEAM > copy.size() ? copy.size() : L4J.MAX_PER_TEAM));
             copy.removeAll(remove);
-            teams.putAll(this.getTeamBySummonerID(remove.toArray(new Long[10])));
+            teams.putAll(this.getTeamBySummonerID(remove.toArray(new Long[L4J.MAX_PER_TEAM])));
         }
         try
         {
@@ -366,7 +312,7 @@ public class L4J
             call.setUrlEndpoint(URLEndpoint.TEAM_BY_SUMMONER);
             call.setData(copy);
             final String json = call.doCall();
-            if (call.isError()) { throw new LibraryException(LibraryException.lastError); }
+            if (call.isError()) { throw call.getErrorData(); }
             final JsonNode node = L4J.mapper.readTree(json);
             for (final Long s : copy)
             {
@@ -378,7 +324,6 @@ public class L4J
                 {
                     final List<Team> tea = L4J.mapper.readValue(innernode, L4J.mapper.getTypeFactory().constructCollectionType(List.class, Team.class));
                     teams.put(s, tea);
-                    CacheData.getTeamList().put(s, tea);
                 }
             }
             return teams;
@@ -400,21 +345,11 @@ public class L4J
     {
         final List<String> copy = new LinkedList<>(Arrays.asList(id));
         final List<Team> teams = new ArrayList<>();
-        for (final String s : id)
+        while (copy.size() > L4J.MAX_PER_TEAM)
         {
-            final Team test = CacheData.getTeams().get(s);
-            if (test != null)
-            {
-                teams.add(test);
-                copy.remove(s);
-            }
-        }
-        if (copy.isEmpty()) { return teams; }
-        while (copy.size() > 10)
-        {
-            final List<String> remove = copy.subList(0, 10 > copy.size() ? copy.size() : 10);
+            final List<String> remove = new ArrayList<String>(copy.subList(0, L4J.MAX_PER_TEAM > copy.size() ? copy.size() : L4J.MAX_PER_TEAM));
             copy.removeAll(remove);
-            teams.addAll(this.getTeamsByID(remove.toArray(new String[10])));
+            teams.addAll(this.getTeamsByID(remove.toArray(new String[L4J.MAX_PER_TEAM])));
         }
         try
         {
@@ -422,7 +357,7 @@ public class L4J
             call.setUrlEndpoint(URLEndpoint.TEAM_BY_ID);
             call.setData(copy);
             final String json = call.doCall();
-            if (call.isError()) { throw new LibraryException(LibraryException.lastError); }
+            if (call.isError()) { throw call.getErrorData(); }
             final JsonNode node = L4J.mapper.readTree(json);
             for (final String s : copy)
             {
@@ -434,7 +369,6 @@ public class L4J
                 {
                     final Team tea = L4J.mapper.readValue(innernode, Team.class);
                     teams.add(tea);
-                    CacheData.getTeams().put(tea.getFullId(), tea);
                 }
             }
             return teams;

@@ -7,9 +7,7 @@ import java.util.List;
 import lombok.Getter;
 import lombok.ToString;
 import my.api.stelar7.usewith.lol.L4J;
-import my.api.stelar7.usewith.lol.basic.CacheData;
 import my.api.stelar7.usewith.lol.basic.DataCall;
-import my.api.stelar7.usewith.lol.basic.LibraryException;
 import my.api.stelar7.usewith.lol.basic.URLEndpoint;
 import my.api.stelar7.usewith.lol.dto.match.MatchDetail;
 
@@ -33,10 +31,8 @@ public class Game
     String       subType;
     int          teamId;
 
-    public MatchDetail getFullMatch()
+    public MatchDetail getFullMatch(final boolean timeline)
     {
-        final MatchDetail test = CacheData.getMatchDetails().get(this.gameId);
-        if (test != null) { return test; }
         try
         {
             final DataCall call = new DataCall();
@@ -46,14 +42,12 @@ public class Game
             call.setUrlParams(new HashMap<String, Object>()
                     {
                 {
-                    this.put("includeTimeline", true);
+                    this.put("includeTimeline", timeline);
                 }
                     });
             final String json = call.doCall();
-            if (call.isError()) { throw new LibraryException(LibraryException.lastError); }
-            final MatchDetail match = L4J.getMapper().readValue(json, MatchDetail.class);
-            CacheData.getMatchDetails().put(this.gameId, match);
-            return match;
+            if (call.isError()) { throw call.getErrorData(); }
+            return L4J.getMapper().readValue(json, MatchDetail.class);
         } catch (final Exception e)
         {
             e.printStackTrace();

@@ -7,8 +7,9 @@ import java.util.List;
 import lombok.Getter;
 import lombok.ToString;
 import my.api.stelar7.usewith.lol.L4J;
-import my.api.stelar7.usewith.lol.basic.*;
-import my.api.stelar7.usewith.lol.dto.game.Game;
+import my.api.stelar7.usewith.lol.basic.DataCall;
+import my.api.stelar7.usewith.lol.basic.Server;
+import my.api.stelar7.usewith.lol.basic.URLEndpoint;
 import my.api.stelar7.usewith.lol.dto.game.RecentGames;
 import my.api.stelar7.usewith.lol.dto.general.SubType;
 import my.api.stelar7.usewith.lol.dto.league.League;
@@ -34,8 +35,6 @@ public class Summoner
 
     public List<League> getFullLeague()
     {
-        final List<League> test = CacheData.getLeaguesFull().get(this.id);
-        if (test != null) { return test; }
         try
         {
             final DataCall call = new DataCall();
@@ -43,11 +42,9 @@ public class Summoner
             call.setData(Arrays.asList(this.id));
             call.setVerbose(true);
             final String json = call.doCall();
-            if (call.isError()) { throw new LibraryException(LibraryException.lastError); }
+            if (call.isError()) { throw call.getErrorData(); }
             final JsonNode node = L4J.getMapper().readTree(json);
-            final List<League> pages = L4J.getMapper().convertValue(node.get("" + this.id), L4J.getMapper().getTypeFactory().constructCollectionType(List.class, League.class));
-            CacheData.getLeaguesFull().put(this.id, pages);
-            return pages;
+            return L4J.getMapper().convertValue(node.get("" + this.id), L4J.getMapper().getTypeFactory().constructCollectionType(List.class, League.class));
         } catch (final Exception e)
         {
             e.printStackTrace();
@@ -57,8 +54,6 @@ public class Summoner
 
     public List<MasteryPage> getMasteryPages()
     {
-        final List<MasteryPage> test = CacheData.getMasteryPages().get(this.id);
-        if (test != null) { return test; }
         try
         {
             final DataCall call = new DataCall();
@@ -66,10 +61,8 @@ public class Summoner
             call.setData(Arrays.asList(this.id));
             call.setVerbose(true);
             final String json = call.doCall();
-            if (call.isError()) { return null; }
-            final List<MasteryPage> pages = L4J.getMapper().convertValue(L4J.getMapper().readTree(json).get("" + this.id).get("pages"), L4J.getMapper().getTypeFactory().constructCollectionType(List.class, MasteryPage.class));
-            CacheData.getMasteryPages().put(this.id, pages);
-            return pages;
+            if (call.isError()) { throw call.getErrorData(); }
+            return L4J.getMapper().convertValue(L4J.getMapper().readTree(json).get("" + this.id).get("pages"), L4J.getMapper().getTypeFactory().constructCollectionType(List.class, MasteryPage.class));
         } catch (final Exception e)
         {
             e.printStackTrace();
@@ -93,8 +86,6 @@ public class Summoner
      */
     public PlayerHistory getMatchHistory(final List<Integer> champids, final List<SubType> rankedQueues, final Integer beginIndex, final Integer endIndex)
     {
-        final PlayerHistory test = CacheData.getPlayerHistory().get(this.id);
-        if (test != null) { return test; }
         try
         {
             final DataCall call = new DataCall();
@@ -102,7 +93,7 @@ public class Summoner
             call.setVerbose(true);
             call.setData(Arrays.asList(this.id));
             call.setUrlParams(new HashMap<String, Object>()
-            {
+                    {
                 {
                     if (champids != null)
                     {
@@ -121,15 +112,11 @@ public class Summoner
                         this.put("endIndex", endIndex);
                     }
                 }
-            });
+                    });
             final String json = call.doCall();
+            if (call.isError()) { throw call.getErrorData(); }
             if (json.equals("{}")) { return null; }
-            final PlayerHistory match = L4J.getMapper().readValue(json, PlayerHistory.class);
-            if ((champids == null) && (rankedQueues == null) && (beginIndex == null) && (endIndex == null))
-            {
-                CacheData.getPlayerHistory().put(this.id, match);
-            }
-            return match;
+            return L4J.getMapper().readValue(json, PlayerHistory.class);
         } catch (final Exception e)
         {
             e.printStackTrace();
@@ -139,8 +126,6 @@ public class Summoner
 
     public RankedStats getRankedStats()
     {
-        final RankedStats test = CacheData.getRankedStats().get(this.id);
-        if (test != null) { return test; }
         try
         {
             final DataCall call = new DataCall();
@@ -148,10 +133,8 @@ public class Summoner
             call.setData(Arrays.asList(this.id));
             call.setVerbose(true);
             final String json = call.doCall();
-            if (call.isError()) { throw new LibraryException(LibraryException.lastError); }
-            final RankedStats pages = L4J.getMapper().readValue(json, RankedStats.class);
-            CacheData.getRankedStats().put(this.id, pages);
-            return pages;
+            if (call.isError()) { throw call.getErrorData(); }
+            return L4J.getMapper().readValue(json, RankedStats.class);
         } catch (final Exception e)
         {
             e.printStackTrace();
@@ -159,20 +142,16 @@ public class Summoner
         }
     }
 
-    public List<Game> getRecentGames()
+    public RecentGames getRecentGames()
     {
-        final RecentGames test = CacheData.getGames().get(this.id);
-        if (test != null) { return test.getGames(); }
         try
         {
             final DataCall call = new DataCall();
             call.setUrlEndpoint(URLEndpoint.RECENT_GAMES);
             call.setData(Arrays.asList(this.id));
             final String json = call.doCall();
-            if (call.isError()) { throw new LibraryException(LibraryException.lastError); }
-            final RecentGames games = L4J.getMapper().readValue(json, RecentGames.class);
-            CacheData.getGames().put(this.id, games);
-            return games.getGames();
+            if (call.isError()) { throw call.getErrorData(); }
+            return L4J.getMapper().readValue(json, RecentGames.class);
         } catch (final Exception e)
         {
             e.printStackTrace();
@@ -182,8 +161,6 @@ public class Summoner
 
     public List<RunePage> getRunePages()
     {
-        final List<RunePage> test = CacheData.getRunePages().get(this.id);
-        if (test != null) { return test; }
         try
         {
             final DataCall call = new DataCall();
@@ -191,11 +168,9 @@ public class Summoner
             call.setData(Arrays.asList(this.id));
             call.setVerbose(true);
             final String json = call.doCall();
-            if (call.isError()) { throw new LibraryException(LibraryException.lastError); }
+            if (call.isError()) { throw call.getErrorData(); }
             final JsonNode node = L4J.getMapper().readTree(json);
-            final List<RunePage> pages = L4J.getMapper().convertValue(node.get("" + this.id).get("pages"), L4J.getMapper().getTypeFactory().constructCollectionType(List.class, RunePage.class));
-            CacheData.getRunePages().put(this.id, pages);
-            return pages;
+            return L4J.getMapper().convertValue(node.get("" + this.id).get("pages"), L4J.getMapper().getTypeFactory().constructCollectionType(List.class, RunePage.class));
         } catch (final Exception e)
         {
             e.printStackTrace();
@@ -205,17 +180,15 @@ public class Summoner
 
     public List<League> getSelfLeague()
     {
-        final List<League> test = CacheData.getLeaguesSelf().get(this.id);
-        if (test != null) { return test; }
         try
         {
             final DataCall call = new DataCall();
             call.setUrlEndpoint(URLEndpoint.LEAGUE_BY_SUMMONER);
             call.setData(Arrays.asList(this.id));
             call.setVerbose(true);
-            final List<League> pages = L4J.getMapper().convertValue(L4J.getMapper().readTree(call.doCall()).get("" + this.id), L4J.getMapper().getTypeFactory().constructCollectionType(List.class, League.class));
-            CacheData.getLeaguesSelf().put(this.id, pages);
-            return pages;
+            final String json = call.doCall();
+            if (call.isError()) { throw call.getErrorData(); }
+            return L4J.getMapper().convertValue(L4J.getMapper().readTree(json).get("" + this.id), L4J.getMapper().getTypeFactory().constructCollectionType(List.class, League.class));
         } catch (final Exception e)
         {
             e.printStackTrace();
@@ -225,8 +198,6 @@ public class Summoner
 
     public List<StatSummary> getStatSummary()
     {
-        final List<StatSummary> test = CacheData.getStatSummary().get(this.id);
-        if (test != null) { return test; }
         try
         {
             final DataCall call = new DataCall();
@@ -234,11 +205,9 @@ public class Summoner
             call.setData(Arrays.asList(this.id));
             call.setVerbose(true);
             final String json = call.doCall();
-            if (call.isError()) { throw new LibraryException(LibraryException.lastError); }
+            if (call.isError()) { throw call.getErrorData(); }
             final JsonNode node = L4J.getMapper().readTree(json);
-            final List<StatSummary> pages = L4J.getMapper().convertValue(node.get("playerStatSummaries"), L4J.getMapper().getTypeFactory().constructCollectionType(List.class, StatSummary.class));
-            CacheData.getStatSummary().put(this.id, pages);
-            return pages;
+            return L4J.getMapper().convertValue(node.get("playerStatSummaries"), L4J.getMapper().getTypeFactory().constructCollectionType(List.class, StatSummary.class));
         } catch (final Exception e)
         {
             e.printStackTrace();
@@ -248,8 +217,6 @@ public class Summoner
 
     public List<Team> getTeams()
     {
-        final List<Team> test = CacheData.getTeamList().get(this.id);
-        if (test != null) { return test; }
         try
         {
             final DataCall call = new DataCall();
@@ -257,11 +224,9 @@ public class Summoner
             call.setData(Arrays.asList(this.id));
             call.setVerbose(true);
             final String json = call.doCall();
-            if (call.isError()) { throw new LibraryException(LibraryException.lastError); }
+            if (call.isError()) { throw call.getErrorData(); }
             final JsonNode node = L4J.getMapper().readTree(json);
-            final List<Team> pages = L4J.getMapper().convertValue(node.get("" + this.id), L4J.getMapper().getTypeFactory().constructCollectionType(List.class, Team.class));
-            CacheData.getTeamList().put(this.id, pages);
-            return pages;
+            return L4J.getMapper().convertValue(node.get("" + this.id), L4J.getMapper().getTypeFactory().constructCollectionType(List.class, Team.class));
         } catch (final Exception e)
         {
             e.printStackTrace();

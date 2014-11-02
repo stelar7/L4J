@@ -7,5 +7,7 @@ public enum GameMode
     ARAM,
     TUTORIAL,
     ONEFORALL,
+    ASCENSION,
+    HEXAKILL,
     FIRSTBLOOD;
 }

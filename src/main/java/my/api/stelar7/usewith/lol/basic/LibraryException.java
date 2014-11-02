@@ -15,8 +15,7 @@ public class LibraryException extends Exception
         UNKNOWN;
     }
 
-    public static int lastError;
-    Type              type;
+    Type type;
 
     /**
      *
@@ -72,7 +71,7 @@ public class LibraryException extends Exception
                 error += "Bad Request";
                 break;
             case NOT_FOUND:
-                error += "404 No data found";
+                error += "No data found";
                 break;
             case PARSE_FAILURE:
                 error += "Failed to parse API response";
@@ -92,7 +91,7 @@ public class LibraryException extends Exception
             default:
                 error += "An unknown error occured";
         }
-        return error + " (" + LibraryException.lastError + ")";
+        return "(" + this.type + ")" + error;
     }
 
 }
