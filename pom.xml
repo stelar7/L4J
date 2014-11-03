@@ -34,7 +34,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>my.api.stelar7.usewith.lol</groupId>
 	<artifactId>L4J</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>1.6.2</version>
 	<name>League of Legends 4 Java</name>
 	<description>This project is a wrapper for the REST-API @ develpoers.riotgames.com	</description>
 	<dependencies>
