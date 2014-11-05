@@ -11,6 +11,7 @@ import my.api.stelar7.usewith.lol.basic.DataCall;
 import my.api.stelar7.usewith.lol.basic.Server;
 import my.api.stelar7.usewith.lol.basic.URLEndpoint;
 import my.api.stelar7.usewith.lol.dto.game.RecentGames;
+import my.api.stelar7.usewith.lol.dto.general.Season;
 import my.api.stelar7.usewith.lol.dto.general.SubType;
 import my.api.stelar7.usewith.lol.dto.league.League;
 import my.api.stelar7.usewith.lol.dto.masteries.MasteryPage;
@@ -93,7 +94,7 @@ public class Summoner
             call.setVerbose(true);
             call.setData(Arrays.asList(this.id));
             call.setUrlParams(new HashMap<String, Object>()
-                    {
+            {
                 {
                     if (champids != null)
                     {
@@ -112,7 +113,7 @@ public class Summoner
                         this.put("endIndex", endIndex);
                     }
                 }
-                    });
+            });
             final String json = call.doCall();
             if (call.isError()) { throw call.getErrorData(); }
             if (json.equals("{}")) { return null; }
@@ -124,13 +125,22 @@ public class Summoner
         }
     }
 
-    public RankedStats getRankedStats()
+    public RankedStats getRankedStats(final Season season)
     {
         try
         {
             final DataCall call = new DataCall();
             call.setUrlEndpoint(URLEndpoint.RANKED_STATS);
             call.setData(Arrays.asList(this.id));
+            call.setUrlParams(new HashMap<String, Object>()
+            {
+                {
+                    if (season != null)
+                    {
+                        put("season", season.name().toLowerCase());
+                    }
+                }
+            });
             call.setVerbose(true);
             final String json = call.doCall();
             if (call.isError()) { throw call.getErrorData(); }
@@ -196,7 +206,7 @@ public class Summoner
         }
     }
 
-    public List<StatSummary> getStatSummary()
+    public List<StatSummary> getStatSummary(final Season season)
     {
         try
         {
@@ -204,6 +214,15 @@ public class Summoner
             call.setUrlEndpoint(URLEndpoint.STAT_SUMMARY);
             call.setData(Arrays.asList(this.id));
             call.setVerbose(true);
+            call.setUrlParams(new HashMap<String, Object>()
+            {
+                {
+                    if (season != null)
+                    {
+                        put("season", season.name().toLowerCase());
+                    }
+                }
+            });
             final String json = call.doCall();
             if (call.isError()) { throw call.getErrorData(); }
             final JsonNode node = L4J.getMapper().readTree(json);
