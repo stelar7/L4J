@@ -50,15 +50,27 @@ public class L4J
      */
     public L4J(final String key)
     {
-        this(key, 7.0 / 10.0, L4J.region);
+        this(key, 7.0 / 10.0);
     }
 
     /**
      *
      * @param key
      *            Your development API key
-     * @param limiter
-     *            The rate limiter to use
+     * @param rate
+     *            the rate to use (requests / seconds)
+     */
+    public L4J(final String key, final double rate)
+    {
+        this(key, rate, L4J.region);
+    }
+
+    /**
+     *
+     * @param key
+     *            Your development API key
+     * @param rate
+     *            the rate to use (requests / seconds)
      * @param server
      *            Your regional endpoint
      */
@@ -71,7 +83,6 @@ public class L4J
             L4J.rateLimiter.put(s, RateLimiter.create(rate));
         }
         L4J.mapper.configure(DeserializationConfig.Feature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-
     }
 
     /**
@@ -130,7 +141,7 @@ public class L4J
      *
      * @return list of leagues from summoner IDs
      */
-    public HashMap<Long, List<League>> getLeagueBySummoners(final boolean full, final Long... names)
+    public Map<Long, List<League>> getLeagueBySummoners(final boolean full, final Long... names)
     {
         final List<Long> copy = new LinkedList<>(Arrays.asList(names));
         final HashMap<Long, List<League>> summoners = new HashMap<>();
@@ -200,15 +211,15 @@ public class L4J
      *
      * @return list of of Summoners from their name
      */
-    public List<Summoner> getSummonersByID(final Long... names)
+    public Map<Long, Summoner> getSummonersByID(final Long... names)
     {
         final List<Long> copy = new LinkedList<>(Arrays.asList(names));
-        final List<Summoner> summoners = new ArrayList<>();
+        final HashMap<Long, Summoner> summoners = new HashMap<>();
         while (copy.size() > L4J.MAX_PER_SUMMONER)
         {
             final List<Long> remove = new ArrayList<Long>(copy.subList(0, L4J.MAX_PER_SUMMONER > copy.size() ? copy.size() : L4J.MAX_PER_SUMMONER));
             copy.removeAll(remove);
-            summoners.addAll(this.getSummonersByID(remove.toArray(new Long[L4J.MAX_PER_SUMMONER])));
+            summoners.putAll(this.getSummonersByID(remove.toArray(new Long[L4J.MAX_PER_SUMMONER])));
         }
         try
         {
@@ -224,14 +235,14 @@ public class L4J
                 final JsonNode innernode = node.get(Long.toString(s));
                 if (innernode == null)
                 {
-                    summoners.add(null);
+                    summoners.put(s, null);
                 } else
                 {
                     final Summoner sum = L4J.mapper.readValue(innernode, Summoner.class);
                     final Field f = Summoner.class.getDeclaredField("region");
                     f.setAccessible(true);
                     f.set(sum, L4J.region);
-                    summoners.add(sum);
+                    summoners.put(s, sum);
                 }
             }
             return summoners;
@@ -247,15 +258,15 @@ public class L4J
      *
      * @return list of of Summoners from their name
      */
-    public List<Summoner> getSummonersByName(final String... names)
+    public Map<String, Summoner> getSummonersByName(final String... names)
     {
         final List<String> copy = new LinkedList<>(Arrays.asList(names));
-        final List<Summoner> summoners = new ArrayList<>();
+        final HashMap<String, Summoner> summoners = new HashMap<>();
         while (copy.size() > L4J.MAX_PER_SUMMONER)
         {
             final List<String> remove = new ArrayList<String>(copy.subList(0, L4J.MAX_PER_SUMMONER > copy.size() ? copy.size() : L4J.MAX_PER_SUMMONER));
             copy.removeAll(remove);
-            summoners.addAll(this.getSummonersByName(remove.toArray(new String[L4J.MAX_PER_SUMMONER])));
+            summoners.putAll(this.getSummonersByName(remove.toArray(new String[L4J.MAX_PER_SUMMONER])));
         }
         try
         {
@@ -271,14 +282,14 @@ public class L4J
                 final JsonNode innernode = node.get(s.toLowerCase().replaceAll(" ", ""));
                 if (innernode == null)
                 {
-                    summoners.add(null);
+                    summoners.put(s, null);
                 } else
                 {
                     final Summoner sum = L4J.mapper.readValue(innernode, Summoner.class);
                     final Field f = Summoner.class.getDeclaredField("region");
                     f.setAccessible(true);
                     f.set(sum, L4J.region);
-                    summoners.add(sum);
+                    summoners.put(s, sum);
                 }
             }
             return summoners;
@@ -296,7 +307,7 @@ public class L4J
      *            A arrays of id's to get teams from
      * @return a list of Teams
      */
-    public HashMap<Long, List<Team>> getTeamBySummonerID(final Long... ids)
+    public Map<Long, List<Team>> getTeamBySummonerID(final Long... ids)
     {
         final List<Long> copy = new LinkedList<>(Arrays.asList(ids));
         final HashMap<Long, List<Team>> teams = new HashMap<>();
@@ -341,15 +352,15 @@ public class L4J
      *            A arrays of id's to get teams from
      * @return a list of Teams
      */
-    public List<Team> getTeamsByID(final String... id)
+    public Map<String, Team> getTeamsByID(final String... id)
     {
         final List<String> copy = new LinkedList<>(Arrays.asList(id));
-        final List<Team> teams = new ArrayList<>();
+        final HashMap<String, Team> teams = new HashMap<>();
         while (copy.size() > L4J.MAX_PER_TEAM)
         {
             final List<String> remove = new ArrayList<String>(copy.subList(0, L4J.MAX_PER_TEAM > copy.size() ? copy.size() : L4J.MAX_PER_TEAM));
             copy.removeAll(remove);
-            teams.addAll(this.getTeamsByID(remove.toArray(new String[L4J.MAX_PER_TEAM])));
+            teams.putAll(this.getTeamsByID(remove.toArray(new String[L4J.MAX_PER_TEAM])));
         }
         try
         {
@@ -364,11 +375,11 @@ public class L4J
                 final JsonNode innernode = node.get(s);
                 if (innernode == null)
                 {
-                    teams.add(null);
+                    teams.put(s, null);
                 } else
                 {
                     final Team tea = L4J.mapper.readValue(innernode, Team.class);
-                    teams.add(tea);
+                    teams.put(s, tea);
                 }
             }
             return teams;

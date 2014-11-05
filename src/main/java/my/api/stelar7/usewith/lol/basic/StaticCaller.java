@@ -4,9 +4,9 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 
-import org.codehaus.jackson.type.TypeReference;
-
 import my.api.stelar7.usewith.lol.L4J;
+import my.api.stelar7.usewith.lol.dto.staticdata.champion.Champion;
+import my.api.stelar7.usewith.lol.dto.staticdata.champion.ChampionList;
 import my.api.stelar7.usewith.lol.dto.staticdata.general.Locale;
 import my.api.stelar7.usewith.lol.dto.staticdata.general.Realm;
 import my.api.stelar7.usewith.lol.dto.staticdata.item.Item;
@@ -19,6 +19,8 @@ import my.api.stelar7.usewith.lol.dto.staticdata.shard.Shard;
 import my.api.stelar7.usewith.lol.dto.staticdata.shard.ShardStatus;
 import my.api.stelar7.usewith.lol.dto.staticdata.summoners.SummonerSpell;
 import my.api.stelar7.usewith.lol.dto.staticdata.summoners.SummonerSpellList;
+
+import org.codehaus.jackson.type.TypeReference;
 
 public class StaticCaller
 {
@@ -35,7 +37,7 @@ public class StaticCaller
      * @param champdata
      *            the data to return. To get all the data use "all". default is id, key, name, and title (can be null)
      */
-    public my.api.stelar7.usewith.lol.dto.staticdata.champion.ChampionList getChampionData(final Locale locale, final String version, final List<String> champdata, final boolean idAsKey)
+    public ChampionList getChampionData(final Locale locale, final String version, final List<String> champdata, final boolean idAsKey)
     {
         try
         {
@@ -129,7 +131,7 @@ public class StaticCaller
      * @param champdata
      *            the data to return. To get all the data use "all". default is id, key, name, and title (can be null)
      */
-    public my.api.stelar7.usewith.lol.dto.staticdata.champion.Champion getChampionData(final long id, final Locale locale, final String version, final List<String> champdata)
+    public Champion getChampionData(final long id, final Locale locale, final String version, final List<String> champdata)
     {
         try
         {
