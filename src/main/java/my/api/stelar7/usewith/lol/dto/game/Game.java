@@ -37,7 +37,6 @@ public class Game
         {
             final DataCall call = new DataCall();
             call.setUrlEndpoint(URLEndpoint.MATCH);
-            call.setVerbose(true);
             call.setData(Arrays.asList(this.gameId));
             call.setUrlParams(new HashMap<String, Object>()
                     {

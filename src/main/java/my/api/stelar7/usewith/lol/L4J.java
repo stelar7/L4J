@@ -27,7 +27,7 @@ public class L4J
 
     @Getter
     @Setter
-    static String                       APIKey;
+    static String                       APIKey           = null;
     @Getter
     @Setter
     static HashMap<Server, RateLimiter> rateLimiter      = new HashMap<>();
@@ -38,6 +38,9 @@ public class L4J
     private static final ObjectMapper   mapper           = new ObjectMapper();
     @Getter
     private final StaticCaller          staticData       = new StaticCaller();
+    @Getter
+    @Setter
+    public static boolean               verbose          = false;
 
     private static final int            MAX_PER_SUMMONER = 40;
     private static final int            MAX_PER_TEAM     = 10;
@@ -104,7 +107,6 @@ public class L4J
                     this.put("type", type);
                 }
             });
-            call.setVerbose(true);
             final String json = call.doCall();
             if (call.isError()) { throw call.getErrorData(); }
             return L4J.getMapper().readValue(json, League.class);
@@ -156,7 +158,6 @@ public class L4J
             final DataCall call = new DataCall();
             call.setUrlEndpoint(full ? URLEndpoint.LEAGUE_BY_SUMMONER_FULL : URLEndpoint.LEAGUE_BY_SUMMONER);
             call.setData(copy);
-            call.setVerbose(true);
             final String json = call.doCall();
             if (call.isError()) { throw call.getErrorData(); }
             final JsonNode node = L4J.mapper.readTree(json);
@@ -188,7 +189,6 @@ public class L4J
         {
             final DataCall call = new DataCall();
             call.setUrlEndpoint(URLEndpoint.MATCH);
-            call.setVerbose(true);
             call.setData(Arrays.asList(id));
             call.setUrlParams(new HashMap<String, Object>()
             {
@@ -226,7 +226,6 @@ public class L4J
             final DataCall call = new DataCall();
             call.setUrlEndpoint(URLEndpoint.SUMMONER_BY_ID);
             call.setData(copy);
-            call.setVerbose(true);
             final String json = call.doCall();
             if (call.isError()) { throw call.getErrorData(); }
             final JsonNode node = L4J.mapper.readTree(json);
@@ -273,7 +272,6 @@ public class L4J
             final DataCall call = new DataCall();
             call.setUrlEndpoint(URLEndpoint.SUMMONER_BY_NAME);
             call.setData(copy);
-            call.setVerbose(true);
             final String json = call.doCall();
             if (call.isError()) { throw call.getErrorData(); }
             final JsonNode node = L4J.mapper.readTree(json);

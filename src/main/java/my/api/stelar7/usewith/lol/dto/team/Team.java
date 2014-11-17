@@ -38,7 +38,6 @@ public class Team
             final DataCall call = new DataCall();
             call.setUrlEndpoint(URLEndpoint.LEAGUE_BY_TEAM_FULL);
             call.setData(Arrays.asList("" + this.fullId));
-            call.setVerbose(true);
             final String json = call.doCall();
             if (call.isError()) { throw call.getErrorData(); }
             final JsonNode node = L4J.getMapper().readTree(json);
@@ -57,7 +56,6 @@ public class Team
             final DataCall call = new DataCall();
             call.setUrlEndpoint(URLEndpoint.LEAGUE_BY_TEAM);
             call.setData(Arrays.asList("" + this.fullId));
-            call.setVerbose(true);
             final String json = call.doCall();
             if (call.isError()) { throw call.getErrorData(); }
             final JsonNode node = L4J.getMapper().readTree(json);

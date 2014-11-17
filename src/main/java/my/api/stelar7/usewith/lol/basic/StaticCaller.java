@@ -43,7 +43,7 @@ public class StaticCaller
         {
             final DataCall call = new DataCall();
             call.setUrlEndpoint(URLEndpoint.STATIC_CHAMPION);
-            call.setVerbose(true);
+
             call.setUrlParams(new HashMap<String, Object>()
             {
                 {
@@ -84,10 +84,10 @@ public class StaticCaller
         {
             final DataCall call = new DataCall();
             call.setUrlEndpoint(URLEndpoint.STATIC_SHARD);
-            call.setVerbose(true);
             final String json = call.doCall();
             if (call.isError()) { throw call.getErrorData(); }
-            return L4J.getMapper().readValue(json, new TypeReference<List<Shard>>(){});//L4J.getMapper.getMapper().getTypeFactory().constructCollectionType(List.class, Shard.class));
+            return L4J.getMapper().readValue(json, new TypeReference<List<Shard>>()
+            {});// L4J.getMapper.getMapper().getTypeFactory().constructCollectionType(List.class, Shard.class));
         } catch (final Exception e)
         {
             e.printStackTrace();
@@ -137,7 +137,6 @@ public class StaticCaller
         {
             final DataCall call = new DataCall();
             call.setUrlEndpoint(URLEndpoint.STATIC_CHAMPION_ID);
-            call.setVerbose(true);
             call.setData(Arrays.asList(id));
             call.setUrlParams(new HashMap<String, Object>()
             {
@@ -182,7 +181,6 @@ public class StaticCaller
         {
             final DataCall call = new DataCall();
             call.setUrlEndpoint(URLEndpoint.STATIC_ITEM);
-            call.setVerbose(true);
             call.setUrlParams(new HashMap<String, Object>()
             {
                 {
@@ -228,7 +226,6 @@ public class StaticCaller
         {
             final DataCall call = new DataCall();
             call.setUrlEndpoint(URLEndpoint.STATIC_ITEM_ID);
-            call.setVerbose(true);
             call.setData(Arrays.asList(id));
             call.setUrlParams(new HashMap<String, Object>()
             {
@@ -273,7 +270,6 @@ public class StaticCaller
         {
             final DataCall call = new DataCall();
             call.setUrlEndpoint(URLEndpoint.STATIC_MASTERY);
-            call.setVerbose(true);
             call.setUrlParams(new HashMap<String, Object>()
             {
                 {
@@ -319,7 +315,6 @@ public class StaticCaller
         {
             final DataCall call = new DataCall();
             call.setUrlEndpoint(URLEndpoint.STATIC_MASTERY_ID);
-            call.setVerbose(true);
             call.setData(Arrays.asList(id));
             call.setUrlParams(new HashMap<String, Object>()
             {
@@ -357,7 +352,7 @@ public class StaticCaller
         {
             final DataCall call = new DataCall();
             call.setUrlEndpoint(URLEndpoint.STATIC_REALM);
-            call.setVerbose(true);
+
             final String json = call.doCall();
             if (call.isError()) { throw call.getErrorData(); }
             return L4J.getMapper().readValue(json, Realm.class);
@@ -384,7 +379,6 @@ public class StaticCaller
         {
             final DataCall call = new DataCall();
             call.setUrlEndpoint(URLEndpoint.STATIC_RUNE);
-            call.setVerbose(true);
             call.setUrlParams(new HashMap<String, Object>()
             {
                 {
@@ -430,7 +424,6 @@ public class StaticCaller
         {
             final DataCall call = new DataCall();
             call.setUrlEndpoint(URLEndpoint.STATIC_RUNE_ID);
-            call.setVerbose(true);
             call.setData(Arrays.asList(id));
             call.setUrlParams(new HashMap<String, Object>()
             {
@@ -477,7 +470,6 @@ public class StaticCaller
         {
             final DataCall call = new DataCall();
             call.setUrlEndpoint(URLEndpoint.STATIC_SUMMONER_SPELL);
-            call.setVerbose(true);
             call.setUrlParams(new HashMap<String, Object>()
             {
                 {
@@ -526,7 +518,6 @@ public class StaticCaller
         {
             final DataCall call = new DataCall();
             call.setUrlEndpoint(URLEndpoint.STATIC_SUMMONER_SPELL_ID);
-            call.setVerbose(true);
             call.setData(Arrays.asList(id));
             call.setUrlParams(new HashMap<String, Object>()
             {
@@ -564,7 +555,6 @@ public class StaticCaller
         {
             final DataCall call = new DataCall();
             call.setUrlEndpoint(URLEndpoint.STATIC_VERSION);
-            call.setVerbose(true);
             final String json = call.doCall();
             if (call.isError()) { throw call.getErrorData(); }
             return L4J.getMapper().readValue(json, L4J.getMapper().getTypeFactory().constructCollectionType(List.class, String.class));

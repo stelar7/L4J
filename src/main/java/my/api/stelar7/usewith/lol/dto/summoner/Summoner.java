@@ -41,7 +41,6 @@ public class Summoner
             final DataCall call = new DataCall();
             call.setUrlEndpoint(URLEndpoint.LEAGUE_BY_SUMMONER_FULL);
             call.setData(Arrays.asList(this.id));
-            call.setVerbose(true);
             final String json = call.doCall();
             if (call.isError()) { throw call.getErrorData(); }
             final JsonNode node = L4J.getMapper().readTree(json);
@@ -60,7 +59,6 @@ public class Summoner
             final DataCall call = new DataCall();
             call.setUrlEndpoint(URLEndpoint.SUMMONER_MASTERIES);
             call.setData(Arrays.asList(this.id));
-            call.setVerbose(true);
             final String json = call.doCall();
             if (call.isError()) { throw call.getErrorData(); }
             return L4J.getMapper().convertValue(L4J.getMapper().readTree(json).get("" + this.id).get("pages"), L4J.getMapper().getTypeFactory().constructCollectionType(List.class, MasteryPage.class));
@@ -91,7 +89,6 @@ public class Summoner
         {
             final DataCall call = new DataCall();
             call.setUrlEndpoint(URLEndpoint.MATCH_HISTORY);
-            call.setVerbose(true);
             call.setData(Arrays.asList(this.id));
             call.setUrlParams(new HashMap<String, Object>()
             {
@@ -141,7 +138,6 @@ public class Summoner
                     }
                 }
             });
-            call.setVerbose(true);
             final String json = call.doCall();
             if (call.isError()) { throw call.getErrorData(); }
             return L4J.getMapper().readValue(json, RankedStats.class);
@@ -176,7 +172,6 @@ public class Summoner
             final DataCall call = new DataCall();
             call.setUrlEndpoint(URLEndpoint.SUMMONER_RUNES);
             call.setData(Arrays.asList(this.id));
-            call.setVerbose(true);
             final String json = call.doCall();
             if (call.isError()) { throw call.getErrorData(); }
             final JsonNode node = L4J.getMapper().readTree(json);
@@ -195,7 +190,6 @@ public class Summoner
             final DataCall call = new DataCall();
             call.setUrlEndpoint(URLEndpoint.LEAGUE_BY_SUMMONER);
             call.setData(Arrays.asList(this.id));
-            call.setVerbose(true);
             final String json = call.doCall();
             if (call.isError()) { throw call.getErrorData(); }
             return L4J.getMapper().convertValue(L4J.getMapper().readTree(json).get("" + this.id), L4J.getMapper().getTypeFactory().constructCollectionType(List.class, League.class));
@@ -213,7 +207,6 @@ public class Summoner
             final DataCall call = new DataCall();
             call.setUrlEndpoint(URLEndpoint.STAT_SUMMARY);
             call.setData(Arrays.asList(this.id));
-            call.setVerbose(true);
             call.setUrlParams(new HashMap<String, Object>()
             {
                 {
@@ -241,7 +234,6 @@ public class Summoner
             final DataCall call = new DataCall();
             call.setUrlEndpoint(URLEndpoint.TEAM_BY_SUMMONER);
             call.setData(Arrays.asList(this.id));
-            call.setVerbose(true);
             final String json = call.doCall();
             if (call.isError()) { throw call.getErrorData(); }
             final JsonNode node = L4J.getMapper().readTree(json);

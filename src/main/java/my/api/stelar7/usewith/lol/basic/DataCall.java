@@ -1,5 +1,6 @@
 package my.api.stelar7.usewith.lol.basic;
 
+import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.HashMap;
 import java.util.List;
@@ -20,8 +21,8 @@ public class DataCall
 
     URLEndpoint             urlEndpoint;
     List<?>                 data;
-    boolean                 blockWhileLimited = true;
     boolean                 verbose           = false;
+    boolean                 blockWhileLimited = true;
     boolean                 error             = false;
     LibraryException        errorData         = null;
     HashMap<String, Object> urlParams         = new HashMap<>();
@@ -37,14 +38,20 @@ public class DataCall
         }
     }
 
-    private String buildData() throws Exception
+    private String buildData()
     {
         final StringBuilder items = new StringBuilder();
         if (this.data != null)
         {
             for (final Object s : this.data)
             {
-                items.append(URLEncoder.encode(s.toString().toLowerCase().replaceAll(" ", ""), "UTF-8")).append(",");
+                try
+                {
+                    items.append(URLEncoder.encode(s.toString().toLowerCase().replaceAll(" ", ""), "UTF-8")).append(",");
+                } catch (UnsupportedEncodingException e)
+                {
+                    e.printStackTrace();
+                }
             }
             items.deleteCharAt(items.length() - 1);
         }
@@ -57,7 +64,7 @@ public class DataCall
      * @return the String from the result
      * @throws Exception
      */
-    public String doCall() throws Exception
+    public String doCall() throws LibraryException
     {
         final StringBuilder URL = new StringBuilder();
         if (!urlEndpoint.getValue().startsWith("http"))
@@ -75,7 +82,7 @@ public class DataCall
         }
         URL.append(replaceData(replaceVersion(replaceRegion(this.urlEndpoint.getValue()))));
         URL.append(this.getAPIkey()).append(this.getParameters());
-        if (this.verbose)
+        if (L4J.verbose || this.verbose)
         {
             DataCall.log.info(URL.toString());
         }
@@ -96,12 +103,18 @@ public class DataCall
         return sb.toString();
     }
 
-    private String getParameters() throws Exception
+    private String getParameters()
     {
         final StringBuilder params = new StringBuilder();
         for (final String s : this.urlParams.keySet())
         {
-            params.append("&").append(s).append("=").append(URLEncoder.encode(this.urlParams.get(s).toString(), "UTF-8"));
+            try
+            {
+                params.append("&").append(s).append("=").append(URLEncoder.encode(this.urlParams.get(s).toString(), "UTF-8"));
+            } catch (UnsupportedEncodingException e)
+            {
+                e.printStackTrace();
+            }
         }
         return params.toString();
     }
@@ -121,7 +134,7 @@ public class DataCall
         return s.replace("{version}", VersionChecker.getFor(this.urlEndpoint));
     }
 
-    private String replaceData(final String s) throws Exception
+    private String replaceData(final String s)
     {
         return s.replace("{data}", this.buildData());
     }
