@@ -1,5 +1,8 @@
 package my.api.stelar7.usewith.lol.basic;
 
+import lombok.Getter;
+import my.api.stelar7.usewith.lol.network.HttpResponse;
+
 public class LibraryException extends Exception
 {
     public enum Type
@@ -15,15 +18,20 @@ public class LibraryException extends Exception
         UNKNOWN;
     }
 
+    @Getter
     Type type;
+    @Getter
+    int retryAfter;
 
     /**
      *
      * @param t
      *            The HTTP response status code to generate error from;
      */
-    public LibraryException(final int code)
+    public LibraryException(final HttpResponse response)
     {
+        int code = response.getStatusCode();
+        retryAfter = response.getRetryAfter() * 1000;
         this.type = Type.UNKNOWN;
         if (code >= 500)
         {

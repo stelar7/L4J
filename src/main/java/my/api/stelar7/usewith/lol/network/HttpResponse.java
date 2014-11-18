@@ -9,6 +9,7 @@ public class HttpResponse
 
     String  body;
     Integer response;
+    HttpURLConnection con;
 
     public HttpResponse(final HttpURLConnection con) throws Exception
     {
@@ -19,6 +20,7 @@ public class HttpResponse
         {
             sb.append((char) x);
         }
+        this.con = con;
         this.body = sb.toString();
         this.response = con.getResponseCode();
     }
@@ -32,5 +34,10 @@ public class HttpResponse
     {
         return this.response;
     }
-
+    
+    public int getRetryAfter()
+    {
+        return con.getHeaderFieldInt("Retry-After", 10) * 1000;
+    }
+    
 }
