@@ -36,31 +36,6 @@ public class SummonerSpell
     String             tooltip;
     List<SpellVars>    vars;
 
-    public enum Spells
-    {
-        EXHAUST(3),
-        BARRIER(21),
-        CLAIRVOYANCE(2),
-        REVIVE(10),
-        CLEANSE(1),
-        HEAL(7),
-        GHOST(6),
-        FLASH(4),
-        GARRISON(17),
-        CLARITY(13),
-        IGNITE(14),
-        SMITE(11),
-        TELEPORT(12);
-
-        @Getter
-        int id;
-
-        private Spells(int id)
-        {
-            this.id = id;
-        }
-    }
-
     public String getSanitizedTooltip(final int championLevel)
     {
         return replaceVariables(sanitizedTooltip, championLevel);

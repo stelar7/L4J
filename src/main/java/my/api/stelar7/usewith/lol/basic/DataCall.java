@@ -90,7 +90,7 @@ public class DataCall
         {
             DataCall.log.info(URL.toString());
         }
-        final HttpResponse response = HttpClient.execute(new GET(URL.toString()), 1);
+        final HttpResponse response = HttpClient.execute(new GET(URL.toString()));
         if (response.getStatusCode() != 200)
         {
             this.errorData = new LibraryException(response.getStatusCode());

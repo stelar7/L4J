@@ -5,6 +5,7 @@ import java.util.Arrays;
 import my.api.stelar7.usewith.lol.L4J;
 import my.api.stelar7.usewith.lol.basic.Server;
 import my.api.stelar7.usewith.lol.dto.staticdata.summoners.SummonerSpell;
+import my.api.stelar7.usewith.lol.dto.staticdata.summoners.SummonerSpellList;
 
 import org.junit.Test;
 
@@ -15,7 +16,7 @@ public class StaticTest
     public void test1()
     {
         L4J.setRegion(Server.EUW);
-        SummonerSpell champ = lib.getStaticData().getSummonerSpellData(SummonerSpell.Spells.EXHAUST.getId(), null, null, Arrays.asList("all"));
+        SummonerSpell champ = lib.getStaticData().getSummonerSpellData(SummonerSpellList.Spell.EXHAUST.getId(), null, null, Arrays.asList("all"));
         System.out.println(champ.getSanitizedTooltip(18));
     }
 }
