@@ -1,6 +1,5 @@
 package my.api.stelar7.usewith.lol.network;
 
-import java.net.ConnectException;
 import java.net.HttpURLConnection;
 import java.net.URLConnection;
 
@@ -12,20 +11,13 @@ public class HttpClient
         {
             if (count > 3) { return null; }
             final URLConnection uc = request.url.openConnection();
-            return new HttpResponse((HttpURLConnection) uc);
+            HttpURLConnection con = (HttpURLConnection) uc;
+            if (con.getResponseCode() == 429) {
+                Thread.sleep(con.getHeaderFieldInt("Retry-After", 10) * 1000);
+            }
+            return new HttpResponse(con);
         } catch (final Exception e)
         {
-            if (e instanceof ConnectException)
-            {
-                try
-                {
-                    Thread.sleep(3000);
-                    return HttpClient.execute(request, count + 1);
-                } catch (final InterruptedException e1)
-                {
-                    e1.printStackTrace();
-                }
-            }
             e.printStackTrace();
             return null;
         }

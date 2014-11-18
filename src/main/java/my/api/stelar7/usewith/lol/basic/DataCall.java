@@ -23,9 +23,13 @@ public class DataCall
     List<?>                 data;
     boolean                 verbose           = false;
     boolean                 blockWhileLimited = true;
-    boolean                 error             = false;
     LibraryException        errorData         = null;
     HashMap<String, Object> urlParams         = new HashMap<>();
+
+    public boolean hasError()
+    {
+        return errorData != null;
+    }
 
     private void applyRateLimit() throws LibraryException
     {
@@ -89,7 +93,6 @@ public class DataCall
         final HttpResponse response = HttpClient.execute(new GET(URL.toString()), 1);
         if (response.getStatusCode() != 200)
         {
-            this.error = true;
             this.errorData = new LibraryException(response.getStatusCode());
             return null;
         }

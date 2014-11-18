@@ -39,7 +39,7 @@ public class Team
             call.setUrlEndpoint(URLEndpoint.LEAGUE_BY_TEAM_FULL);
             call.setData(Arrays.asList("" + this.fullId));
             final String json = call.doCall();
-            if (call.isError()) { throw call.getErrorData(); }
+            if (call.hasError()) { throw call.getErrorData(); }
             final JsonNode node = L4J.getMapper().readTree(json);
             return L4J.getMapper().convertValue(node.get("" + this.fullId), L4J.getMapper().getTypeFactory().constructCollectionType(List.class, League.class));
         } catch (final Exception e)
@@ -57,7 +57,7 @@ public class Team
             call.setUrlEndpoint(URLEndpoint.LEAGUE_BY_TEAM);
             call.setData(Arrays.asList("" + this.fullId));
             final String json = call.doCall();
-            if (call.isError()) { throw call.getErrorData(); }
+            if (call.hasError()) { throw call.getErrorData(); }
             final JsonNode node = L4J.getMapper().readTree(json);
             return L4J.getMapper().convertValue(node.get("" + this.fullId), L4J.getMapper().getTypeFactory().constructCollectionType(List.class, League.class));
         } catch (final Exception e)

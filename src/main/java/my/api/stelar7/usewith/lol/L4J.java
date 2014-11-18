@@ -108,7 +108,7 @@ public class L4J
                 }
             });
             final String json = call.doCall();
-            if (call.isError()) { throw call.getErrorData(); }
+            if (call.hasError()) { throw call.getErrorData(); }
             return L4J.getMapper().readValue(json, League.class);
         } catch (final Exception e)
         {
@@ -129,7 +129,7 @@ public class L4J
             final DataCall call = new DataCall();
             call.setUrlEndpoint(URLEndpoint.CHAMPION_LIST);
             final String json = call.doCall();
-            if (call.isError()) { throw call.getErrorData(); }
+            if (call.hasError()) { throw call.getErrorData(); }
             return L4J.mapper.readValue(json, ChampionList.class);
         } catch (final Exception e)
         {
@@ -159,7 +159,7 @@ public class L4J
             call.setUrlEndpoint(full ? URLEndpoint.LEAGUE_BY_SUMMONER_FULL : URLEndpoint.LEAGUE_BY_SUMMONER);
             call.setData(copy);
             final String json = call.doCall();
-            if (call.isError()) { throw call.getErrorData(); }
+            if (call.hasError()) { throw call.getErrorData(); }
             final JsonNode node = L4J.mapper.readTree(json);
             for (final Long s : copy)
             {
@@ -197,7 +197,7 @@ public class L4J
                 }
             });
             final String json = call.doCall();
-            if (call.isError()) { throw call.getErrorData(); }
+            if (call.hasError()) { throw call.getErrorData(); }
             return L4J.getMapper().readValue(json, MatchDetail.class);
         } catch (final Exception e)
         {
@@ -227,7 +227,7 @@ public class L4J
             call.setUrlEndpoint(URLEndpoint.SUMMONER_BY_ID);
             call.setData(copy);
             final String json = call.doCall();
-            if (call.isError()) { throw call.getErrorData(); }
+            if (call.hasError()) { throw call.getErrorData(); }
             final JsonNode node = L4J.mapper.readTree(json);
             for (final Long s : copy)
             {
@@ -273,7 +273,7 @@ public class L4J
             call.setUrlEndpoint(URLEndpoint.SUMMONER_BY_NAME);
             call.setData(copy);
             final String json = call.doCall();
-            if (call.isError()) { throw call.getErrorData(); }
+            if (call.hasError()) { throw call.getErrorData(); }
             final JsonNode node = L4J.mapper.readTree(json);
             for (final String s : copy)
             {
@@ -321,7 +321,7 @@ public class L4J
             call.setUrlEndpoint(URLEndpoint.TEAM_BY_SUMMONER);
             call.setData(copy);
             final String json = call.doCall();
-            if (call.isError()) { throw call.getErrorData(); }
+            if (call.hasError()) { throw call.getErrorData(); }
             final JsonNode node = L4J.mapper.readTree(json);
             for (final Long s : copy)
             {
@@ -366,7 +366,7 @@ public class L4J
             call.setUrlEndpoint(URLEndpoint.TEAM_BY_ID);
             call.setData(copy);
             final String json = call.doCall();
-            if (call.isError()) { throw call.getErrorData(); }
+            if (call.hasError()) { throw call.getErrorData(); }
             final JsonNode node = L4J.mapper.readTree(json);
             for (final String s : copy)
             {

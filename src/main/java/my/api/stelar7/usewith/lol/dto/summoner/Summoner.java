@@ -42,7 +42,7 @@ public class Summoner
             call.setUrlEndpoint(URLEndpoint.LEAGUE_BY_SUMMONER_FULL);
             call.setData(Arrays.asList(this.id));
             final String json = call.doCall();
-            if (call.isError()) { throw call.getErrorData(); }
+            if (call.hasError()) { throw call.getErrorData(); }
             final JsonNode node = L4J.getMapper().readTree(json);
             return L4J.getMapper().convertValue(node.get("" + this.id), L4J.getMapper().getTypeFactory().constructCollectionType(List.class, League.class));
         } catch (final Exception e)
@@ -60,7 +60,7 @@ public class Summoner
             call.setUrlEndpoint(URLEndpoint.SUMMONER_MASTERIES);
             call.setData(Arrays.asList(this.id));
             final String json = call.doCall();
-            if (call.isError()) { throw call.getErrorData(); }
+            if (call.hasError()) { throw call.getErrorData(); }
             return L4J.getMapper().convertValue(L4J.getMapper().readTree(json).get("" + this.id).get("pages"), L4J.getMapper().getTypeFactory().constructCollectionType(List.class, MasteryPage.class));
         } catch (final Exception e)
         {
@@ -112,7 +112,7 @@ public class Summoner
                 }
             });
             final String json = call.doCall();
-            if (call.isError()) { throw call.getErrorData(); }
+            if (call.hasError()) { throw call.getErrorData(); }
             if (json.equals("{}")) { return null; }
             return L4J.getMapper().readValue(json, PlayerHistory.class);
         } catch (final Exception e)
@@ -139,7 +139,7 @@ public class Summoner
                 }
             });
             final String json = call.doCall();
-            if (call.isError()) { throw call.getErrorData(); }
+            if (call.hasError()) { throw call.getErrorData(); }
             return L4J.getMapper().readValue(json, RankedStats.class);
         } catch (final Exception e)
         {
@@ -156,7 +156,7 @@ public class Summoner
             call.setUrlEndpoint(URLEndpoint.RECENT_GAMES);
             call.setData(Arrays.asList(this.id));
             final String json = call.doCall();
-            if (call.isError()) { throw call.getErrorData(); }
+            if (call.hasError()) { throw call.getErrorData(); }
             return L4J.getMapper().readValue(json, RecentGames.class);
         } catch (final Exception e)
         {
@@ -173,7 +173,7 @@ public class Summoner
             call.setUrlEndpoint(URLEndpoint.SUMMONER_RUNES);
             call.setData(Arrays.asList(this.id));
             final String json = call.doCall();
-            if (call.isError()) { throw call.getErrorData(); }
+            if (call.hasError()) { throw call.getErrorData(); }
             final JsonNode node = L4J.getMapper().readTree(json);
             return L4J.getMapper().convertValue(node.get("" + this.id).get("pages"), L4J.getMapper().getTypeFactory().constructCollectionType(List.class, RunePage.class));
         } catch (final Exception e)
@@ -191,7 +191,7 @@ public class Summoner
             call.setUrlEndpoint(URLEndpoint.LEAGUE_BY_SUMMONER);
             call.setData(Arrays.asList(this.id));
             final String json = call.doCall();
-            if (call.isError()) { throw call.getErrorData(); }
+            if (call.hasError()) { throw call.getErrorData(); }
             return L4J.getMapper().convertValue(L4J.getMapper().readTree(json).get("" + this.id), L4J.getMapper().getTypeFactory().constructCollectionType(List.class, League.class));
         } catch (final Exception e)
         {
@@ -217,7 +217,7 @@ public class Summoner
                 }
             });
             final String json = call.doCall();
-            if (call.isError()) { throw call.getErrorData(); }
+            if (call.hasError()) { throw call.getErrorData(); }
             final JsonNode node = L4J.getMapper().readTree(json);
             return L4J.getMapper().convertValue(node.get("playerStatSummaries"), L4J.getMapper().getTypeFactory().constructCollectionType(List.class, StatSummary.class));
         } catch (final Exception e)
@@ -235,7 +235,7 @@ public class Summoner
             call.setUrlEndpoint(URLEndpoint.TEAM_BY_SUMMONER);
             call.setData(Arrays.asList(this.id));
             final String json = call.doCall();
-            if (call.isError()) { throw call.getErrorData(); }
+            if (call.hasError()) { throw call.getErrorData(); }
             final JsonNode node = L4J.getMapper().readTree(json);
             return L4J.getMapper().convertValue(node.get("" + this.id), L4J.getMapper().getTypeFactory().constructCollectionType(List.class, Team.class));
         } catch (final Exception e)

@@ -45,7 +45,7 @@ public class Game
                 }
                     });
             final String json = call.doCall();
-            if (call.isError()) { throw call.getErrorData(); }
+            if (call.hasError()) { throw call.getErrorData(); }
             return L4J.getMapper().readValue(json, MatchDetail.class);
         } catch (final Exception e)
         {
