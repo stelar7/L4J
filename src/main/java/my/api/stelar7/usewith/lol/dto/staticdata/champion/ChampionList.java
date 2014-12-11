@@ -17,6 +17,7 @@ public class ChampionList
 
     public enum Champion
     {
+        
         SHACO(35),
         DR_MUNDO(36),
         IRELIA(39),
@@ -47,6 +48,7 @@ public class ChampionList
         AMUMU(32),
         TWISTED_FATE(4),
         CHOGATH(31),
+        REKSAI(421),
         FIDDLESTICKS(9),
         VLADIMIR(8),
         WARWICK(19),

@@ -9,5 +9,6 @@ public enum GameMode
     ONEFORALL,
     ASCENSION,
     HEXAKILL,
-    FIRSTBLOOD;
+    FIRSTBLOOD,
+    KINGPORO;
 }

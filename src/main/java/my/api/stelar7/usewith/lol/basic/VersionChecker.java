@@ -71,6 +71,8 @@ public class VersionChecker
                 break;
             case STATIC_SHARD_REGION:
                 break;
+            case STATIC_LANGUAGES:
+                return "v1.2";
             default:
                 break;
         }

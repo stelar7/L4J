@@ -25,6 +25,30 @@ import org.codehaus.jackson.type.TypeReference;
 public class StaticCaller
 {
 
+    public List<String> getLanguages(final Server region)
+    {
+        try
+        {
+            final DataCall call = new DataCall();
+            call.setUrlEndpoint(URLEndpoint.STATIC_LANGUAGES);
+
+            call.setUrlParams(new HashMap<String, Object>()
+            {
+                {
+                    this.put("region", region.name().toLowerCase());
+                }
+            });
+            final String json = call.doCall();
+            if (call.hasError()) { throw call.getErrorData(); }
+            return L4J.getMapper().readValue(json, new TypeReference<List<String>>()
+            {});
+        } catch (final Exception e)
+        {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
     /**
      * Gets static data about all champions
      *
@@ -87,7 +111,8 @@ public class StaticCaller
             final String json = call.doCall();
             if (call.hasError()) { throw call.getErrorData(); }
             return L4J.getMapper().readValue(json, new TypeReference<List<Shard>>()
-            {});// L4J.getMapper.getMapper().getTypeFactory().constructCollectionType(List.class, Shard.class));
+            {});
+            // L4J.getMapper.getMapper().getTypeFactory().constructCollectionType(List.class, Shard.class));
         } catch (final Exception e)
         {
             e.printStackTrace();
