@@ -10,6 +10,7 @@ import lombok.ToString;
 public class Participant
 {
     int                 championId;
+    String              highestAchievedSeasonTier;
     List<MatchMastery>  masteries;
     int                 participantId;
     List<MatchRune>     runes;
