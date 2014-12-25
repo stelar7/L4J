@@ -1,7 +1,10 @@
 package test;
 
+import java.util.Arrays;
+
 import my.api.stelar7.usewith.lol.L4J;
 import my.api.stelar7.usewith.lol.basic.Server;
+import my.api.stelar7.usewith.lol.dto.general.SubType;
 import my.api.stelar7.usewith.lol.dto.match.Event;
 import my.api.stelar7.usewith.lol.dto.match.Frame;
 import my.api.stelar7.usewith.lol.dto.match.MatchDetail;
@@ -32,5 +35,6 @@ public class MatchTest
                 }
             }
         }
+        lib.getSummonersByName("stelar7").get("stelar7").getMatchHistory(null, Arrays.asList(SubType.RANKED_TEAM_5x5), null, null);
     }
 }

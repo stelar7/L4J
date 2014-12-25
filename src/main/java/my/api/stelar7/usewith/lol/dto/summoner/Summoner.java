@@ -73,13 +73,13 @@ public class Summoner
      * Gets the players matchhistory (max 15 games)
      *
      * @param champids
-     *            list of champion IDs to use for fetching games (can be null)
+     *            list of champion IDs used for fetching games (can be null)
      * @param rankedQueues
-     *            list of ranked queues yo use for fetching games. Non-ranked queues will be ignored (can be null)
+     *            list of ranked queues used for fetching games. Non-ranked queues will be ignored (can be null)
      * @param beginIndex
-     *            the begin index to use for fetching (can be null)
+     *            the begin index used for fetching (can be null)
      * @param endIndex
-     *            the end index to use for fetching (can be null)
+     *            the end index used for fetching (can be null)
      *
      * @return PlayerHistory from the player
      */
@@ -95,11 +95,11 @@ public class Summoner
                 {
                     if (champids != null)
                     {
-                        this.put("championIds", champids.toString().substring(1, champids.toString().length() - 2));
+                        this.put("championIds", champids.toString().substring(1, champids.toString().length() - 1));
                     }
                     if (rankedQueues != null)
                     {
-                        this.put("rankedQueues", rankedQueues.toString().substring(1, rankedQueues.toString().length() - 2));
+                        this.put("rankedQueues", rankedQueues.toString().substring(1, rankedQueues.toString().length() - 1));
                     }
                     if (beginIndex != null)
                     {
