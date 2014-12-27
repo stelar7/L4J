@@ -8,7 +8,7 @@ import lombok.ToString;
 public class StatSummary
 {
     AggregatedStats aggregatedStats;
-    int             lossses;
+    int             losses;
     Long            modifyDate;
     String          playerStatSummaryType;
     int             wins;
