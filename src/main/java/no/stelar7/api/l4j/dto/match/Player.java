@@ -1,0 +1,14 @@
+package no.stelar7.api.l4j.dto.match;
+
+import lombok.Getter;
+import lombok.ToString;
+
+@ToString
+@Getter
+public class Player
+{
+    String matchHistoryUri;
+    int    profileIcon;
+    long   summonerId;
+    String summonerName;
+}

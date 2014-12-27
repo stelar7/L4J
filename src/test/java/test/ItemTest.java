@@ -3,10 +3,10 @@ package test;
 import java.util.Arrays;
 import java.util.Map;
 
-import my.api.stelar7.usewith.lol.L4J;
-import my.api.stelar7.usewith.lol.basic.Server;
-import my.api.stelar7.usewith.lol.dto.staticdata.item.ItemList;
-import my.api.stelar7.usewith.lol.dto.staticdata.rune.RuneList;
+import no.stelar7.api.l4j.L4J;
+import no.stelar7.api.l4j.basic.Server;
+import no.stelar7.api.l4j.dto.staticdata.item.ItemList;
+import no.stelar7.api.l4j.dto.staticdata.rune.RuneList;
 
 import org.junit.Test;
 

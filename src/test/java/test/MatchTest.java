@@ -2,12 +2,12 @@ package test;
 
 import java.util.Arrays;
 
-import my.api.stelar7.usewith.lol.L4J;
-import my.api.stelar7.usewith.lol.basic.Server;
-import my.api.stelar7.usewith.lol.dto.general.SubType;
-import my.api.stelar7.usewith.lol.dto.match.Event;
-import my.api.stelar7.usewith.lol.dto.match.Frame;
-import my.api.stelar7.usewith.lol.dto.match.MatchDetail;
+import no.stelar7.api.l4j.L4J;
+import no.stelar7.api.l4j.basic.Server;
+import no.stelar7.api.l4j.dto.general.SubType;
+import no.stelar7.api.l4j.dto.match.Event;
+import no.stelar7.api.l4j.dto.match.Frame;
+import no.stelar7.api.l4j.dto.match.MatchDetail;
 
 import org.junit.Test;
 

@@ -2,10 +2,10 @@ package test;
 
 import java.util.Arrays;
 
-import my.api.stelar7.usewith.lol.L4J;
-import my.api.stelar7.usewith.lol.basic.Server;
-import my.api.stelar7.usewith.lol.dto.staticdata.summoners.SummonerSpell;
-import my.api.stelar7.usewith.lol.dto.staticdata.summoners.SummonerSpellList;
+import no.stelar7.api.l4j.L4J;
+import no.stelar7.api.l4j.basic.Server;
+import no.stelar7.api.l4j.dto.staticdata.summoners.SummonerSpell;
+import no.stelar7.api.l4j.dto.staticdata.summoners.SummonerSpellList;
 
 import org.junit.Test;
 

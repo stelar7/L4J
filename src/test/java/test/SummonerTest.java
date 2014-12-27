@@ -2,9 +2,9 @@ package test;
 
 import java.util.Map;
 
-import my.api.stelar7.usewith.lol.L4J;
-import my.api.stelar7.usewith.lol.basic.Server;
-import my.api.stelar7.usewith.lol.dto.summoner.Summoner;
+import no.stelar7.api.l4j.L4J;
+import no.stelar7.api.l4j.basic.Server;
+import no.stelar7.api.l4j.dto.summoner.Summoner;
 
 import org.junit.Test;
 
