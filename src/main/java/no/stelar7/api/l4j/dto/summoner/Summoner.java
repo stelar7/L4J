@@ -212,7 +212,7 @@ public class Summoner
                 {
                     if (season != null)
                     {
-                        put("season", season.name().toLowerCase());
+                        put("season", season.toString());
                     }
                 }
             });

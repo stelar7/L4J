@@ -38,7 +38,10 @@ public class DataCall
             L4J.getRateLimiter().get(L4J.getRegion()).acquire();
         } else
         {
-            if (!L4J.getRateLimiter().get(L4J.getRegion()).tryAcquire()) { throw new LibraryException(LibraryException.Type.RATE_LIMIT); }
+            if (!L4J.getRateLimiter().get(L4J.getRegion()).tryAcquire())
+            {
+                throw new LibraryException(LibraryException.Type.RATE_LIMIT);
+            }
         }
     }
 
@@ -68,7 +71,7 @@ public class DataCall
      * @return the String from the result
      * @throws Exception
      */
-    public String doCall() throws LibraryException
+    public String doCall()
     {
         final StringBuilder URL = new StringBuilder();
         if (!urlEndpoint.getValue().startsWith("http"))
@@ -77,7 +80,14 @@ public class DataCall
             if (!this.isToStatic())
             {
                 URL.append(L4J.getRegion().getServer());
-                this.applyRateLimit();
+                try
+                {
+                    this.applyRateLimit();
+                } catch (LibraryException e)
+                {
+                    this.errorData = e;
+                    return null;
+                }
             } else
             {
                 URL.append(Server.GLOBAL.getServer());

@@ -9,32 +9,32 @@ import lombok.ToString;
 @ToString
 public class SummonerSpellList
 {
-    Map<String, SummonerSpell> data;
-    String                     type;
-    String                     version;
-
     public enum Spell
     {
-        EXHAUST(3),
         BARRIER(21),
         CLAIRVOYANCE(2),
-        REVIVE(10),
+        CLARITY(13),
         CLEANSE(1),
-        HEAL(7),
-        GHOST(6),
+        EXHAUST(3),
         FLASH(4),
         GARRISON(17),
-        CLARITY(13),
+        GHOST(6),
+        HEAL(7),
         IGNITE(14),
+        REVIVE(10),
         SMITE(11),
         TELEPORT(12);
 
         @Getter
         int id;
 
-        private Spell(int id)
+        private Spell(final int id)
         {
             this.id = id;
         }
     }
+
+    Map<String, SummonerSpell> data;
+    String                     type;
+    String                     version;
 }
