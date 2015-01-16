@@ -1,5 +1,6 @@
 package no.stelar7.api.l4j.dto.staticdata.general;
 
+import java.io.Serializable;
 import java.util.List;
 import java.util.Map;
 
@@ -8,7 +9,7 @@ import lombok.ToString;
 
 @ToString
 @Getter
-public class BasicData
+public class BasicData implements Serializable
 {
     String               colloq;
     boolean              consumeOnFull;

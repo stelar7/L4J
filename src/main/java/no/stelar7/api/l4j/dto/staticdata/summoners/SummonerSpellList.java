@@ -1,5 +1,6 @@
 package no.stelar7.api.l4j.dto.staticdata.summoners;
 
+import java.io.Serializable;
 import java.util.Map;
 
 import lombok.Getter;
@@ -7,7 +8,7 @@ import lombok.ToString;
 
 @Getter
 @ToString
-public class SummonerSpellList
+public class SummonerSpellList implements Serializable
 {
     public enum Spell
     {

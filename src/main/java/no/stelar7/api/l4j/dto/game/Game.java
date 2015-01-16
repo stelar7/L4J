@@ -1,5 +1,6 @@
 package no.stelar7.api.l4j.dto.game;
 
+import java.io.Serializable;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
@@ -13,7 +14,7 @@ import lombok.ToString;
 
 @Getter
 @ToString
-public class Game
+public class Game  implements Serializable
 {
     int          championId;
     Long         createDate;

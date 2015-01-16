@@ -1,5 +1,6 @@
 package no.stelar7.api.l4j.dto.match;
 
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -8,7 +9,7 @@ import lombok.ToString;
 
 @ToString
 @Getter
-public class ParticipantTimelineData
+public class ParticipantTimelineData implements Serializable
 {
     double tenToTwenty;
     double thirtyToEnd;

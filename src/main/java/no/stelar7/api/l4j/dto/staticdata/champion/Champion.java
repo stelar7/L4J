@@ -1,5 +1,6 @@
 package no.stelar7.api.l4j.dto.staticdata.champion;
 
+import java.io.Serializable;
 import java.util.List;
 
 import no.stelar7.api.l4j.dto.staticdata.general.Image;
@@ -8,7 +9,7 @@ import lombok.ToString;
 
 @Getter
 @ToString
-public class Champion
+public class Champion implements Serializable
 {
     List<String>        allytips;
     String              blurb;

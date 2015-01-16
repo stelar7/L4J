@@ -1,5 +1,6 @@
 package no.stelar7.api.l4j.dto.team;
 
+import java.io.Serializable;
 import java.util.Arrays;
 import java.util.List;
 
@@ -14,7 +15,7 @@ import org.codehaus.jackson.JsonNode;
 
 @Getter
 @ToString
-public class Team
+public class Team implements Serializable
 {
     Long                      createDate;
     String                    fullId;

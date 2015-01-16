@@ -1,5 +1,6 @@
 package no.stelar7.api.l4j.dto.matchhistory;
 
+import java.io.Serializable;
 import java.util.List;
 
 import no.stelar7.api.l4j.dto.match.Participant;
@@ -9,7 +10,7 @@ import lombok.ToString;
 
 @ToString
 @Getter
-public class MatchSummary
+public class MatchSummary implements Serializable
 {
     long                      mapId;
     long                      matchCreation;

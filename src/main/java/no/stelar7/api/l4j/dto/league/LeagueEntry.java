@@ -1,11 +1,13 @@
 package no.stelar7.api.l4j.dto.league;
 
+import java.io.Serializable;
+
 import lombok.Getter;
 import lombok.ToString;
 
 @Getter
 @ToString
-public class LeagueEntry
+public class LeagueEntry implements Serializable
 {
     public String     division;
     public boolean    isFreshBlood;

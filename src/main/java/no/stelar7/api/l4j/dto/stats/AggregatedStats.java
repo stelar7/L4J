@@ -1,11 +1,13 @@
 package no.stelar7.api.l4j.dto.stats;
 
+import java.io.Serializable;
+
 import lombok.Getter;
 import lombok.ToString;
 
 @Getter
 @ToString
-public class AggregatedStats
+public class AggregatedStats implements Serializable
 {
     int averageAssists;
     int averageChampionsKilled;

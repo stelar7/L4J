@@ -1,5 +1,6 @@
 package no.stelar7.api.l4j.dto.staticdata.champion;
 
+import java.io.Serializable;
 import java.util.List;
 
 import no.stelar7.api.l4j.dto.staticdata.general.Image;
@@ -10,7 +11,7 @@ import lombok.ToString;
 
 @Getter
 @ToString
-public class ChampionSpell
+public class ChampionSpell implements Serializable
 {
     List<Image>        altimages;
     List<Double>       cooldown;

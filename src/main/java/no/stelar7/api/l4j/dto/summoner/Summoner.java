@@ -1,5 +1,6 @@
 package no.stelar7.api.l4j.dto.summoner;
 
+import java.io.Serializable;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
@@ -12,7 +13,6 @@ import no.stelar7.api.l4j.basic.Server;
 import no.stelar7.api.l4j.basic.URLEndpoint;
 import no.stelar7.api.l4j.dto.game.RecentGames;
 import no.stelar7.api.l4j.dto.general.Season;
-import no.stelar7.api.l4j.dto.general.SubType;
 import no.stelar7.api.l4j.dto.league.League;
 import no.stelar7.api.l4j.dto.masteries.MasteryPage;
 import no.stelar7.api.l4j.dto.matchhistory.PlayerHistory;
@@ -25,7 +25,7 @@ import org.codehaus.jackson.JsonNode;
 
 @Getter
 @ToString
-public class Summoner
+public class Summoner implements Serializable
 {
     Long   id;
     String name;
@@ -83,7 +83,7 @@ public class Summoner
      *
      * @return PlayerHistory from the player
      */
-    public PlayerHistory getMatchHistory(final List<Integer> champids, final List<SubType> rankedQueues, final Integer beginIndex, final Integer endIndex)
+    public PlayerHistory getMatchHistory(final List<Integer> champids, final List<String> rankedQueues, final Integer beginIndex, final Integer endIndex)
     {
         try
         {

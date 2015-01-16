@@ -1,11 +1,13 @@
 package no.stelar7.api.l4j.dto.team;
 
+import java.io.Serializable;
+
 import lombok.Getter;
 import lombok.ToString;
 
 @Getter
 @ToString
-public class MatchHistorySummary
+public class MatchHistorySummary implements Serializable
 {
     int     assists;
     Long    date;
