@@ -36,7 +36,9 @@ public enum URLEndpoint
     STATIC_SUMMONER_SPELL_ID("api/lol/static-data/{region}/{version}/summoner-spell/{data}"),
     STATIC_SHARD("http://status.leagueoflegends.com/shards"),
     STATIC_SHARD_REGION("http://status.leagueoflegends.com/shards/{data}"),
-    STATIC_LANGUAGES("api/lol/static-data/{region}/{version}/languages");
+    STATIC_LANGUAGES("api/lol/static-data/{region}/{version}/languages"),
+    STATIC_MAP("api/lol/static-data/{region}/{version}/map"),
+    STATIC_LANGUAGE_STRINGS("api/lol/static-data/{region}/{version}/language-strings");
     
 
     @Getter

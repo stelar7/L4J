@@ -73,6 +73,10 @@ public class VersionChecker
                 break;
             case STATIC_LANGUAGES:
                 return "v1.2";
+            case STATIC_MAP:
+                return "v1.2";
+            case STATIC_LANGUAGE_STRINGS:
+                return "v1.2";
             default:
                 break;
         }

@@ -1,14 +1,11 @@
 package no.stelar7.api.l4j.basic;
 
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 
 import no.stelar7.api.l4j.L4J;
 import no.stelar7.api.l4j.dto.matchhistory.MatchSummary;
 import no.stelar7.api.l4j.dto.staticdata.champion.Champion;
 import no.stelar7.api.l4j.dto.staticdata.champion.ChampionList;
-import no.stelar7.api.l4j.dto.staticdata.general.Locale;
 import no.stelar7.api.l4j.dto.staticdata.general.Realm;
 import no.stelar7.api.l4j.dto.staticdata.item.Item;
 import no.stelar7.api.l4j.dto.staticdata.item.ItemList;
@@ -30,6 +27,14 @@ import org.codehaus.jackson.type.TypeReference;
 public class StaticCaller
 {
 
+    /**
+     * Gets a list of the supported languages for that region
+     * 
+     * @param region
+     *            the region to get languages from
+     * 
+     * @return list of supported languages
+     */
     public List<String> getLanguages(final Server region)
     {
         try
@@ -50,6 +55,93 @@ public class StaticCaller
             }
             return L4J.getMapper().readValue(json, new TypeReference<List<String>>()
             {});
+        } catch (final Exception e)
+        {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    /**
+     * Gets a map of Strings that map to propperly formatted Strings
+     * 
+     * @param locale
+     *            the locale to use, may be null
+     * @param version
+     *            the version to use, may be null
+     * @return map of Strings that map to propperly formatted Strings
+     */
+    public Map<String, String> getLanguageStrings(final String locale, final String version)
+    {
+        try
+        {
+            final DataCall call = new DataCall();
+            call.setUrlEndpoint(URLEndpoint.STATIC_LANGUAGE_STRINGS);
+
+            call.setUrlParams(new HashMap<String, Object>()
+            {
+                {
+                    if (locale != null)
+                    {
+                        this.put("locale", locale);
+                    }
+
+                    if (version != null)
+                    {
+                        this.put("version", version);
+                    }
+                }
+            });
+            final String json = call.doCall();
+            if (call.hasError())
+            {
+                throw call.getErrorData();
+            }
+            JsonNode node = L4J.getMapper().readTree(json).get("data");
+            return L4J.getMapper().readValue(node, new TypeReference<Map<String, String>>()
+            {});
+        } catch (final Exception e)
+        {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    public List<no.stelar7.api.l4j.dto.staticdata.map.Map> getMapData(final String locale, final String version)
+    {
+        try
+        {
+            final DataCall call = new DataCall();
+            call.setUrlEndpoint(URLEndpoint.STATIC_MAP);
+
+            call.setUrlParams(new HashMap<String, Object>()
+            {
+                {
+                    if (locale != null)
+                    {
+                        this.put("locale", locale);
+                    }
+
+                    if (version != null)
+                    {
+                        this.put("version", version);
+                    }
+                }
+            });
+            final String json = call.doCall();
+            if (call.hasError())
+            {
+                throw call.getErrorData();
+            }
+            List<no.stelar7.api.l4j.dto.staticdata.map.Map> maps = new ArrayList<no.stelar7.api.l4j.dto.staticdata.map.Map>();
+            JsonNode node = L4J.getMapper().readTree(json).get("data");
+            Iterator<JsonNode> iter = node.getElements();
+            while (iter.hasNext())
+            {
+                JsonNode dta = iter.next();
+                maps.add(L4J.getMapper().readValue(dta, no.stelar7.api.l4j.dto.staticdata.map.Map.class));
+            }
+            return maps;
         } catch (final Exception e)
         {
             e.printStackTrace();
@@ -100,7 +192,7 @@ public class StaticCaller
      * @param champdata
      *            the data to return. To get all the data use "all". default is id, key, name, and title (can be null)
      */
-    public ChampionList getChampionData(final Locale locale, final String version, final List<String> champdata, final boolean idAsKey)
+    public ChampionList getChampionData(final String locale, final String version, final List<String> champdata, final boolean idAsKey)
     {
         try
         {
@@ -203,7 +295,7 @@ public class StaticCaller
      * @param champdata
      *            the data to return. To get all the data use "all". default is id, key, name, and title (can be null)
      */
-    public Champion getChampionData(final long id, final Locale locale, final String version, final List<String> champdata)
+    public Champion getChampionData(final long id, final String locale, final String version, final List<String> champdata)
     {
         try
         {
@@ -250,7 +342,7 @@ public class StaticCaller
      * @param itemListData
      *            the data to return. To get all the data use "all". default is type, version, basic, data, id, name, plaintext, group and description (can be null)
      */
-    public ItemList getItemData(final Locale locale, final String version, final List<String> itemListData)
+    public ItemList getItemData(final String locale, final String version, final List<String> itemListData)
     {
         try
         {
@@ -298,7 +390,7 @@ public class StaticCaller
      * @param itemListData
      *            the data to return. To get all the data use "all". default is type, version, basic, data, id, name, plaintext, group and description (can be null)
      */
-    public Item getItemData(final long id, final Locale locale, final String version, final List<String> itemData)
+    public Item getItemData(final long id, final String locale, final String version, final List<String> itemData)
     {
         try
         {
@@ -345,7 +437,7 @@ public class StaticCaller
      * @param champdata
      *            the data to return. To get all the data use "all". default is id, key, name, and title (can be null)
      */
-    public MasteryList getMasteryData(final Locale locale, final String version, final List<String> champdata)
+    public MasteryList getMasteryData(final String locale, final String version, final List<String> champdata)
     {
         try
         {
@@ -393,7 +485,7 @@ public class StaticCaller
      * @param data
      *            the data to return. To get all the data use "all". default is type, version, basic, data, id, name, plaintext, group and description (can be null)
      */
-    public Mastery getMasteryData(final long id, final Locale locale, final String version, final List<String> data)
+    public Mastery getMasteryData(final long id, final String locale, final String version, final List<String> data)
     {
         try
         {
@@ -463,7 +555,7 @@ public class StaticCaller
      * @param itemData
      *            the data to return. To get all the data use "all". default is type, version, basic, data, id, name, plaintext, group and description (can be null)
      */
-    public RuneList getRuneData(final Locale locale, final String version, final List<String> itemData)
+    public RuneList getRuneData(final String locale, final String version, final List<String> itemData)
     {
         try
         {
@@ -511,7 +603,7 @@ public class StaticCaller
      * @param itemData
      *            the data to return. To get all the data use "all". default is type, version, basic, data, id, name, plaintext, group and description (can be null)
      */
-    public Rune getRuneData(final long id, final Locale locale, final String version, final List<String> itemData)
+    public Rune getRuneData(final long id, final String locale, final String version, final List<String> itemData)
     {
         try
         {
@@ -560,7 +652,7 @@ public class StaticCaller
      * @param idAsKey
      *            use the id as the key instead of the normal key
      */
-    public SummonerSpellList getSummonerSpellData(final Locale locale, final String version, final List<String> itemData, final boolean idAsKey)
+    public SummonerSpellList getSummonerSpellData(final String locale, final String version, final List<String> itemData, final boolean idAsKey)
     {
         try
         {
@@ -611,7 +703,7 @@ public class StaticCaller
      * @param idAsKey
      *            use the id as the key instead of the normal key
      */
-    public SummonerSpell getSummonerSpellData(final long id, final Locale locale, final String version, final List<String> itemData)
+    public SummonerSpell getSummonerSpellData(final long id, final String locale, final String version, final List<String> itemData)
     {
         try
         {
