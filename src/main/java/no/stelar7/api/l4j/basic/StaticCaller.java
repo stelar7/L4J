@@ -1,5 +1,9 @@
 package no.stelar7.api.l4j.basic;
 
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.*;
 
 import no.stelar7.api.l4j.L4J;
@@ -17,9 +21,6 @@ import no.stelar7.api.l4j.dto.staticdata.shard.Shard;
 import no.stelar7.api.l4j.dto.staticdata.shard.ShardStatus;
 import no.stelar7.api.l4j.dto.staticdata.summoners.SummonerSpell;
 import no.stelar7.api.l4j.dto.staticdata.summoners.SummonerSpellList;
-import no.stelar7.api.l4j.network.GET;
-import no.stelar7.api.l4j.network.HttpClient;
-import no.stelar7.api.l4j.network.HttpResponse;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonNode;
@@ -164,13 +165,21 @@ public class StaticCaller
             {
                 throw new IllegalArgumentException("Seedfile out of bounds!");
             }
-            String url = String.format("https://s3-us-west-1.amazonaws.com/riot-api/seed_data/matches%s.json", seedfile);
-            final HttpResponse response = HttpClient.execute(new GET(url));
-            if (response.getStatusCode() != 200)
+            String URL = String.format("https://s3-us-west-1.amazonaws.com/riot-api/seed_data/matches%s.json", seedfile);
+            HttpURLConnection con = (HttpURLConnection) new URL(URL.toString()).openConnection();
+            if (con.getResponseCode() != 200)
             {
-                throw new LibraryException(response);
+                throw new LibraryException(con.getResponseCode(), con.getHeaderFieldInt("Retry-After", 0));
             }
-            JsonNode node = L4J.getMapper().readTree(response.getBody()).get("matches");
+            StringBuilder data = new StringBuilder();
+            BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()));
+            String inputLine;
+            while ((inputLine = in.readLine()) != null)
+            {
+                data.append(inputLine);
+            }
+            in.close();
+            JsonNode node = L4J.getMapper().readTree(data.toString()).get("matches");
             return L4J.getMapper().readValue(node.toString(), new TypeReference<List<MatchSummary>>()
             {});
         } catch (Exception e)

@@ -1,17 +1,19 @@
 package no.stelar7.api.l4j.basic;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.net.URLEncoder;
 import java.util.HashMap;
 import java.util.List;
 
-import no.stelar7.api.l4j.L4J;
-import no.stelar7.api.l4j.network.GET;
-import no.stelar7.api.l4j.network.HttpClient;
-import no.stelar7.api.l4j.network.HttpResponse;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.java.Log;
+import no.stelar7.api.l4j.L4J;
 
 @Setter
 @Getter
@@ -24,7 +26,7 @@ public class DataCall
     boolean                 verbose           = false;
     boolean                 blockWhileLimited = true;
     LibraryException        errorData         = null;
-    HashMap<String, Object> urlParams         = new HashMap<>();
+    HashMap<String, Object> urlParams         = new HashMap<String, Object>();
 
     public boolean hasError()
     {
@@ -69,9 +71,10 @@ public class DataCall
      * Sends the call to the limiter, executing it when possible
      *
      * @return the String from the result
+     * @throws IOException
      * @throws Exception
      */
-    public String doCall()
+    public String doCall() throws IOException
     {
         final StringBuilder URL = new StringBuilder();
         if (!urlEndpoint.getValue().startsWith("http"))
@@ -100,13 +103,21 @@ public class DataCall
         {
             DataCall.log.info(URL.toString());
         }
-        final HttpResponse response = HttpClient.execute(new GET(URL.toString()));
-        if (response.getStatusCode() != 200)
+        HttpURLConnection con = (HttpURLConnection) new URL(URL.toString()).openConnection();
+        if (con.getResponseCode() != 200)
         {
-            this.errorData = new LibraryException(response);
+            this.errorData = new LibraryException(con.getResponseCode(), con.getHeaderFieldInt("Retry-After", 0));
             return null;
         }
-        return response.getBody();
+        StringBuilder data = new StringBuilder();
+        BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()));
+        String inputLine;
+        while ((inputLine = in.readLine()) != null)
+        {
+            data.append(inputLine);
+        }
+        in.close();
+        return data.toString();
     }
 
     private String getAPIkey()

@@ -29,7 +29,7 @@ public class L4J
     static String                       APIKey           = null;
     @Getter
     @Setter
-    static HashMap<Server, RateLimiter> rateLimiter      = new HashMap<>();
+    static HashMap<Server, RateLimiter> rateLimiter      = new HashMap<Server, RateLimiter>();
     @Getter
     @Setter
     static Server                       region           = Server.EUW;
@@ -144,8 +144,8 @@ public class L4J
      */
     public Map<Long, List<League>> getLeagueBySummoners(final boolean full, final Long... names)
     {
-        final List<Long> copy = new LinkedList<>(Arrays.asList(names));
-        final HashMap<Long, List<League>> summoners = new HashMap<>();
+        final List<Long> copy = new LinkedList<Long>(Arrays.asList(names));
+        final HashMap<Long, List<League>> summoners = new HashMap<Long, List<League>>();
         while (copy.size() > L4J.MAX_PER_LEAGUE)
         {
             final List<Long> remove = new ArrayList<Long>(copy.subList(0, L4J.MAX_PER_LEAGUE > copy.size() ? copy.size() : L4J.MAX_PER_LEAGUE));
@@ -212,8 +212,8 @@ public class L4J
      */
     public Map<Long, Summoner> getSummonersByID(final Long... names)
     {
-        final List<Long> copy = new LinkedList<>(Arrays.asList(names));
-        final HashMap<Long, Summoner> summoners = new HashMap<>();
+        final List<Long> copy = new LinkedList<Long>(Arrays.asList(names));
+        final HashMap<Long, Summoner> summoners = new HashMap<Long, Summoner>();
         while (copy.size() > L4J.MAX_PER_SUMMONER)
         {
             final List<Long> remove = new ArrayList<Long>(copy.subList(0, L4J.MAX_PER_SUMMONER > copy.size() ? copy.size() : L4J.MAX_PER_SUMMONER));
@@ -258,8 +258,8 @@ public class L4J
      */
     public Map<String, Summoner> getSummonersByName(final String... names)
     {
-        final List<String> copy = new LinkedList<>(Arrays.asList(names));
-        final HashMap<String, Summoner> summoners = new HashMap<>();
+        final List<String> copy = new LinkedList<String>(Arrays.asList(names));
+        final HashMap<String, Summoner> summoners = new HashMap<String, Summoner>();
         while (copy.size() > L4J.MAX_PER_SUMMONER)
         {
             final List<String> remove = new ArrayList<String>(copy.subList(0, L4J.MAX_PER_SUMMONER > copy.size() ? copy.size() : L4J.MAX_PER_SUMMONER));
@@ -306,8 +306,8 @@ public class L4J
      */
     public Map<Long, List<Team>> getTeamBySummonerID(final Long... ids)
     {
-        final List<Long> copy = new LinkedList<>(Arrays.asList(ids));
-        final HashMap<Long, List<Team>> teams = new HashMap<>();
+        final List<Long> copy = new LinkedList<Long>(Arrays.asList(ids));
+        final HashMap<Long, List<Team>> teams = new HashMap<Long, List<Team>>();
         while (copy.size() > L4J.MAX_PER_TEAM)
         {
             final List<Long> remove = new ArrayList<Long>(copy.subList(0, L4J.MAX_PER_TEAM > copy.size() ? copy.size() : L4J.MAX_PER_TEAM));
@@ -351,8 +351,8 @@ public class L4J
      */
     public Map<String, Team> getTeamsByID(final String... id)
     {
-        final List<String> copy = new LinkedList<>(Arrays.asList(id));
-        final HashMap<String, Team> teams = new HashMap<>();
+        final List<String> copy = new LinkedList<String>(Arrays.asList(id));
+        final HashMap<String, Team> teams = new HashMap<String, Team>();
         while (copy.size() > L4J.MAX_PER_TEAM)
         {
             final List<String> remove = new ArrayList<String>(copy.subList(0, L4J.MAX_PER_TEAM > copy.size() ? copy.size() : L4J.MAX_PER_TEAM));

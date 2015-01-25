@@ -1,6 +1,5 @@
 package no.stelar7.api.l4j.basic;
 
-import no.stelar7.api.l4j.network.HttpResponse;
 import lombok.Getter;
 
 public class LibraryException extends Exception
@@ -28,10 +27,9 @@ public class LibraryException extends Exception
      * @param t
      *            The HTTP response status code to generate error from;
      */
-    public LibraryException(final HttpResponse response)
+    public LibraryException(int code, int retryafter)
     {
-        int code = response.getStatusCode();
-        retryAfter = response.getRetryAfter() * 1000;
+        this.retryAfter = retryafter;
         this.type = Type.UNKNOWN;
         if (code >= 500)
         {
@@ -99,7 +97,7 @@ public class LibraryException extends Exception
             default:
                 error += "An unknown error occured";
         }
-        return "(" + this.type + ")" + error;
+        return "(" + this.type + ") " + error;
     }
 
 }
