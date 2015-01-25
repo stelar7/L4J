@@ -11,7 +11,7 @@ import no.stelar7.api.l4j.basic.DataCall;
 import no.stelar7.api.l4j.basic.URLEndpoint;
 import no.stelar7.api.l4j.dto.league.League;
 
-import org.codehaus.jackson.JsonNode;
+import com.fasterxml.jackson.databind.JsonNode;
 
 @Getter
 @ToString

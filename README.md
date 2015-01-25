@@ -2,6 +2,9 @@
 
 A Java wrapper for the Riot Games League of Legends API.
 
+## Examples
+For examples look [here](https://github.com/stelar7/L4J/tree/master/src/test/java/test)
+
 ## Dependencies
 * Jackson-mapper-asl
 

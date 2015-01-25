@@ -16,10 +16,9 @@ import no.stelar7.api.l4j.dto.match.MatchDetail;
 import no.stelar7.api.l4j.dto.summoner.Summoner;
 import no.stelar7.api.l4j.dto.team.Team;
 
-import org.codehaus.jackson.JsonNode;
-import org.codehaus.jackson.map.DeserializationConfig;
-import org.codehaus.jackson.map.ObjectMapper;
-
+import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.util.concurrent.RateLimiter;
 
 public class L4J
@@ -85,7 +84,7 @@ public class L4J
         {
             L4J.rateLimiter.put(s, RateLimiter.create(rate));
         }
-        L4J.mapper.configure(DeserializationConfig.Feature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+        L4J.mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
     }
 
     /**
@@ -237,7 +236,7 @@ public class L4J
                     summoners.put(s, null);
                 } else
                 {
-                    final Summoner sum = L4J.mapper.readValue(innernode, Summoner.class);
+                    final Summoner sum = L4J.mapper.readValue(innernode.toString(), Summoner.class);
                     final Field f = Summoner.class.getDeclaredField("region");
                     f.setAccessible(true);
                     f.set(sum, L4J.region);
@@ -283,7 +282,7 @@ public class L4J
                     summoners.put(s, null);
                 } else
                 {
-                    final Summoner sum = L4J.mapper.readValue(innernode, Summoner.class);
+                    final Summoner sum = L4J.mapper.readValue(innernode.toString(), Summoner.class);
                     final Field f = Summoner.class.getDeclaredField("region");
                     f.setAccessible(true);
                     f.set(sum, L4J.region);
@@ -331,7 +330,7 @@ public class L4J
                     teams.put(s, null);
                 } else
                 {
-                    final List<Team> tea = L4J.mapper.readValue(innernode, L4J.mapper.getTypeFactory().constructCollectionType(List.class, Team.class));
+                    final List<Team> tea = L4J.mapper.readValue(innernode.toString(), L4J.mapper.getTypeFactory().constructCollectionType(List.class, Team.class));
                     teams.put(s, tea);
                 }
             }
@@ -376,7 +375,7 @@ public class L4J
                     teams.put(s, null);
                 } else
                 {
-                    final Team tea = L4J.mapper.readValue(innernode, Team.class);
+                    final Team tea = L4J.mapper.readValue(innernode.toString(), Team.class);
                     teams.put(s, tea);
                 }
             }

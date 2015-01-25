@@ -21,7 +21,7 @@ import no.stelar7.api.l4j.dto.stats.RankedStats;
 import no.stelar7.api.l4j.dto.stats.StatSummary;
 import no.stelar7.api.l4j.dto.team.Team;
 
-import org.codehaus.jackson.JsonNode;
+import com.fasterxml.jackson.databind.JsonNode;
 
 @Getter
 @ToString

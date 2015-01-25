@@ -21,8 +21,8 @@ import no.stelar7.api.l4j.network.GET;
 import no.stelar7.api.l4j.network.HttpClient;
 import no.stelar7.api.l4j.network.HttpResponse;
 
-import org.codehaus.jackson.JsonNode;
-import org.codehaus.jackson.type.TypeReference;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.JsonNode;
 
 public class StaticCaller
 {
@@ -98,7 +98,7 @@ public class StaticCaller
                 throw call.getErrorData();
             }
             JsonNode node = L4J.getMapper().readTree(json).get("data");
-            return L4J.getMapper().readValue(node, new TypeReference<Map<String, String>>()
+            return L4J.getMapper().readValue(node.toString(), new TypeReference<Map<String, String>>()
             {});
         } catch (final Exception e)
         {
@@ -135,11 +135,11 @@ public class StaticCaller
             }
             List<no.stelar7.api.l4j.dto.staticdata.map.Map> maps = new ArrayList<no.stelar7.api.l4j.dto.staticdata.map.Map>();
             JsonNode node = L4J.getMapper().readTree(json).get("data");
-            Iterator<JsonNode> iter = node.getElements();
+            Iterator<JsonNode> iter = node.elements();
             while (iter.hasNext())
             {
                 JsonNode dta = iter.next();
-                maps.add(L4J.getMapper().readValue(dta, no.stelar7.api.l4j.dto.staticdata.map.Map.class));
+                maps.add(L4J.getMapper().readValue(dta.toString(), no.stelar7.api.l4j.dto.staticdata.map.Map.class));
             }
             return maps;
         } catch (final Exception e)
@@ -171,7 +171,7 @@ public class StaticCaller
                 throw new LibraryException(response);
             }
             JsonNode node = L4J.getMapper().readTree(response.getBody()).get("matches");
-            return L4J.getMapper().readValue(node, new TypeReference<List<MatchSummary>>()
+            return L4J.getMapper().readValue(node.toString(), new TypeReference<List<MatchSummary>>()
             {});
         } catch (Exception e)
         {
