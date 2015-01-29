@@ -1,6 +1,7 @@
 package no.stelar7.api.l4j.basic;
 
 import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
@@ -23,6 +24,7 @@ import no.stelar7.api.l4j.dto.staticdata.summoners.SummonerSpell;
 import no.stelar7.api.l4j.dto.staticdata.summoners.SummonerSpellList;
 
 import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.JsonNode;
 
 public class StaticCaller
@@ -35,8 +37,9 @@ public class StaticCaller
      *            the region to get languages from
      * 
      * @return list of supported languages
+     * @throws LibraryException
      */
-    public List<String> getLanguages(final Server region)
+    public List<String> getLanguages(final Server region) throws LibraryException
     {
         try
         {
@@ -56,7 +59,11 @@ public class StaticCaller
             }
             return L4J.getMapper().readValue(json, new TypeReference<List<String>>()
             {});
-        } catch (final Exception e)
+        } catch (final JsonMappingException e)
+        {
+            e.printStackTrace();
+            return null;
+        } catch (final IOException e)
         {
             e.printStackTrace();
             return null;
@@ -71,8 +78,9 @@ public class StaticCaller
      * @param version
      *            the version to use, may be null
      * @return map of Strings that map to propperly formatted Strings
+     * @throws LibraryException
      */
-    public Map<String, String> getLanguageStrings(final String locale, final String version)
+    public Map<String, String> getLanguageStrings(final String locale, final String version) throws LibraryException
     {
         try
         {
@@ -101,14 +109,17 @@ public class StaticCaller
             JsonNode node = L4J.getMapper().readTree(json).get("data");
             return L4J.getMapper().readValue(node.toString(), new TypeReference<Map<String, String>>()
             {});
-        } catch (final Exception e)
+        } catch (final JsonMappingException e)
         {
             e.printStackTrace();
-            return null;
+        } catch (IOException e)
+        {
+            e.printStackTrace();
         }
+        return null;
     }
 
-    public List<no.stelar7.api.l4j.dto.staticdata.map.Map> getMapData(final String locale, final String version)
+    public List<no.stelar7.api.l4j.dto.staticdata.map.Map> getMapData(final String locale, final String version) throws LibraryException
     {
         try
         {
@@ -143,11 +154,14 @@ public class StaticCaller
                 maps.add(L4J.getMapper().readValue(dta.toString(), no.stelar7.api.l4j.dto.staticdata.map.Map.class));
             }
             return maps;
-        } catch (final Exception e)
+        } catch (final JsonMappingException e)
         {
             e.printStackTrace();
-            return null;
+        } catch (IOException e)
+        {
+            e.printStackTrace();
         }
+        return null;
     }
 
     /**
@@ -156,8 +170,9 @@ public class StaticCaller
      * @param seedfile
      *            the seedfile to get (1 -> 10)
      * @return A list of matches from the seedfile.
+     * @throws LibraryException
      */
-    public List<MatchSummary> getSeedMatches(int seedfile)
+    public List<MatchSummary> getSeedMatches(int seedfile) throws LibraryException
     {
         try
         {
@@ -182,11 +197,14 @@ public class StaticCaller
             JsonNode node = L4J.getMapper().readTree(data.toString()).get("matches");
             return L4J.getMapper().readValue(node.toString(), new TypeReference<List<MatchSummary>>()
             {});
-        } catch (Exception e)
+        } catch (JsonMappingException e)
         {
             e.printStackTrace();
-            return null;
+        } catch (IOException e)
+        {
+            e.printStackTrace();
         }
+        return null;
     }
 
     /**
@@ -200,8 +218,9 @@ public class StaticCaller
      *            the version to get data from (can be null)
      * @param champdata
      *            the data to return. To get all the data use "all". default is id, key, name, and title (can be null)
+     * @throws LibraryException
      */
-    public ChampionList getChampionData(final String locale, final String version, final List<String> champdata, final boolean idAsKey)
+    public ChampionList getChampionData(final String locale, final String version, final List<String> champdata, final boolean idAsKey) throws LibraryException
     {
         try
         {
@@ -232,20 +251,24 @@ public class StaticCaller
                 throw call.getErrorData();
             }
             return L4J.getMapper().readValue(json, no.stelar7.api.l4j.dto.staticdata.champion.ChampionList.class);
-        } catch (final Exception e)
+        } catch (final JsonMappingException e)
         {
             e.printStackTrace();
-            return null;
+        } catch (IOException e)
+        {
+            e.printStackTrace();
         }
+        return null;
     }
 
     /**
      * Gets data about the game in the form of a Shard
      * 
      * @return A list of Shards
+     * @throws LibraryException
      */
 
-    public List<Shard> getShards()
+    public List<Shard> getShards() throws LibraryException
     {
         try
         {
@@ -258,11 +281,14 @@ public class StaticCaller
             }
             return L4J.getMapper().readValue(json, new TypeReference<List<Shard>>()
             {});
-        } catch (final Exception e)
+        } catch (final JsonMappingException e)
         {
             e.printStackTrace();
-            return null;
+        } catch (IOException e)
+        {
+            e.printStackTrace();
         }
+        return null;
     }
 
     /**
@@ -271,8 +297,9 @@ public class StaticCaller
      * @param slug
      *            the region to check
      * @return
+     * @throws LibraryException
      */
-    public ShardStatus getShardStatus(String slug)
+    public ShardStatus getShardStatus(String slug) throws LibraryException
     {
         try
         {
@@ -285,11 +312,14 @@ public class StaticCaller
                 throw call.getErrorData();
             }
             return L4J.getMapper().readValue(json, ShardStatus.class);
-        } catch (final Exception e)
+        } catch (final JsonMappingException e)
         {
             e.printStackTrace();
-            return null;
+        } catch (IOException e)
+        {
+            e.printStackTrace();
         }
+        return null;
     }
 
     /**
@@ -303,8 +333,9 @@ public class StaticCaller
      *            the version to get data from (can be null)
      * @param champdata
      *            the data to return. To get all the data use "all". default is id, key, name, and title (can be null)
+     * @throws LibraryException
      */
-    public Champion getChampionData(final long id, final String locale, final String version, final List<String> champdata)
+    public Champion getChampionData(final long id, final String locale, final String version, final List<String> champdata) throws LibraryException
     {
         try
         {
@@ -334,11 +365,14 @@ public class StaticCaller
                 throw call.getErrorData();
             }
             return L4J.getMapper().readValue(json, no.stelar7.api.l4j.dto.staticdata.champion.Champion.class);
-        } catch (final Exception e)
+        } catch (final JsonMappingException e)
         {
             e.printStackTrace();
-            return null;
+        } catch (IOException e)
+        {
+            e.printStackTrace();
         }
+        return null;
     }
 
     /**
@@ -350,8 +384,9 @@ public class StaticCaller
      *            the version to get data from (can be null)
      * @param itemListData
      *            the data to return. To get all the data use "all". default is type, version, basic, data, id, name, plaintext, group and description (can be null)
+     * @throws LibraryException
      */
-    public ItemList getItemData(final String locale, final String version, final List<String> itemListData)
+    public ItemList getItemData(final String locale, final String version, final List<String> itemListData) throws LibraryException
     {
         try
         {
@@ -380,11 +415,14 @@ public class StaticCaller
                 throw call.getErrorData();
             }
             return L4J.getMapper().readValue(json, ItemList.class);
-        } catch (final Exception e)
+        } catch (final JsonMappingException e)
         {
             e.printStackTrace();
-            return null;
+        } catch (IOException e)
+        {
+            e.printStackTrace();
         }
+        return null;
     }
 
     /**
@@ -398,8 +436,9 @@ public class StaticCaller
      *            the version to get data from (can be null)
      * @param itemListData
      *            the data to return. To get all the data use "all". default is type, version, basic, data, id, name, plaintext, group and description (can be null)
+     * @throws LibraryException
      */
-    public Item getItemData(final long id, final String locale, final String version, final List<String> itemData)
+    public Item getItemData(final long id, final String locale, final String version, final List<String> itemData) throws LibraryException
     {
         try
         {
@@ -429,11 +468,14 @@ public class StaticCaller
                 throw call.getErrorData();
             }
             return L4J.getMapper().readValue(json, Item.class);
-        } catch (final Exception e)
+        } catch (final JsonMappingException e)
         {
             e.printStackTrace();
-            return null;
+        } catch (IOException e)
+        {
+            e.printStackTrace();
         }
+        return null;
     }
 
     /**
@@ -445,8 +487,9 @@ public class StaticCaller
      *            the version to get data from (can be null)
      * @param champdata
      *            the data to return. To get all the data use "all". default is id, key, name, and title (can be null)
+     * @throws LibraryException
      */
-    public MasteryList getMasteryData(final String locale, final String version, final List<String> champdata)
+    public MasteryList getMasteryData(final String locale, final String version, final List<String> champdata) throws LibraryException
     {
         try
         {
@@ -475,11 +518,14 @@ public class StaticCaller
                 throw call.getErrorData();
             }
             return L4J.getMapper().readValue(json, MasteryList.class);
-        } catch (final Exception e)
+        } catch (final JsonMappingException e)
         {
             e.printStackTrace();
-            return null;
+        } catch (IOException e)
+        {
+            e.printStackTrace();
         }
+        return null;
     }
 
     /**
@@ -493,8 +539,9 @@ public class StaticCaller
      *            the version to get data from (can be null)
      * @param data
      *            the data to return. To get all the data use "all". default is type, version, basic, data, id, name, plaintext, group and description (can be null)
+     * @throws LibraryException
      */
-    public Mastery getMasteryData(final long id, final String locale, final String version, final List<String> data)
+    public Mastery getMasteryData(final long id, final String locale, final String version, final List<String> data) throws LibraryException
     {
         try
         {
@@ -524,17 +571,22 @@ public class StaticCaller
                 throw call.getErrorData();
             }
             return L4J.getMapper().readValue(json, Mastery.class);
-        } catch (final Exception e)
+        } catch (final JsonMappingException e)
         {
             e.printStackTrace();
-            return null;
+        } catch (IOException e)
+        {
+            e.printStackTrace();
         }
+        return null;
     }
 
     /**
      * Gets static data about the realm
+     * 
+     * @throws LibraryException
      */
-    public Realm getRealm()
+    public Realm getRealm() throws LibraryException
     {
         try
         {
@@ -547,11 +599,14 @@ public class StaticCaller
                 throw call.getErrorData();
             }
             return L4J.getMapper().readValue(json, Realm.class);
-        } catch (final Exception e)
+        } catch (final JsonMappingException e)
         {
             e.printStackTrace();
-            return null;
+        } catch (IOException e)
+        {
+            e.printStackTrace();
         }
+        return null;
     }
 
     /**
@@ -563,8 +618,9 @@ public class StaticCaller
      *            the version to get data from (can be null)
      * @param itemData
      *            the data to return. To get all the data use "all". default is type, version, basic, data, id, name, plaintext, group and description (can be null)
+     * @throws LibraryException
      */
-    public RuneList getRuneData(final String locale, final String version, final List<String> itemData)
+    public RuneList getRuneData(final String locale, final String version, final List<String> itemData) throws LibraryException
     {
         try
         {
@@ -593,11 +649,14 @@ public class StaticCaller
                 throw call.getErrorData();
             }
             return L4J.getMapper().readValue(json, RuneList.class);
-        } catch (final Exception e)
+        } catch (final JsonMappingException e)
         {
             e.printStackTrace();
-            return null;
+        } catch (IOException e)
+        {
+            e.printStackTrace();
         }
+        return null;
     }
 
     /**
@@ -611,8 +670,9 @@ public class StaticCaller
      *            the version to get data from (can be null)
      * @param itemData
      *            the data to return. To get all the data use "all". default is type, version, basic, data, id, name, plaintext, group and description (can be null)
+     * @throws LibraryException
      */
-    public Rune getRuneData(final long id, final String locale, final String version, final List<String> itemData)
+    public Rune getRuneData(final long id, final String locale, final String version, final List<String> itemData) throws LibraryException
     {
         try
         {
@@ -642,11 +702,14 @@ public class StaticCaller
                 throw call.getErrorData();
             }
             return L4J.getMapper().readValue(json, Rune.class);
-        } catch (final Exception e)
+        } catch (final JsonMappingException e)
         {
             e.printStackTrace();
-            return null;
+        } catch (IOException e)
+        {
+            e.printStackTrace();
         }
+        return null;
     }
 
     /**
@@ -660,8 +723,9 @@ public class StaticCaller
      *            the data to return. To get all the data use "all". default is type, version, basic, data, id, name, plaintext, group and description (can be null)
      * @param idAsKey
      *            use the id as the key instead of the normal key
+     * @throws LibraryException
      */
-    public SummonerSpellList getSummonerSpellData(final String locale, final String version, final List<String> itemData, final boolean idAsKey)
+    public SummonerSpellList getSummonerSpellData(final String locale, final String version, final List<String> itemData, final boolean idAsKey) throws LibraryException
     {
         try
         {
@@ -691,11 +755,14 @@ public class StaticCaller
                 throw call.getErrorData();
             }
             return L4J.getMapper().readValue(json, SummonerSpellList.class);
-        } catch (final Exception e)
+        } catch (final JsonMappingException e)
         {
             e.printStackTrace();
-            return null;
+        } catch (IOException e)
+        {
+            e.printStackTrace();
         }
+        return null;
     }
 
     /**
@@ -711,8 +778,9 @@ public class StaticCaller
      *            the data to return. To get all the data use "all". default is type, version, basic, data, id, name, plaintext, group and description (can be null)
      * @param idAsKey
      *            use the id as the key instead of the normal key
+     * @throws LibraryException
      */
-    public SummonerSpell getSummonerSpellData(final long id, final String locale, final String version, final List<String> itemData)
+    public SummonerSpell getSummonerSpellData(final long id, final String locale, final String version, final List<String> itemData) throws LibraryException
     {
         try
         {
@@ -742,17 +810,22 @@ public class StaticCaller
                 throw call.getErrorData();
             }
             return L4J.getMapper().readValue(json, SummonerSpell.class);
-        } catch (final Exception e)
+        } catch (final JsonMappingException e)
         {
             e.printStackTrace();
-            return null;
+        } catch (IOException e)
+        {
+            e.printStackTrace();
         }
+        return null;
     }
 
     /**
      * Gets static data about the versions
+     * 
+     * @throws LibraryException
      */
-    public List<String> getVersions()
+    public List<String> getVersions() throws LibraryException
     {
         try
         {
@@ -764,10 +837,13 @@ public class StaticCaller
                 throw call.getErrorData();
             }
             return L4J.getMapper().readValue(json, L4J.getMapper().getTypeFactory().constructCollectionType(List.class, String.class));
-        } catch (final Exception e)
+        } catch (final JsonMappingException e)
         {
             e.printStackTrace();
-            return null;
+        } catch (IOException e)
+        {
+            e.printStackTrace();
         }
+        return null;
     }
 }

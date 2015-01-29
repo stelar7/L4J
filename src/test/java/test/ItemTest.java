@@ -4,6 +4,7 @@ import java.util.Arrays;
 import java.util.Map;
 
 import no.stelar7.api.l4j.L4J;
+import no.stelar7.api.l4j.basic.LibraryException;
 import no.stelar7.api.l4j.basic.Server;
 import no.stelar7.api.l4j.dto.staticdata.item.ItemList;
 import no.stelar7.api.l4j.dto.staticdata.rune.RuneList;
@@ -18,18 +19,24 @@ public class ItemTest
     @Test
     public void test1()
     {
-        L4J.setRegion(Server.EUW);
-        ItemList items = lib.getStaticData().getItemData(null, null, Arrays.asList("all"));
-        RuneList runes = lib.getStaticData().getRuneData(null, null, Arrays.asList("all"));
-        for (String s : items.getData().keySet())
+        try
         {
-            Map<String, Double> stats = items.getData().get(s).getStats();
-            System.out.println(stats);
-        }
-        for (String s : runes.getData().keySet())
+            ItemList items = lib.getStaticData().getItemData(null, null, Arrays.asList("all"));
+            L4J.setRegion(Server.EUW);
+            RuneList runes = lib.getStaticData().getRuneData(null, null, Arrays.asList("all"));
+            for (String s : items.getData().keySet())
+            {
+                Map<String, Double> stats = items.getData().get(s).getStats();
+                System.out.println(stats);
+            }
+            for (String s : runes.getData().keySet())
+            {
+                Map<String, Double> stats = runes.getData().get(s).getStats();
+                System.out.println(stats);
+            }
+        } catch (LibraryException e)
         {
-            Map<String, Double> stats = runes.getData().get(s).getStats();
-            System.out.println(stats);
+            e.printStackTrace();
         }
     }
 }

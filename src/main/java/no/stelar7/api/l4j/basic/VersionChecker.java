@@ -67,10 +67,6 @@ public class VersionChecker
                 return "v1.2";
             case SUMMONER_BY_ID:
                 return "v1.4";
-            case STATIC_SHARD:
-                break;
-            case STATIC_SHARD_REGION:
-                break;
             case STATIC_LANGUAGES:
                 return "v1.2";
             case STATIC_MAP:
@@ -80,6 +76,6 @@ public class VersionChecker
             default:
                 break;
         }
-        return "null";
+        return "";
     }
 }

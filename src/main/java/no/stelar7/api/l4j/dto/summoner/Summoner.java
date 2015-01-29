@@ -1,5 +1,6 @@
 package no.stelar7.api.l4j.dto.summoner;
 
+import java.io.IOException;
 import java.io.Serializable;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -9,6 +10,7 @@ import lombok.Getter;
 import lombok.ToString;
 import no.stelar7.api.l4j.L4J;
 import no.stelar7.api.l4j.basic.DataCall;
+import no.stelar7.api.l4j.basic.LibraryException;
 import no.stelar7.api.l4j.basic.Server;
 import no.stelar7.api.l4j.basic.URLEndpoint;
 import no.stelar7.api.l4j.dto.game.RecentGames;
@@ -21,6 +23,7 @@ import no.stelar7.api.l4j.dto.stats.RankedStats;
 import no.stelar7.api.l4j.dto.stats.StatSummary;
 import no.stelar7.api.l4j.dto.team.Team;
 
+import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.JsonNode;
 
 @Getter
@@ -34,7 +37,7 @@ public class Summoner implements Serializable
     Long   summonerLevel;
     Server region;
 
-    public List<League> getFullLeague()
+    public List<League> getFullLeague() throws LibraryException
     {
         try
         {
@@ -42,17 +45,23 @@ public class Summoner implements Serializable
             call.setUrlEndpoint(URLEndpoint.LEAGUE_BY_SUMMONER_FULL);
             call.setData(Arrays.asList(this.id));
             final String json = call.doCall();
-            if (call.hasError()) { throw call.getErrorData(); }
+            if (call.hasError())
+            {
+                throw call.getErrorData();
+            }
             final JsonNode node = L4J.getMapper().readTree(json);
             return L4J.getMapper().convertValue(node.get("" + this.id), L4J.getMapper().getTypeFactory().constructCollectionType(List.class, League.class));
-        } catch (final Exception e)
+        } catch (final JsonMappingException e)
         {
             e.printStackTrace();
-            return null;
+        } catch (IOException e)
+        {
+            e.printStackTrace();
         }
+        return null;
     }
 
-    public List<MasteryPage> getMasteryPages()
+    public List<MasteryPage> getMasteryPages() throws LibraryException
     {
         try
         {
@@ -60,13 +69,19 @@ public class Summoner implements Serializable
             call.setUrlEndpoint(URLEndpoint.SUMMONER_MASTERIES);
             call.setData(Arrays.asList(this.id));
             final String json = call.doCall();
-            if (call.hasError()) { throw call.getErrorData(); }
+            if (call.hasError())
+            {
+                throw call.getErrorData();
+            }
             return L4J.getMapper().convertValue(L4J.getMapper().readTree(json).get("" + this.id).get("pages"), L4J.getMapper().getTypeFactory().constructCollectionType(List.class, MasteryPage.class));
-        } catch (final Exception e)
+        } catch (final JsonMappingException e)
         {
             e.printStackTrace();
-            return null;
+        } catch (IOException e)
+        {
+            e.printStackTrace();
         }
+        return null;
     }
 
     /**
@@ -82,8 +97,9 @@ public class Summoner implements Serializable
      *            the end index used for fetching (can be null)
      *
      * @return PlayerHistory from the player
+     * @throws LibraryException 
      */
-    public PlayerHistory getMatchHistory(final List<Integer> champids, final List<String> rankedQueues, final Integer beginIndex, final Integer endIndex)
+    public PlayerHistory getMatchHistory(final List<Integer> champids, final List<String> rankedQueues, final Integer beginIndex, final Integer endIndex) throws LibraryException
     {
         try
         {
@@ -112,17 +128,26 @@ public class Summoner implements Serializable
                 }
             });
             final String json = call.doCall();
-            if (call.hasError()) { throw call.getErrorData(); }
-            if (json.equals("{}")) { return null; }
+            if (call.hasError())
+            {
+                throw call.getErrorData();
+            }
+            if (json.equals("{}"))
+            {
+                return null;
+            }
             return L4J.getMapper().readValue(json, PlayerHistory.class);
-        } catch (final Exception e)
+        } catch (final JsonMappingException e)
         {
             e.printStackTrace();
-            return null;
+        } catch (IOException e)
+        {
+            e.printStackTrace();
         }
+        return null;
     }
 
-    public RankedStats getRankedStats(final Season season)
+    public RankedStats getRankedStats(final Season season) throws LibraryException
     {
         try
         {
@@ -139,16 +164,22 @@ public class Summoner implements Serializable
                 }
             });
             final String json = call.doCall();
-            if (call.hasError()) { throw call.getErrorData(); }
+            if (call.hasError())
+            {
+                throw call.getErrorData();
+            }
             return L4J.getMapper().readValue(json, RankedStats.class);
-        } catch (final Exception e)
+        } catch (final JsonMappingException e)
         {
             e.printStackTrace();
-            return null;
+        } catch (IOException e)
+        {
+            e.printStackTrace();
         }
+        return null;
     }
 
-    public RecentGames getRecentGames()
+    public RecentGames getRecentGames() throws LibraryException
     {
         try
         {
@@ -156,16 +187,22 @@ public class Summoner implements Serializable
             call.setUrlEndpoint(URLEndpoint.RECENT_GAMES);
             call.setData(Arrays.asList(this.id));
             final String json = call.doCall();
-            if (call.hasError()) { throw call.getErrorData(); }
+            if (call.hasError())
+            {
+                throw call.getErrorData();
+            }
             return L4J.getMapper().readValue(json, RecentGames.class);
-        } catch (final Exception e)
+        } catch (final JsonMappingException e)
         {
             e.printStackTrace();
-            return null;
+        } catch (IOException e)
+        {
+            e.printStackTrace();
         }
+        return null;
     }
 
-    public List<RunePage> getRunePages()
+    public List<RunePage> getRunePages() throws LibraryException
     {
         try
         {
@@ -173,17 +210,23 @@ public class Summoner implements Serializable
             call.setUrlEndpoint(URLEndpoint.SUMMONER_RUNES);
             call.setData(Arrays.asList(this.id));
             final String json = call.doCall();
-            if (call.hasError()) { throw call.getErrorData(); }
+            if (call.hasError())
+            {
+                throw call.getErrorData();
+            }
             final JsonNode node = L4J.getMapper().readTree(json);
             return L4J.getMapper().convertValue(node.get("" + this.id).get("pages"), L4J.getMapper().getTypeFactory().constructCollectionType(List.class, RunePage.class));
-        } catch (final Exception e)
+        } catch (final JsonMappingException e)
         {
             e.printStackTrace();
-            return null;
+        } catch (IOException e)
+        {
+            e.printStackTrace();
         }
+        return null;
     }
 
-    public List<League> getSelfLeague()
+    public List<League> getSelfLeague() throws LibraryException
     {
         try
         {
@@ -191,16 +234,22 @@ public class Summoner implements Serializable
             call.setUrlEndpoint(URLEndpoint.LEAGUE_BY_SUMMONER);
             call.setData(Arrays.asList(this.id));
             final String json = call.doCall();
-            if (call.hasError()) { throw call.getErrorData(); }
+            if (call.hasError())
+            {
+                throw call.getErrorData();
+            }
             return L4J.getMapper().convertValue(L4J.getMapper().readTree(json).get("" + this.id), L4J.getMapper().getTypeFactory().constructCollectionType(List.class, League.class));
-        } catch (final Exception e)
+        } catch (final JsonMappingException e)
         {
             e.printStackTrace();
-            return null;
+        } catch (IOException e)
+        {
+            e.printStackTrace();
         }
+        return null;
     }
 
-    public List<StatSummary> getStatSummary(final Season season)
+    public List<StatSummary> getStatSummary(final Season season) throws LibraryException
     {
         try
         {
@@ -217,17 +266,23 @@ public class Summoner implements Serializable
                 }
             });
             final String json = call.doCall();
-            if (call.hasError()) { throw call.getErrorData(); }
+            if (call.hasError())
+            {
+                throw call.getErrorData();
+            }
             final JsonNode node = L4J.getMapper().readTree(json);
             return L4J.getMapper().convertValue(node.get("playerStatSummaries"), L4J.getMapper().getTypeFactory().constructCollectionType(List.class, StatSummary.class));
-        } catch (final Exception e)
+        } catch (final JsonMappingException e)
         {
             e.printStackTrace();
-            return null;
+        } catch (IOException e)
+        {
+            e.printStackTrace();
         }
+        return null;
     }
 
-    public List<Team> getTeams()
+    public List<Team> getTeams() throws LibraryException
     {
         try
         {
@@ -235,13 +290,19 @@ public class Summoner implements Serializable
             call.setUrlEndpoint(URLEndpoint.TEAM_BY_SUMMONER);
             call.setData(Arrays.asList(this.id));
             final String json = call.doCall();
-            if (call.hasError()) { throw call.getErrorData(); }
+            if (call.hasError())
+            {
+                throw call.getErrorData();
+            }
             final JsonNode node = L4J.getMapper().readTree(json);
             return L4J.getMapper().convertValue(node.get("" + this.id), L4J.getMapper().getTypeFactory().constructCollectionType(List.class, Team.class));
-        } catch (final Exception e)
+        } catch (final JsonMappingException e)
         {
             e.printStackTrace();
-            return null;
+        } catch (IOException e)
+        {
+            e.printStackTrace();
         }
+        return null;
     }
 }

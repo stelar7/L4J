@@ -1,6 +1,7 @@
 package test;
 
 import no.stelar7.api.l4j.L4J;
+import no.stelar7.api.l4j.basic.LibraryException;
 import no.stelar7.api.l4j.basic.Server;
 import no.stelar7.api.l4j.dto.match.Event;
 import no.stelar7.api.l4j.dto.match.Frame;
@@ -15,22 +16,29 @@ public class MatchTest
     @Test
     public void test1()
     {
-        L4J.setRegion(Server.EUW);
-        L4J.setVerbose(true);
-        MatchDetail match = lib.getMatch(1843818315, true);
-        for (Frame f : match.getTimeline().getFrames())
+        try
         {
-            if (f.getEvents() == null) continue;
-            for (Event e : f.getEvents())
+            L4J.setRegion(Server.EUW);
+            L4J.setVerbose(true);
+            MatchDetail match = lib.getMatch(1843818315, true);
+            for (Frame f : match.getTimeline().getFrames())
             {
-                if (e.getParticipantId() == 8)
+                if (f.getEvents() == null)
+                    continue;
+                for (Event e : f.getEvents())
                 {
-                    if (e.getEventType().contains("ITEM_PURCHASE"))
+                    if (e.getParticipantId() == 8)
                     {
-                        System.out.format("%s %s%n", e.getEventType(), lib.getStaticData().getItemData(e.getItemId(), null, null, null).getName());
+                        if (e.getEventType().contains("ITEM_PURCHASE"))
+                        {
+                            System.out.format("%s %s%n", e.getEventType(), lib.getStaticData().getItemData(e.getItemId(), null, null, null).getName());
+                        }
                     }
                 }
             }
+        } catch (LibraryException e1)
+        {
+            e1.printStackTrace();
         }
     }
 }

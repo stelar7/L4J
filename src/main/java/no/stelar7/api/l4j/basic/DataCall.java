@@ -22,11 +22,12 @@ public class DataCall
 {
 
     URLEndpoint             urlEndpoint;
-    List<?>                 data;
     boolean                 verbose           = false;
     boolean                 blockWhileLimited = true;
     LibraryException        errorData         = null;
+    List<?>                 data              = null;
     HashMap<String, Object> urlParams         = new HashMap<String, Object>();
+    HashMap<String, Object> extraData         = new HashMap<String, Object>();
 
     public boolean hasError()
     {
@@ -158,8 +159,15 @@ public class DataCall
         return s.replace("{version}", VersionChecker.getFor(this.urlEndpoint));
     }
 
-    private String replaceData(final String s)
+    private String replaceData(String s)
     {
+        for (String st : extraData.keySet())
+        {
+            if (extraData.get(st) != null)
+            {
+                s = s.replace(st, extraData.get(st).toString());
+            }
+        }
         return s.replace("{data}", this.buildData());
     }
 }

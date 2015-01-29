@@ -38,7 +38,9 @@ public enum URLEndpoint
     STATIC_SHARD_REGION("http://status.leagueoflegends.com/shards/{data}"),
     STATIC_LANGUAGES("api/lol/static-data/{region}/{version}/languages"),
     STATIC_MAP("api/lol/static-data/{region}/{version}/map"),
-    STATIC_LANGUAGE_STRINGS("api/lol/static-data/{region}/{version}/language-strings");
+    STATIC_LANGUAGE_STRINGS("api/lol/static-data/{region}/{version}/language-strings"),
+    CURRENT_GAME("observer-mode/rest/consumer/getSpectatorGameInfo/{platformId}/{summonerId}"),
+    FEATURED_GAMES("observer-mode/rest/featured");
     
 
     @Getter
