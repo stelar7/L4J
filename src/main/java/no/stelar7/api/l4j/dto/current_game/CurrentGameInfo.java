@@ -16,7 +16,6 @@ public class CurrentGameInfo
     long                     gameQueueConfigId;
     long                     gameStartTime;
     String                   gameType;
-    long                     gameTypeConfigId;
     long                     mapId;
     Observer                 observers;
     List<CurrentParticipant> participants;
