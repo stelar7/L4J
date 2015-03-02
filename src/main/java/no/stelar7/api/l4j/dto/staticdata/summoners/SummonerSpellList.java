@@ -24,6 +24,8 @@ public class SummonerSpellList implements Serializable
         IGNITE(14),
         REVIVE(10),
         SMITE(11),
+        PORO_RECALL(30),
+        PORO_THROW(31),
         TELEPORT(12);
 
         @Getter

@@ -51,6 +51,7 @@ public class ChampionList implements Serializable
         JAX(24),
         JAYCE(126),
         JINX(222),
+        KALISTA(429),
         KARMA(43),
         KARTHUS(30),
         KASSADIN(38),
