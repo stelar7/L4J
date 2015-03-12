@@ -20,6 +20,7 @@ public class ChampionList implements Serializable
         ANNIE(1),
         ASHE(22),
         AZIR(268),
+        BARD(432),
         BLITZCRANK(53),
         BRAND(63),
         BRAUM(201),
