@@ -15,8 +15,10 @@ public enum PlatformId
     RU,
     EUW1,
     KR;
-    
-    public String toString() {
+
+    @Override
+    public String toString()
+    {
         return this.name();
     }
 }

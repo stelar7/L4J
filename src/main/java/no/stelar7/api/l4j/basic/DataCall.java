@@ -29,11 +29,6 @@ public class DataCall
     HashMap<String, Object> urlParams         = new HashMap<String, Object>();
     HashMap<String, Object> extraData         = new HashMap<String, Object>();
 
-    public boolean hasError()
-    {
-        return errorData != null;
-    }
-
     private void applyRateLimit() throws LibraryException
     {
         if (this.blockWhileLimited)
@@ -58,7 +53,7 @@ public class DataCall
                 try
                 {
                     items.append(URLEncoder.encode(s.toString().toLowerCase().replaceAll(" ", ""), "UTF-8")).append(",");
-                } catch (UnsupportedEncodingException e)
+                } catch (final UnsupportedEncodingException e)
                 {
                     e.printStackTrace();
                 }
@@ -78,7 +73,7 @@ public class DataCall
     public String doCall() throws IOException
     {
         final StringBuilder URL = new StringBuilder();
-        if (!urlEndpoint.getValue().startsWith("http"))
+        if (!this.urlEndpoint.getValue().startsWith("http"))
         {
             URL.append("https://");
             if (!this.isToStatic())
@@ -87,7 +82,7 @@ public class DataCall
                 try
                 {
                     this.applyRateLimit();
-                } catch (LibraryException e)
+                } catch (final LibraryException e)
                 {
                     this.errorData = e;
                     return null;
@@ -98,20 +93,20 @@ public class DataCall
             }
             URL.append("/");
         }
-        URL.append(replaceData(replaceVersion(replaceRegion(this.urlEndpoint.getValue()))));
+        URL.append(this.replaceData(this.replaceVersion(this.replaceRegion(this.urlEndpoint.getValue()))));
         URL.append(this.getAPIkey()).append(this.getParameters());
         if (L4J.verbose || this.verbose)
         {
             DataCall.log.info(URL.toString());
         }
-        HttpURLConnection con = (HttpURLConnection) new URL(URL.toString()).openConnection();
+        final HttpURLConnection con = (HttpURLConnection) new URL(URL.toString()).openConnection();
         if (con.getResponseCode() != 200)
         {
             this.errorData = new LibraryException(con.getResponseCode(), con.getHeaderFieldInt("Retry-After", 0));
             return null;
         }
-        StringBuilder data = new StringBuilder();
-        BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()));
+        final StringBuilder data = new StringBuilder();
+        final BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()));
         String inputLine;
         while ((inputLine = in.readLine()) != null)
         {
@@ -136,7 +131,7 @@ public class DataCall
             try
             {
                 params.append("&").append(s).append("=").append(URLEncoder.encode(this.urlParams.get(s).toString(), "UTF-8"));
-            } catch (UnsupportedEncodingException e)
+            } catch (final UnsupportedEncodingException e)
             {
                 e.printStackTrace();
             }
@@ -144,30 +139,35 @@ public class DataCall
         return params.toString();
     }
 
+    public boolean hasError()
+    {
+        return this.errorData != null;
+    }
+
     private boolean isToStatic()
     {
         return this.urlEndpoint.toString().startsWith("api/lol/static-data");
     }
 
-    private String replaceRegion(String s)
+    private String replaceData(String s)
+    {
+        for (final String st : this.extraData.keySet())
+        {
+            if (this.extraData.get(st) != null)
+            {
+                s = s.replace("{" + st + "}", this.extraData.get(st).toString());
+            }
+        }
+        return s.replace("{data}", this.buildData());
+    }
+
+    private String replaceRegion(final String s)
     {
         return s.replace("{region}", L4J.getRegion().name().toLowerCase());
     }
 
-    private String replaceVersion(String s)
+    private String replaceVersion(final String s)
     {
         return s.replace("{version}", VersionChecker.getFor(this.urlEndpoint));
-    }
-
-    private String replaceData(String s)
-    {
-        for (String st : extraData.keySet())
-        {
-            if (extraData.get(st) != null)
-            {
-                s = s.replace(st, extraData.get(st).toString());
-            }
-        }
-        return s.replace("{data}", this.buildData());
     }
 }

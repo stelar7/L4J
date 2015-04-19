@@ -49,25 +49,40 @@ public final class Preconditions
 
     private static String badPositionIndexes(final int start, final int end, final int size)
     {
-        if ((start < 0) || (start > size)) { return Preconditions.badPositionIndex(start, size, "start index"); }
-        if ((end < 0) || (end > size)) { return Preconditions.badPositionIndex(end, size, "end index"); }
+        if ((start < 0) || (start > size))
+        {
+            return Preconditions.badPositionIndex(start, size, "start index");
+        }
+        if ((end < 0) || (end > size))
+        {
+            return Preconditions.badPositionIndex(end, size, "end index");
+        }
         // end < start
         return Preconditions.format("end index (%s) must not be less than start index (%s)", end, start);
     }
 
     public static void checkArgument(final boolean expression)
     {
-        if (!expression) { throw new IllegalArgumentException(); }
+        if (!expression)
+        {
+            throw new IllegalArgumentException();
+        }
     }
 
     public static void checkArgument(final boolean expression, final Object errorMessage)
     {
-        if (!expression) { throw new IllegalArgumentException(String.valueOf(errorMessage)); }
+        if (!expression)
+        {
+            throw new IllegalArgumentException(String.valueOf(errorMessage));
+        }
     }
 
     public static void checkArgument(final boolean expression, final String errorMessageTemplate, final Object... errorMessageArgs)
     {
-        if (!expression) { throw new IllegalArgumentException(Preconditions.format(errorMessageTemplate, errorMessageArgs)); }
+        if (!expression)
+        {
+            throw new IllegalArgumentException(Preconditions.format(errorMessageTemplate, errorMessageArgs));
+        }
     }
 
     public static int checkElementIndex(final int index, final int size)
@@ -77,25 +92,37 @@ public final class Preconditions
 
     public static int checkElementIndex(final int index, final int size, final String desc)
     {
-        if ((index < 0) || (index >= size)) { throw new IndexOutOfBoundsException(Preconditions.badElementIndex(index, size, desc)); }
+        if ((index < 0) || (index >= size))
+        {
+            throw new IndexOutOfBoundsException(Preconditions.badElementIndex(index, size, desc));
+        }
         return index;
     }
 
     public static <T> T checkNotNull(final T reference)
     {
-        if (reference == null) { throw new NullPointerException(); }
+        if (reference == null)
+        {
+            throw new NullPointerException();
+        }
         return reference;
     }
 
     public static <T> T checkNotNull(final T reference, final Object errorMessage)
     {
-        if (reference == null) { throw new NullPointerException(String.valueOf(errorMessage)); }
+        if (reference == null)
+        {
+            throw new NullPointerException(String.valueOf(errorMessage));
+        }
         return reference;
     }
 
     public static <T> T checkNotNull(final T reference, final String errorMessageTemplate, final Object... errorMessageArgs)
     {
-        if (reference == null) { throw new NullPointerException(Preconditions.format(errorMessageTemplate, errorMessageArgs)); }
+        if (reference == null)
+        {
+            throw new NullPointerException(Preconditions.format(errorMessageTemplate, errorMessageArgs));
+        }
         return reference;
     }
 
@@ -106,29 +133,44 @@ public final class Preconditions
 
     public static int checkPositionIndex(final int index, final int size, final String desc)
     {
-        if ((index < 0) || (index > size)) { throw new IndexOutOfBoundsException(Preconditions.badPositionIndex(index, size, desc)); }
+        if ((index < 0) || (index > size))
+        {
+            throw new IndexOutOfBoundsException(Preconditions.badPositionIndex(index, size, desc));
+        }
         return index;
     }
 
     public static void checkPositionIndexes(final int start, final int end, final int size)
     {
         // Carefully optimized for execution by hotspot (explanatory comment above)
-        if ((start < 0) || (end < start) || (end > size)) { throw new IndexOutOfBoundsException(Preconditions.badPositionIndexes(start, end, size)); }
+        if ((start < 0) || (end < start) || (end > size))
+        {
+            throw new IndexOutOfBoundsException(Preconditions.badPositionIndexes(start, end, size));
+        }
     }
 
     public static void checkState(final boolean expression)
     {
-        if (!expression) { throw new IllegalStateException(); }
+        if (!expression)
+        {
+            throw new IllegalStateException();
+        }
     }
 
     public static void checkState(final boolean expression, final Object errorMessage)
     {
-        if (!expression) { throw new IllegalStateException(String.valueOf(errorMessage)); }
+        if (!expression)
+        {
+            throw new IllegalStateException(String.valueOf(errorMessage));
+        }
     }
 
     public static void checkState(final boolean expression, final String errorMessageTemplate, final Object... errorMessageArgs)
     {
-        if (!expression) { throw new IllegalStateException(Preconditions.format(errorMessageTemplate, errorMessageArgs)); }
+        if (!expression)
+        {
+            throw new IllegalStateException(Preconditions.format(errorMessageTemplate, errorMessageArgs));
+        }
     }
 
     static String format(String template, final Object... args)

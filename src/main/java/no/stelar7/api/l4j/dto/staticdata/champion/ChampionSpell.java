@@ -3,11 +3,11 @@ package no.stelar7.api.l4j.dto.staticdata.champion;
 import java.io.Serializable;
 import java.util.List;
 
+import lombok.Getter;
+import lombok.ToString;
 import no.stelar7.api.l4j.dto.staticdata.general.Image;
 import no.stelar7.api.l4j.dto.staticdata.general.LevelTip;
 import no.stelar7.api.l4j.dto.staticdata.general.SpellVars;
-import lombok.Getter;
-import lombok.ToString;
 
 @Getter
 @ToString
@@ -35,37 +35,49 @@ public class ChampionSpell implements Serializable
     String             tooltip;
     List<SpellVars>    vars;
 
-    public String getTooltip(int champLevel, int spellLevel)
-    {
-        return replaceVariables(tooltip, champLevel, spellLevel);
-    }
-
     public String getSanitizedTooltip(final int champLevel, final int spellLevel)
     {
-        return replaceVariables(sanitizedTooltip, champLevel, spellLevel);
+        return this.replaceVariables(this.sanitizedTooltip, champLevel, spellLevel);
     }
 
-    private String replaceVariables(String text, int clevel, int slevel)
+    public String getTooltip(final int champLevel, final int spellLevel)
     {
-        if (clevel > 18 || clevel < 1) { throw new IllegalArgumentException("Champion level out of bounds!"); }
-        if (slevel > maxrank || slevel < 1) { throw new IllegalArgumentException("Spell level out of bounds!"); }
-        if (effect != null)
+        return this.replaceVariables(this.tooltip, champLevel, spellLevel);
+    }
+
+    private String replaceVariables(String text, final int clevel, final int slevel)
+    {
+        if ((clevel > 18) || (clevel < 1))
+        {
+            throw new IllegalArgumentException("Champion level out of bounds!");
+        }
+        if ((slevel > this.maxrank) || (slevel < 1))
+        {
+            throw new IllegalArgumentException("Spell level out of bounds!");
+        }
+        if (this.effect != null)
         {
             int i = 1;
-            for (final List<Double> e : effect)
+            for (final List<Double> e : this.effect)
             {
-                if (e == null) continue;
+                if (e == null)
+                {
+                    continue;
+                }
                 text = text.replaceAll("\\{\\{ e" + i + " \\}\\}", e.get(slevel - 1).toString());
                 i++;
             }
         }
-        if (vars != null)
+        if (this.vars != null)
         {
-            for (final SpellVars var : vars)
+            for (final SpellVars var : this.vars)
             {
-                if (var == null) continue;
+                if (var == null)
+                {
+                    continue;
+                }
                 Double val = var.getCoeff().get(0);
-                if (var.getCoeff().size() == maxrank)
+                if (var.getCoeff().size() == this.maxrank)
                 {
                     val = var.getCoeff().get(slevel - 1);
                 } else if (var.getCoeff().size() == 18)

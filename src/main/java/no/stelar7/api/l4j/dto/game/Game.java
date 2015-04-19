@@ -6,19 +6,19 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 
-import com.fasterxml.jackson.databind.JsonMappingException;
-
+import lombok.Getter;
+import lombok.ToString;
 import no.stelar7.api.l4j.L4J;
 import no.stelar7.api.l4j.basic.DataCall;
 import no.stelar7.api.l4j.basic.LibraryException;
 import no.stelar7.api.l4j.basic.URLEndpoint;
 import no.stelar7.api.l4j.dto.match.MatchDetail;
-import lombok.Getter;
-import lombok.ToString;
+
+import com.fasterxml.jackson.databind.JsonMappingException;
 
 @Getter
 @ToString
-public class Game  implements Serializable
+public class Game implements Serializable
 {
     int          championId;
     Long         createDate;
@@ -50,12 +50,15 @@ public class Game  implements Serializable
                 }
                     });
             final String json = call.doCall();
-            if (call.hasError()) { throw call.getErrorData(); }
+            if (call.hasError())
+            {
+                throw call.getErrorData();
+            }
             return L4J.getMapper().readValue(json, MatchDetail.class);
         } catch (final JsonMappingException e)
         {
             e.printStackTrace();
-        } catch (IOException e)
+        } catch (final IOException e)
         {
             e.printStackTrace();
         }

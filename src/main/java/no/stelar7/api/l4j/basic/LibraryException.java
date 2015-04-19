@@ -20,14 +20,14 @@ public class LibraryException extends Exception
     @Getter
     Type type;
     @Getter
-    int retryAfter;
+    int  retryAfter;
 
     /**
      *
      * @param t
      *            The HTTP response status code to generate error from;
      */
-    public LibraryException(int code, int retryafter)
+    public LibraryException(final int code, final int retryafter)
     {
         this.retryAfter = retryafter;
         this.type = Type.UNKNOWN;

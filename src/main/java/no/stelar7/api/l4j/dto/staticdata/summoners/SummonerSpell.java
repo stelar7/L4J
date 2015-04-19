@@ -3,11 +3,11 @@ package no.stelar7.api.l4j.dto.staticdata.summoners;
 import java.io.Serializable;
 import java.util.List;
 
+import lombok.Getter;
+import lombok.ToString;
 import no.stelar7.api.l4j.dto.staticdata.general.Image;
 import no.stelar7.api.l4j.dto.staticdata.general.LevelTip;
 import no.stelar7.api.l4j.dto.staticdata.general.SpellVars;
-import lombok.Getter;
-import lombok.ToString;
 
 @Getter
 @ToString
@@ -39,23 +39,29 @@ public class SummonerSpell implements Serializable
 
     public String getSanitizedTooltip(final int championLevel)
     {
-        return replaceVariables(sanitizedTooltip, championLevel);
+        return this.replaceVariables(this.sanitizedTooltip, championLevel);
     }
 
     public String getTooltip(final int championLevel)
     {
-        return replaceVariables(tooltip, championLevel);
+        return this.replaceVariables(this.tooltip, championLevel);
     }
 
     private String replaceVariables(String text, final int level)
     {
-        if (level < 1 || level > 18) { throw new IllegalArgumentException("Champion level out of bounds"); }
-
-        if (vars != null)
+        if ((level < 1) || (level > 18))
         {
-            for (final SpellVars var : vars)
+            throw new IllegalArgumentException("Champion level out of bounds");
+        }
+
+        if (this.vars != null)
+        {
+            for (final SpellVars var : this.vars)
             {
-                if (var == null) continue;
+                if (var == null)
+                {
+                    continue;
+                }
                 final Double val = var.getLink().equals("@player.level") ? var.getCoeff().get(level - 1) : var.getCoeff().get(0);
                 text = text.replaceAll("\\{\\{ " + var.getKey() + " \\}\\}", val.toString());
             }

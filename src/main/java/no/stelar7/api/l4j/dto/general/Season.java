@@ -8,10 +8,11 @@ public enum Season
     SEASON_4,
     PRESEASON_2015,
     SEASON_5;
-    
-    public String toString() {
+
+    @Override
+    public String toString()
+    {
         return this.name().replace("_", "");
     }
-    
-    
+
 }

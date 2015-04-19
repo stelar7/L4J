@@ -3,10 +3,10 @@ package no.stelar7.api.l4j.dto.matchhistory;
 import java.io.Serializable;
 import java.util.List;
 
-import no.stelar7.api.l4j.dto.match.Participant;
-import no.stelar7.api.l4j.dto.match.ParticipantIdentity;
 import lombok.Getter;
 import lombok.ToString;
+import no.stelar7.api.l4j.dto.match.Participant;
+import no.stelar7.api.l4j.dto.match.ParticipantIdentity;
 
 @ToString
 @Getter

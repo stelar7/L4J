@@ -40,8 +40,8 @@ public enum URLEndpoint
     STATIC_MAP("api/lol/static-data/{region}/{version}/map"),
     STATIC_LANGUAGE_STRINGS("api/lol/static-data/{region}/{version}/language-strings"),
     CURRENT_GAME("observer-mode/rest/consumer/getSpectatorGameInfo/{platformId}/{summonerId}"),
-    FEATURED_GAMES("observer-mode/rest/featured");
-    
+    FEATURED_GAMES("observer-mode/rest/featured"),
+    DDRAGON("http://ddragon.leagueoflegends.com/cdn/{dragonversion}/{type}");
 
     @Getter
     String value;

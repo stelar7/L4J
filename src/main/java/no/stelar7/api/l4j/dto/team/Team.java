@@ -52,7 +52,7 @@ public class Team implements Serializable
         } catch (final JsonMappingException e)
         {
             e.printStackTrace();
-        } catch (IOException e)
+        } catch (final IOException e)
         {
             e.printStackTrace();
         }
@@ -76,7 +76,7 @@ public class Team implements Serializable
         } catch (final JsonMappingException e)
         {
             e.printStackTrace();
-        } catch (IOException e)
+        } catch (final IOException e)
         {
             e.printStackTrace();
         }

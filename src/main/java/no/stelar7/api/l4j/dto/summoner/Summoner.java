@@ -54,7 +54,7 @@ public class Summoner implements Serializable
         } catch (final JsonMappingException e)
         {
             e.printStackTrace();
-        } catch (IOException e)
+        } catch (final IOException e)
         {
             e.printStackTrace();
         }
@@ -77,7 +77,7 @@ public class Summoner implements Serializable
         } catch (final JsonMappingException e)
         {
             e.printStackTrace();
-        } catch (IOException e)
+        } catch (final IOException e)
         {
             e.printStackTrace();
         }
@@ -97,7 +97,7 @@ public class Summoner implements Serializable
      *            the end index used for fetching (can be null)
      *
      * @return PlayerHistory from the player
-     * @throws LibraryException 
+     * @throws LibraryException
      */
     public PlayerHistory getMatchHistory(final List<Integer> champids, final List<String> rankedQueues, final Integer beginIndex, final Integer endIndex) throws LibraryException
     {
@@ -140,7 +140,7 @@ public class Summoner implements Serializable
         } catch (final JsonMappingException e)
         {
             e.printStackTrace();
-        } catch (IOException e)
+        } catch (final IOException e)
         {
             e.printStackTrace();
         }
@@ -159,7 +159,7 @@ public class Summoner implements Serializable
                 {
                     if (season != null)
                     {
-                        put("season", season.name().toLowerCase());
+                        this.put("season", season.name().toLowerCase());
                     }
                 }
             });
@@ -172,7 +172,7 @@ public class Summoner implements Serializable
         } catch (final JsonMappingException e)
         {
             e.printStackTrace();
-        } catch (IOException e)
+        } catch (final IOException e)
         {
             e.printStackTrace();
         }
@@ -195,7 +195,7 @@ public class Summoner implements Serializable
         } catch (final JsonMappingException e)
         {
             e.printStackTrace();
-        } catch (IOException e)
+        } catch (final IOException e)
         {
             e.printStackTrace();
         }
@@ -219,7 +219,7 @@ public class Summoner implements Serializable
         } catch (final JsonMappingException e)
         {
             e.printStackTrace();
-        } catch (IOException e)
+        } catch (final IOException e)
         {
             e.printStackTrace();
         }
@@ -242,7 +242,7 @@ public class Summoner implements Serializable
         } catch (final JsonMappingException e)
         {
             e.printStackTrace();
-        } catch (IOException e)
+        } catch (final IOException e)
         {
             e.printStackTrace();
         }
@@ -261,7 +261,7 @@ public class Summoner implements Serializable
                 {
                     if (season != null)
                     {
-                        put("season", season.toString());
+                        this.put("season", season.toString());
                     }
                 }
             });
@@ -275,7 +275,7 @@ public class Summoner implements Serializable
         } catch (final JsonMappingException e)
         {
             e.printStackTrace();
-        } catch (IOException e)
+        } catch (final IOException e)
         {
             e.printStackTrace();
         }
@@ -299,7 +299,7 @@ public class Summoner implements Serializable
         } catch (final JsonMappingException e)
         {
             e.printStackTrace();
-        } catch (IOException e)
+        } catch (final IOException e)
         {
             e.printStackTrace();
         }

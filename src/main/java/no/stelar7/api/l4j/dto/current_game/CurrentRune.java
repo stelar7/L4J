@@ -7,6 +7,6 @@ import lombok.ToString;
 @ToString
 public class CurrentRune
 {
-    int count;
+    int  count;
     long runeId;
 }

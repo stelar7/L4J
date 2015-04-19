@@ -4,9 +4,9 @@ import java.io.Serializable;
 import java.util.List;
 import java.util.Map;
 
-import no.stelar7.api.l4j.dto.staticdata.general.BasicData;
 import lombok.Getter;
 import lombok.ToString;
+import no.stelar7.api.l4j.dto.staticdata.general.BasicData;
 
 @ToString
 @Getter

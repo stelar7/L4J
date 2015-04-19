@@ -14,6 +14,7 @@ import no.stelar7.api.l4j.dto.featured_game.FeaturedGames;
 import no.stelar7.api.l4j.dto.league.League;
 import no.stelar7.api.l4j.dto.league.LeagueType;
 import no.stelar7.api.l4j.dto.match.MatchDetail;
+import no.stelar7.api.l4j.dto.staticdata.general.Image;
 import no.stelar7.api.l4j.dto.summoner.Summoner;
 import no.stelar7.api.l4j.dto.team.Team;
 
@@ -38,14 +39,14 @@ public class L4J
     @Getter
     private static final ObjectMapper   mapper           = new ObjectMapper();
     @Getter
-    private final StaticCaller          staticData       = new StaticCaller();
-    @Getter
     @Setter
     public static boolean               verbose          = false;
-
     private static final int            MAX_PER_SUMMONER = 40;
+
     private static final int            MAX_PER_TEAM     = 10;
     private static final int            MAX_PER_LEAGUE   = 10;
+    @Getter
+    private final StaticCaller          staticData       = new StaticCaller();
 
     /**
      *
@@ -104,11 +105,11 @@ public class L4J
             final DataCall call = new DataCall();
             call.setUrlEndpoint(URLEndpoint.CHALLENGER_LEAGUE);
             call.setUrlParams(new HashMap<String, Object>()
-            {
+                    {
                 {
                     this.put("type", type);
                 }
-            });
+                    });
             final String json = call.doCall();
             if (call.hasError())
             {
@@ -156,50 +157,6 @@ public class L4J
     }
 
     /**
-     * Gets a list of leagues from summoner IDs
-     *
-     * @return list of leagues from summoner IDs
-     * @throws LibraryException
-     */
-    public Map<Long, List<League>> getLeagueBySummoners(final boolean full, final Long... names) throws LibraryException
-    {
-        final List<Long> copy = new LinkedList<Long>(Arrays.asList(names));
-        final HashMap<Long, List<League>> summoners = new HashMap<Long, List<League>>();
-        while (copy.size() > L4J.MAX_PER_LEAGUE)
-        {
-            final List<Long> remove = new ArrayList<Long>(copy.subList(0, L4J.MAX_PER_LEAGUE > copy.size() ? copy.size() : L4J.MAX_PER_LEAGUE));
-            copy.removeAll(remove);
-            summoners.putAll(this.getLeagueBySummoners(full, remove.toArray(new Long[L4J.MAX_PER_LEAGUE])));
-        }
-        try
-        {
-            final DataCall call = new DataCall();
-            call.setUrlEndpoint(full ? URLEndpoint.LEAGUE_BY_SUMMONER_FULL : URLEndpoint.LEAGUE_BY_SUMMONER);
-            call.setData(copy);
-            final String json = call.doCall();
-            if (call.hasError())
-            {
-                throw call.getErrorData();
-            }
-            final JsonNode node = L4J.mapper.readTree(json);
-            for (final Long s : copy)
-            {
-                final List<League> pages = L4J.getMapper().convertValue(node.get("" + s), L4J.getMapper().getTypeFactory().constructCollectionType(List.class, League.class));
-                summoners.put(s, pages);
-            }
-            return summoners;
-        } catch (final JsonMappingException e)
-        {
-            e.printStackTrace();
-            return null;
-        } catch (final IOException e)
-        {
-            e.printStackTrace();
-            return null;
-        }
-    }
-
-    /**
      * Gets a on-going match from its id
      *
      * @param id
@@ -216,12 +173,12 @@ public class L4J
             final DataCall call = new DataCall();
             call.setUrlEndpoint(URLEndpoint.CURRENT_GAME);
             call.setExtraData(new HashMap<String, Object>()
-            {
+                    {
                 {
                     this.put("{platformId}", platform);
                     this.put("{summonerId}", summonerId);
                 }
-            });
+                    });
             final String json = call.doCall();
             if (call.hasError())
             {
@@ -269,6 +226,70 @@ public class L4J
     }
 
     /**
+     * Gets the URL for the ImageDto
+     *
+     * @return a String with the URL to the image
+     */
+    public String getImageURL(final ImageType type, final Image image) throws LibraryException
+    {
+        return URLEndpoint.DDRAGON.getValue().replace("{dragonversion}", this.getStaticData().getRealm().getV()).replace("{type}", type.getURLPart()) + image.getFull();
+    }
+
+    /**
+     * Gets the URL for the ImageDto
+     *
+     * @return a String with the URL to the image
+     */
+    public String getImageURL(final ImageType type, final String imagename) throws LibraryException
+    {
+        return URLEndpoint.DDRAGON.getValue().replace("{dragonversion}", this.getStaticData().getRealm().getV()).replace("{type}", type.getURLPart()) + imagename;
+    }
+
+    /**
+     * Gets a list of leagues from summoner IDs
+     *
+     * @return list of leagues from summoner IDs
+     * @throws LibraryException
+     */
+    public Map<Long, List<League>> getLeagueBySummoners(final boolean full, final Long... names) throws LibraryException
+    {
+        final List<Long> copy = new LinkedList<Long>(Arrays.asList(names));
+        final HashMap<Long, List<League>> summoners = new HashMap<Long, List<League>>();
+        while (copy.size() > L4J.MAX_PER_LEAGUE)
+        {
+            final List<Long> remove = new ArrayList<Long>(copy.subList(0, L4J.MAX_PER_LEAGUE > copy.size() ? copy.size() : L4J.MAX_PER_LEAGUE));
+            copy.removeAll(remove);
+            summoners.putAll(this.getLeagueBySummoners(full, remove.toArray(new Long[L4J.MAX_PER_LEAGUE])));
+        }
+        try
+        {
+            final DataCall call = new DataCall();
+            call.setUrlEndpoint(full ? URLEndpoint.LEAGUE_BY_SUMMONER_FULL : URLEndpoint.LEAGUE_BY_SUMMONER);
+            call.setData(copy);
+            final String json = call.doCall();
+            if (call.hasError())
+            {
+                throw call.getErrorData();
+            }
+            final JsonNode node = L4J.mapper.readTree(json);
+            for (final Long s : copy)
+            {
+                final List<League> pages = L4J.getMapper().convertValue(node.get("" + s), L4J.getMapper().getTypeFactory().constructCollectionType(List.class, League.class));
+                summoners.put(s, pages);
+            }
+            return summoners;
+        } catch (final JsonMappingException e)
+        {
+            e.printStackTrace();
+            return null;
+        } catch (final IOException e)
+        {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    /**
      * Gets a match from its id
      *
      * @param id
@@ -286,11 +307,11 @@ public class L4J
             call.setUrlEndpoint(URLEndpoint.MATCH);
             call.setData(Arrays.asList(id));
             call.setUrlParams(new HashMap<String, Object>()
-            {
+                    {
                 {
                     this.put("includeTimeline", timeline);
                 }
-            });
+                    });
             final String json = call.doCall();
             if (call.hasError())
             {
@@ -357,16 +378,16 @@ public class L4J
         } catch (final IOException e)
         {
             e.printStackTrace();
-        } catch (IllegalArgumentException e)
+        } catch (final IllegalArgumentException e)
         {
             e.printStackTrace();
-        } catch (IllegalAccessException e)
+        } catch (final IllegalAccessException e)
         {
             e.printStackTrace();
-        } catch (NoSuchFieldException e)
+        } catch (final NoSuchFieldException e)
         {
             e.printStackTrace();
-        } catch (SecurityException e)
+        } catch (final SecurityException e)
         {
             e.printStackTrace();
         }
@@ -422,16 +443,16 @@ public class L4J
         } catch (final IOException e)
         {
             e.printStackTrace();
-        } catch (IllegalArgumentException e)
+        } catch (final IllegalArgumentException e)
         {
             e.printStackTrace();
-        } catch (IllegalAccessException e)
+        } catch (final IllegalAccessException e)
         {
             e.printStackTrace();
-        } catch (NoSuchFieldException e)
+        } catch (final NoSuchFieldException e)
         {
             e.printStackTrace();
-        } catch (SecurityException e)
+        } catch (final SecurityException e)
         {
             e.printStackTrace();
         }
