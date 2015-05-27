@@ -6,13 +6,22 @@ import java.util.List;
 import lombok.Getter;
 import lombok.ToString;
 
-@Getter
 @ToString
 public class League implements Serializable
 {
-    List<LeagueEntry> entries;
-    String            name;
-    String            participantId;
-    String            queue;
-    String            tier;
+
+    @Getter
+    List<LeagueEntry>    entries;
+    @Getter
+    String               name;
+    @Getter
+    String               participantId;
+    @Getter
+    String               tier;
+    
+    String               queue;
+    
+    public LeagueType getQueue() {
+        return LeagueType.valueOf(queue);
+    }
 }

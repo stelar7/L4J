@@ -13,6 +13,6 @@ public class Champion implements Serializable
     boolean botEnabled;
     boolean botMmEnabled;
     boolean freeToPlay;
-    Long    id;
+    int    id;
     boolean rankedPlayEnabled;
 }

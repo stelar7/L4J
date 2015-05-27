@@ -175,8 +175,8 @@ public class L4J
             call.setExtraData(new HashMap<String, Object>()
                     {
                 {
-                    this.put("{platformId}", platform);
-                    this.put("{summonerId}", summonerId);
+                    this.put("platformId", platform);
+                    this.put("summonerId", summonerId);
                 }
                     });
             final String json = call.doCall();

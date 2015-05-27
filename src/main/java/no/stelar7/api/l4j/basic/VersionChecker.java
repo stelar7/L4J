@@ -3,7 +3,7 @@ package no.stelar7.api.l4j.basic;
 public class VersionChecker
 {
 
-    public static String getFor(final URLEndpoint urlEndpoint)
+    public static String getVersionFor(final URLEndpoint urlEndpoint)
     {
         switch (urlEndpoint)
         {

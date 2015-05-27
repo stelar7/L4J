@@ -93,7 +93,7 @@ public class DataCall
             }
             URL.append("/");
         }
-        URL.append(this.replaceData(this.replaceVersion(this.replaceRegion(this.urlEndpoint.getValue()))));
+        URL.append(this.replaceData(this.urlEndpoint.getValue()));
         URL.append(this.getAPIkey()).append(this.getParameters());
         if (L4J.verbose || this.verbose)
         {
@@ -149,25 +149,15 @@ public class DataCall
         return this.urlEndpoint.toString().startsWith("api/lol/static-data");
     }
 
-    private String replaceData(String s)
+    private String replaceData(final String s)
     {
+        String returnme = s.replace("{region}", L4J.getRegion().name().toLowerCase());
+        returnme = returnme.replace("{version}", VersionChecker.getVersionFor(this.urlEndpoint));
+
         for (final String st : this.extraData.keySet())
         {
-            if (this.extraData.get(st) != null)
-            {
-                s = s.replace("{" + st + "}", this.extraData.get(st).toString());
-            }
+            returnme = returnme.replace("{" + st + "}", this.extraData.get(st).toString());
         }
-        return s.replace("{data}", this.buildData());
-    }
-
-    private String replaceRegion(final String s)
-    {
-        return s.replace("{region}", L4J.getRegion().name().toLowerCase());
-    }
-
-    private String replaceVersion(final String s)
-    {
-        return s.replace("{version}", VersionChecker.getFor(this.urlEndpoint));
+        return returnme.replace("{data}", this.buildData());
     }
 }

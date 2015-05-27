@@ -18,8 +18,6 @@ package com.google.common.util.concurrent;
 
 import static java.util.concurrent.TimeUnit.*;
 
-import java.util.concurrent.TimeUnit;
-
 abstract class SmoothRateLimiter extends RateLimiter
 {
     static final class SmoothBursty extends SmoothRateLimiter
@@ -51,57 +49,6 @@ abstract class SmoothRateLimiter extends RateLimiter
         long storedPermitsToWaitTime(final double storedPermits, final double permitsToTake)
         {
             return 0L;
-        }
-    }
-
-    static final class SmoothWarmingUp extends SmoothRateLimiter
-    {
-        private final long warmupPeriodMicros;
-        private double     slope;
-        private double     halfPermits;
-
-        SmoothWarmingUp(final SleepingStopwatch stopwatch, final long warmupPeriod, final TimeUnit timeUnit)
-        {
-            super(stopwatch);
-            this.warmupPeriodMicros = timeUnit.toMicros(warmupPeriod);
-        }
-
-        @Override
-        void doSetRate(final double permitsPerSecond, final double stableIntervalMicros)
-        {
-            final double oldMaxPermits = this.maxPermits;
-            this.maxPermits = this.warmupPeriodMicros / stableIntervalMicros;
-            this.halfPermits = this.maxPermits / 2.0;
-            final double coldIntervalMicros = stableIntervalMicros * 3.0;
-            this.slope = (coldIntervalMicros - stableIntervalMicros) / this.halfPermits;
-            if (oldMaxPermits == Double.POSITIVE_INFINITY)
-            {
-                this.storedPermits = 0.0;
-            } else
-            {
-                this.storedPermits = (oldMaxPermits == 0.0) ? this.maxPermits // initial state is cold
-                        : (this.storedPermits * this.maxPermits) / oldMaxPermits;
-            }
-        }
-
-        private double permitsToTime(final double permits)
-        {
-            return this.stableIntervalMicros + (permits * this.slope);
-        }
-
-        @Override
-        long storedPermitsToWaitTime(final double storedPermits, double permitsToTake)
-        {
-            final double availablePermitsAboveHalf = storedPermits - this.halfPermits;
-            long micros = 0;
-            if (availablePermitsAboveHalf > 0.0)
-            {
-                final double permitsAboveHalfToTake = Math.min(availablePermitsAboveHalf, permitsToTake);
-                micros = (long) ((permitsAboveHalfToTake * (this.permitsToTime(availablePermitsAboveHalf) + this.permitsToTime(availablePermitsAboveHalf - permitsAboveHalfToTake))) / 2.0);
-                permitsToTake -= permitsAboveHalfToTake;
-            }
-            micros += (this.stableIntervalMicros * permitsToTake);
-            return micros;
         }
     }
 

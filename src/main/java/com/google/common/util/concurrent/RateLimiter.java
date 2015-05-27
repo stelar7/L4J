@@ -22,7 +22,6 @@ import java.util.concurrent.TimeUnit;
 
 import com.google.common.base.Stopwatch;
 import com.google.common.util.concurrent.SmoothRateLimiter.SmoothBursty;
-import com.google.common.util.concurrent.SmoothRateLimiter.SmoothWarmingUp;
 
 public abstract class RateLimiter
 {
@@ -75,21 +74,9 @@ public abstract class RateLimiter
         return RateLimiter.create(SleepingStopwatch.createFromSystemTimer(), permitsPerSecond);
     }
 
-    public static RateLimiter create(final double permitsPerSecond, final long warmupPeriod, final TimeUnit unit)
-    {
-        return RateLimiter.create(SleepingStopwatch.createFromSystemTimer(), permitsPerSecond, warmupPeriod, unit);
-    }
-
     static RateLimiter create(final SleepingStopwatch stopwatch, final double permitsPerSecond)
     {
-        final RateLimiter rateLimiter = new SmoothBursty(stopwatch, 1.0 /* maxBurstSeconds */);
-        rateLimiter.setRate(permitsPerSecond);
-        return rateLimiter;
-    }
-
-    static RateLimiter create(final SleepingStopwatch stopwatch, final double permitsPerSecond, final long warmupPeriod, final TimeUnit unit)
-    {
-        final RateLimiter rateLimiter = new SmoothWarmingUp(stopwatch, warmupPeriod, unit);
+        final RateLimiter rateLimiter = new SmoothBursty(stopwatch, 1.0);
         rateLimiter.setRate(permitsPerSecond);
         return rateLimiter;
     }

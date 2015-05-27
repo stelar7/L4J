@@ -34,7 +34,7 @@ public class Summoner implements Serializable
     String name;
     int    profileIconId;
     Long   revisionDate;
-    Long   summonerLevel;
+    int   summonerLevel;
     Server region;
 
     public List<League> getFullLeague() throws LibraryException
