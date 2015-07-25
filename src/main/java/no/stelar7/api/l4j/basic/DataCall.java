@@ -106,14 +106,21 @@ public class DataCall
             return null;
         }
         final StringBuilder data = new StringBuilder();
-        final BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()));
-        String inputLine;
-        while ((inputLine = in.readLine()) != null)
+        try
         {
-            data.append(inputLine);
+            final BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()));
+            String inputLine;
+            while ((inputLine = in.readLine()) != null)
+            {
+                data.append(inputLine);
+            }
+            in.close();
+        } catch (Exception e)
+        {
+            e.printStackTrace();
         }
-        in.close();
         return data.toString();
+
     }
 
     private String getAPIkey()

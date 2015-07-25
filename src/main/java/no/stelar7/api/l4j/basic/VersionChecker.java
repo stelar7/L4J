@@ -73,6 +73,8 @@ public class VersionChecker
                 return "v1.2";
             case STATIC_LANGUAGE_STRINGS:
                 return "v1.2";
+            case MATCHLIST:
+                return "v2.2";
             default:
                 break;
         }

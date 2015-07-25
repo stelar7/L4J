@@ -7,6 +7,10 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.*;
 
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.JsonMappingException;
+import com.fasterxml.jackson.databind.JsonNode;
+
 import no.stelar7.api.l4j.L4J;
 import no.stelar7.api.l4j.dto.matchhistory.MatchSummary;
 import no.stelar7.api.l4j.dto.staticdata.champion.Champion;
@@ -22,10 +26,6 @@ import no.stelar7.api.l4j.dto.staticdata.shard.Shard;
 import no.stelar7.api.l4j.dto.staticdata.shard.ShardStatus;
 import no.stelar7.api.l4j.dto.staticdata.summoners.SummonerSpell;
 import no.stelar7.api.l4j.dto.staticdata.summoners.SummonerSpellList;
-
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.JsonMappingException;
-import com.fasterxml.jackson.databind.JsonNode;
 
 public class StaticCaller
 {
@@ -631,13 +631,18 @@ public class StaticCaller
                 throw new LibraryException(con.getResponseCode(), con.getHeaderFieldInt("Retry-After", 0));
             }
             final StringBuilder data = new StringBuilder();
-            final BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()));
-            String inputLine;
-            while ((inputLine = in.readLine()) != null)
+            try 
             {
-                data.append(inputLine);
+                final BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()));
+                String inputLine;
+                while ((inputLine = in.readLine()) != null)
+                {
+                    data.append(inputLine);
+                }
+                in.close();
+            } catch(Exception e) {
+                e.printStackTrace();
             }
-            in.close();
             final JsonNode node = L4J.getMapper().readTree(data.toString()).get("matches");
             return L4J.getMapper().readValue(node.toString(), new TypeReference<List<MatchSummary>>()
             {});

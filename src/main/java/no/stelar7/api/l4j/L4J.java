@@ -4,6 +4,12 @@ import java.io.IOException;
 import java.lang.reflect.Field;
 import java.util.*;
 
+import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.fasterxml.jackson.databind.JsonMappingException;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.common.util.concurrent.RateLimiter;
+
 import lombok.Getter;
 import lombok.Setter;
 import no.stelar7.api.l4j.basic.*;
@@ -14,15 +20,10 @@ import no.stelar7.api.l4j.dto.featured_game.FeaturedGames;
 import no.stelar7.api.l4j.dto.league.League;
 import no.stelar7.api.l4j.dto.league.LeagueType;
 import no.stelar7.api.l4j.dto.match.MatchDetail;
+import no.stelar7.api.l4j.dto.matchlist.MatchList;
 import no.stelar7.api.l4j.dto.staticdata.general.Image;
 import no.stelar7.api.l4j.dto.summoner.Summoner;
 import no.stelar7.api.l4j.dto.team.Team;
-
-import com.fasterxml.jackson.databind.DeserializationFeature;
-import com.fasterxml.jackson.databind.JsonMappingException;
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.google.common.util.concurrent.RateLimiter;
 
 public class L4J
 {
@@ -43,10 +44,10 @@ public class L4J
     public static boolean               verbose          = false;
     private static final int            MAX_PER_SUMMONER = 40;
 
-    private static final int            MAX_PER_TEAM     = 10;
-    private static final int            MAX_PER_LEAGUE   = 10;
+    private static final int   MAX_PER_TEAM   = 10;
+    private static final int   MAX_PER_LEAGUE = 10;
     @Getter
-    private final StaticCaller          staticData       = new StaticCaller();
+    private final StaticCaller staticData     = new StaticCaller();
 
     /**
      *
@@ -105,11 +106,11 @@ public class L4J
             final DataCall call = new DataCall();
             call.setUrlEndpoint(URLEndpoint.CHALLENGER_LEAGUE);
             call.setUrlParams(new HashMap<String, Object>()
-                    {
+            {
                 {
                     this.put("type", type);
                 }
-                    });
+            });
             final String json = call.doCall();
             if (call.hasError())
             {
@@ -173,12 +174,12 @@ public class L4J
             final DataCall call = new DataCall();
             call.setUrlEndpoint(URLEndpoint.CURRENT_GAME);
             call.setExtraData(new HashMap<String, Object>()
-                    {
+            {
                 {
                     this.put("platformId", platform);
                     this.put("summonerId", summonerId);
                 }
-                    });
+            });
             final String json = call.doCall();
             if (call.hasError())
             {
@@ -307,11 +308,11 @@ public class L4J
             call.setUrlEndpoint(URLEndpoint.MATCH);
             call.setData(Arrays.asList(id));
             call.setUrlParams(new HashMap<String, Object>()
-                    {
+            {
                 {
                     this.put("includeTimeline", timeline);
                 }
-                    });
+            });
             final String json = call.doCall();
             if (call.hasError())
             {
@@ -457,6 +458,79 @@ public class L4J
             e.printStackTrace();
         }
         return null;
+
+    }
+
+    /**
+     * Gets a list of matches from the summonerId
+     * 
+     * @param in
+     *            The summonerId
+     * @param rankedQueues
+     *            Comma-separated list of ranked queues to use (RANKED_SOLO_5x5, RANKED_TEAM_3x3, RANKED_TEAM_5x5)
+     * @param season
+     *            Comma-separated list of seasons to use for fetching games
+     * @param beginTime
+     *            The begin time to use for fetching games specified as epoch milliseconds.
+     * @param endTime
+     *            The end time to use for fetching games specified as epoch milliseconds.
+     * @param beginIndex
+     *            The begin index to use for fetching games.
+     * @param endIndex
+     *            The end index to use for fetching games.
+     * 
+     */
+    public MatchList getMatchListBySummonerId(final long id, final String rankedQueues, final String seasons, final Long beginTime, final Long endTime, final Integer beginIndex, final Integer endIndex) throws LibraryException
+    {
+        try
+        {
+            final DataCall call = new DataCall();
+            call.setUrlEndpoint(URLEndpoint.MATCHLIST);
+            call.setData(Arrays.asList(id));
+            call.setUrlParams(new HashMap<String, Object>()
+            {
+                {
+                    if (rankedQueues != null)
+                    {
+                        this.put("rankedQueues", rankedQueues);
+                    }
+                    if (seasons != null)
+                    {
+                        this.put("seasons", seasons);
+                    }
+                    if (beginTime != null)
+                    {
+                        this.put("beginTime", beginTime);
+                    }
+                    if (endTime != null)
+                    {
+                        this.put("endTime", endTime);
+                    }
+                    if (beginIndex != null)
+                    {
+                        this.put("beginIndex", beginIndex);
+                    }
+                    if (endIndex != null)
+                    {
+                        this.put("endIndex", endIndex);
+                    }
+                }
+            });
+            final String json = call.doCall();
+            if (call.hasError())
+            {
+                throw call.getErrorData();
+            }
+            return L4J.getMapper().readValue(json, MatchList.class);
+        } catch (final JsonMappingException e)
+        {
+            e.printStackTrace();
+            return null;
+        } catch (final IOException e)
+        {
+            e.printStackTrace();
+            return null;
+        }
     }
 
     /**

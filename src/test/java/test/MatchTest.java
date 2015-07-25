@@ -6,6 +6,7 @@ import java.util.Collection;
 import no.stelar7.api.l4j.L4J;
 import no.stelar7.api.l4j.basic.LibraryException;
 import no.stelar7.api.l4j.dto.match.Event;
+import no.stelar7.api.l4j.dto.match.EventType;
 import no.stelar7.api.l4j.dto.match.Frame;
 import no.stelar7.api.l4j.dto.match.MatchDetail;
 import no.stelar7.api.l4j.dto.staticdata.item.Item;
@@ -41,7 +42,7 @@ public class MatchTest
                 {
                     if (e.getParticipantId() == 8)
                     {
-                        if (e.getEventType().contains("ITEM_PURCHASE"))
+                        if (e.getEventType() == EventType.ITEM_PURCHASED)
                         {
                             System.out.format("%s %s%n", e.getEventType(), getItem(list, e.getItemId()).getName());
                         }

@@ -3,6 +3,7 @@ package no.stelar7.api.l4j.dto.match;
 import java.io.Serializable;
 import java.util.List;
 
+import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.ToString;
 
@@ -14,6 +15,7 @@ public class Event implements Serializable
     List<Integer> assistingParticipantIds;
     String        buildingType;
     int           creatorId;
+    @Getter(AccessLevel.NONE)
     String        eventType;
     int           itemAfter;
     int           itemBefore;
@@ -31,4 +33,10 @@ public class Event implements Serializable
     String        towerType;
     int           victimId;
     String        wardType;
+
+    public EventType getEventType()
+    {
+        return EventType.valueOf(eventType);
+    }
+
 }

@@ -41,7 +41,8 @@ public enum URLEndpoint
     STATIC_LANGUAGE_STRINGS("api/lol/static-data/{region}/{version}/language-strings"),
     CURRENT_GAME("observer-mode/rest/consumer/getSpectatorGameInfo/{platformId}/{summonerId}"),
     FEATURED_GAMES("observer-mode/rest/featured"),
-    DDRAGON("http://ddragon.leagueoflegends.com/cdn/{dragonversion}/{type}");
+    DDRAGON("http://ddragon.leagueoflegends.com/cdn/{dragonversion}/{type}"),
+    MATCHLIST("api/lol/{region}/{version}/matchlist/by-summoner/{data}");
 
     @Getter
     String value;

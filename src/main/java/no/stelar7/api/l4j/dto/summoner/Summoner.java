@@ -18,6 +18,7 @@ import no.stelar7.api.l4j.dto.general.Season;
 import no.stelar7.api.l4j.dto.league.League;
 import no.stelar7.api.l4j.dto.masteries.MasteryPage;
 import no.stelar7.api.l4j.dto.matchhistory.PlayerHistory;
+import no.stelar7.api.l4j.dto.matchlist.MatchList;
 import no.stelar7.api.l4j.dto.runes.RunePage;
 import no.stelar7.api.l4j.dto.stats.RankedStats;
 import no.stelar7.api.l4j.dto.stats.StatSummary;
@@ -304,5 +305,77 @@ public class Summoner implements Serializable
             e.printStackTrace();
         }
         return null;
+    }
+    
+    /**
+     * Gets a list of matches from the summonerId
+     * 
+     * @param in
+     *            The summonerId
+     * @param rankedQueues
+     *            Comma-separated list of ranked queues to use (RANKED_SOLO_5x5, RANKED_TEAM_3x3, RANKED_TEAM_5x5)
+     * @param season
+     *            Comma-separated list of seasons to use for fetching games
+     * @param beginTime
+     *            The begin time to use for fetching games specified as epoch milliseconds.
+     * @param endTime
+     *            The end time to use for fetching games specified as epoch milliseconds.
+     * @param beginIndex
+     *            The begin index to use for fetching games.
+     * @param endIndex
+     *            The end index to use for fetching games.
+     * 
+     */
+    public MatchList getMatchList(final String rankedQueues, final String seasons, final Long beginTime, final Long endTime, final Integer beginIndex, final Integer endIndex) throws LibraryException
+    {
+        try
+        {
+            final DataCall call = new DataCall();
+            call.setUrlEndpoint(URLEndpoint.MATCHLIST);
+            call.setData(Arrays.asList(id));
+            call.setUrlParams(new HashMap<String, Object>()
+            {
+                {
+                    if (rankedQueues != null)
+                    {
+                        this.put("rankedQueues", rankedQueues);
+                    }
+                    if (seasons != null)
+                    {
+                        this.put("seasons", seasons);
+                    }
+                    if (beginTime != null)
+                    {
+                        this.put("beginTime", beginTime);
+                    }
+                    if (endTime != null)
+                    {
+                        this.put("endTime", endTime);
+                    }
+                    if (beginIndex != null)
+                    {
+                        this.put("beginIndex", beginIndex);
+                    }
+                    if (endIndex != null)
+                    {
+                        this.put("endIndex", endIndex);
+                    }
+                }
+            });
+            final String json = call.doCall();
+            if (call.hasError())
+            {
+                throw call.getErrorData();
+            }
+            return L4J.getMapper().readValue(json, MatchList.class);
+        } catch (final JsonMappingException e)
+        {
+            e.printStackTrace();
+            return null;
+        } catch (final IOException e)
+        {
+            e.printStackTrace();
+            return null;
+        }
     }
 }
